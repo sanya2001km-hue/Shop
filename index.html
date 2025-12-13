@@ -1200,64 +1200,79 @@
         }
 
         // Отправка заказа в бот через API
-        async function sendOrderToBot(order) {
-            try {
-                // Отправляем POST запрос на наш сервер
-                const response = await fetch(`${CONFIG.API_URL}/api/create_order`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        order_id: order.id,
-                        user_id: order.userData.telegramId || '',
-                        username: order.userData.username,
-                        first_name: order.userData.firstName,
-                        product_name: order.product.name,
-                        price: order.product.price,
-                        player_id: order.playerId,
-                        payment_method: order.paymentMethod
-                    })
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const result = await response.json();
-                
-                if (result.status === 'success') {
-                    console.log('✅ Заказ успешно отправлен:', order.id);
-                    
-                    // Пытаемся также отправить через Telegram API (как запасной вариант)
-                    try {
-                        const telegramResponse = await fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                chat_id: CONFIG.ADMIN_ID,
-                                text: `🆕 <b>НОВЫЙ ЗАКАР С САЙТА #${order.id}</b>\n\n👤 @${order.userData.username}\n🎮 ${order.product.name}\n💰 ${order.product.price}₽\n👾 ${order.playerId}\n💳 ${order.paymentMethod}`,
-                                parse_mode: 'HTML'
-                            })
-                        });
-                    } catch (tgError) {
-                        console.log('Telegram API backup не сработал, но заказ отправлен через API');
-                    }
-                    
-                    return true;
-                } else {
-                    console.error('Ошибка от сервера:', result);
-                    return false;
-                }
-                
-            } catch (error) {
-                console.error('Ошибка при отправке заказа:', error);
-                return false;
-            }
+// Отправка заказа в бот через API - ИСПРАВЛЕННАЯ ВЕРСИЯ
+async function sendOrderToBot(order) {
+    try {
+        console.log('📦 Отправка заказа:', order);
+        
+        const response = await fetch('http://localhost:8081/api/create_order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                order_id: order.id,
+                user_id: order.userData.telegramId || '',
+                username: order.userData.username || '',
+                first_name: order.userData.firstName || '',
+                product_name: order.product.name,
+                price: order.product.price,
+                player_id: order.playerId,
+                payment_method: order.paymentMethod
+            })
+        });
+        
+        console.log('📡 Ответ сервера:', response);
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('❌ HTTP ошибка:', response.status, errorText);
+            throw new Error(`HTTP ошибка ${response.status}: ${errorText}`);
         }
-
+        
+        const result = await response.json();
+        console.log('✅ Результат:', result);
+        
+        if (result.status === 'success') {
+            console.log('✅ Заказ успешно создан:', order.id);
+            return true;
+        } else {
+            console.error('❌ Ошибка от сервера:', result.message);
+            throw new Error(result.message || 'Неизвестная ошибка');
+        }
+        
+    } catch (error) {
+        console.error('❌ Ошибка отправки заказа:', error);
+        
+        // Пробуем отправить напрямую через Telegram API как запасной вариант
+        try {
+            console.log('🔄 Пробуем запасной вариант через Telegram API...');
+            
+            const messageText = `🆕 ЗАКАЗ С САЙТА #${order.id}\n\n👤 @${order.userData.username}\n🎮 ${order.product.name}\n💰 ${order.product.price}₽\n👾 ${order.playerId}\n💳 ${order.paymentMethod}`;
+            
+            const telegramResponse = await fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: CONFIG.ADMIN_ID,
+                    text: messageText,
+                    parse_mode: 'HTML'
+                })
+            });
+            
+            if (telegramResponse.ok) {
+                console.log('✅ Запасной вариант сработал');
+                return true;
+            }
+        } catch (telegramError) {
+            console.error('❌ Запасной вариант тоже не сработал:', telegramError);
+        }
+        
+        return false;
+    }
+}
         // Показать статус заказа
         function showOrderStatus(status, orderId) {
             const orderStatus = document.getElementById('order-status');
