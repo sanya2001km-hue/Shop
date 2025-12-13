@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MITYA PUBG STORE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -13,34 +14,187 @@
         }
 
         :root {
-            --primary-red: #dc2626;
-            --dark-red: #b91c1c;
-            --light-red: #f87171;
-            --bg-dark: #0f172a;
-            --bg-card: #1e293b;
-            --text-light: #f8fafc;
-            --text-gray: #94a3b8;
-            --border-color: #334155;
+            --primary-purple: #8b5cf6;
+            --dark-purple: #7c3aed;
+            --light-purple: #a78bfa;
+            --bg-dark: #0f0f23;
+            --bg-card: #1a1a2e;
+            --text-light: #f0f0ff;
+            --text-gray: #a0a0c0;
+            --border-color: #2a2a4a;
             --success-green: #10b981;
             --warning-yellow: #f59e0b;
             --telegram-blue: #0088cc;
+            --neon-pink: #ff00ff;
+            --neon-blue: #00ffff;
         }
 
         body {
             background-color: var(--bg-dark);
             color: var(--text-light);
             min-height: 100vh;
-            background: linear-gradient(135deg, var(--bg-dark) 0%, #1a1a2e 100%);
+            overflow-x: hidden;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(124, 58, 237, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .airplane-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .airplane {
+            position: absolute;
+            width: 200px;
+            height: 80px;
+            background: linear-gradient(90deg, var(--light-purple), var(--neon-pink));
+            clip-path: polygon(0% 40%, 20% 0%, 100% 0%, 100% 100%, 20% 100%, 0% 60%);
+            filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.7));
+            animation: fly 8s linear infinite;
+            opacity: 0.7;
+        }
+
+        .airplane:before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            top: 25px;
+            left: -15px;
+            box-shadow: 0 0 20px var(--neon-blue);
+        }
+
+        @keyframes fly {
+            0% {
+                transform: translateX(-300px) translateY(100px) rotate(10deg);
+            }
+            100% {
+                transform: translateX(calc(100vw + 300px)) translateY(-100px) rotate(10deg);
+            }
+        }
+
+        .loading-content {
+            text-align: center;
+            z-index: 2;
+        }
+
+        .loading-logo {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(90deg, var(--primary-purple), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.05);
+            }
+        }
+
+        .loading-bar {
+            width: 300px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 2rem auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loading-progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-purple), var(--light-purple));
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-progress:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .loading-percent {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            color: var(--light-purple);
+        }
+
+        .loading-text {
+            margin-top: 1rem;
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            animation: fadeInOut 2s infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
 
         /* Header */
         .header {
-            background: linear-gradient(90deg, var(--dark-red) 0%, var(--primary-red) 100%);
+            background: linear-gradient(90deg, rgba(124, 58, 237, 0.9), rgba(139, 92, 246, 0.9));
             padding: 1.5rem;
-            box-shadow: 0 4px 20px rgba(220, 38, 38, 0.3);
+            box-shadow: 0 4px 30px rgba(139, 92, 246, 0.4);
             position: sticky;
             top: 0;
             z-index: 100;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .nav-container {
@@ -55,17 +209,36 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
         }
 
         .logo h1 {
             font-size: 1.8rem;
             font-weight: 800;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(90deg, #ffffff, var(--light-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
         }
 
         .logo-icon {
-            font-size: 2rem;
+            font-size: 2.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         .nav-buttons {
@@ -77,19 +250,37 @@
             background: rgba(255, 255, 255, 0.1);
             color: white;
             border: 2px solid rgba(255, 255, 255, 0.2);
-            padding: 0.7rem 1.5rem;
-            border-radius: 8px;
+            padding: 0.8rem 1.8rem;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-btn:hover:before {
+            left: 100%;
         }
 
         .nav-btn:hover {
             background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+            border-color: var(--light-purple);
         }
 
         /* Main Container */
@@ -97,78 +288,130 @@
             max-width: 1200px;
             margin: 2rem auto;
             padding: 0 1rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Registration Form */
         .registration-form {
             max-width: 500px;
             margin: 2rem auto;
-            padding: 2rem;
-            background: var(--bg-card);
+            padding: 2.5rem;
+            background: rgba(26, 26, 46, 0.8);
             border-radius: 20px;
-            border: 2px solid var(--primary-red);
+            border: 2px solid var(--primary-purple);
             display: none;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 50px rgba(139, 92, 246, 0.2);
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.8rem;
         }
 
         .form-label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
             color: var(--text-light);
             font-weight: 600;
+            font-size: 1.1rem;
         }
 
         .form-input {
             width: 100%;
-            padding: 0.8rem 1rem;
-            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            border-radius: 12px;
             border: 2px solid var(--border-color);
             background: rgba(255, 255, 255, 0.05);
             color: var(--text-light);
             font-size: 1rem;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .form-input:focus {
             outline: none;
-            border-color: var(--primary-red);
+            border-color: var(--light-purple);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .form-hint {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: var(--text-gray);
-            margin-top: 0.25rem;
+            margin-top: 0.5rem;
+            line-height: 1.4;
         }
 
         /* Hero Section */
         .hero {
             text-align: center;
             padding: 3rem 1rem;
-            background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(185, 28, 28, 0.05) 100%);
-            border-radius: 20px;
-            margin-bottom: 2rem;
-            border: 1px solid var(--border-color);
+            background: rgba(26, 26, 46, 0.6);
+            border-radius: 25px;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero:before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .user-info {
             background: rgba(255, 255, 255, 0.05);
-            padding: 1rem 2rem;
-            border-radius: 15px;
+            padding: 1.5rem 2.5rem;
+            border-radius: 20px;
             display: inline-block;
-            margin-bottom: 2rem;
-            border: 1px solid var(--border-color);
+            margin-bottom: 2.5rem;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            backdrop-filter: blur(5px);
+            position: relative;
+            z-index: 1;
         }
 
         .user-info p {
-            margin: 0.5rem 0;
+            margin: 0.8rem 0;
             color: var(--text-light);
+            font-size: 1.1rem;
         }
 
         .user-info .username {
-            color: var(--telegram-blue);
+            color: var(--light-purple);
             font-weight: 600;
         }
 
@@ -176,133 +419,160 @@
             background: transparent;
             border: 1px solid var(--border-color);
             color: var(--text-gray);
-            padding: 0.3rem 1rem;
+            padding: 0.5rem 1.5rem;
             border-radius: 20px;
             cursor: pointer;
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            margin-top: 1rem;
             transition: all 0.3s ease;
         }
 
         .edit-profile-btn:hover {
-            border-color: var(--primary-red);
-            color: var(--light-red);
+            border-color: var(--light-purple);
+            color: var(--light-purple);
+            transform: scale(1.05);
         }
 
         .hero h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(90deg, var(--light-red), #ffffff);
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, var(--light-purple), var(--neon-pink));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
         }
 
         .hero p {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: var(--text-gray);
             max-width: 600px;
-            margin: 0 auto 2rem;
+            margin: 0 auto 2.5rem;
+            position: relative;
+            z-index: 1;
         }
 
         /* Categories */
         .categories {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
             margin-bottom: 3rem;
         }
 
         .category-card {
-            background: var(--bg-card);
-            border-radius: 15px;
-            padding: 2rem;
+            background: rgba(26, 26, 46, 0.7);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             border: 2px solid transparent;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(5px);
         }
 
         .category-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary-red);
-            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.2);
+            transform: translateY(-10px) scale(1.03);
+            border-color: var(--light-purple);
+            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.3);
         }
 
-        .category-card::before {
+        .category-card:before {
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-red), var(--light-red));
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.7s;
+        }
+
+        .category-card:hover:before {
+            left: 100%;
         }
 
         .category-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: var(--light-red);
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--light-purple);
+            filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.5));
         }
 
         /* Products Grid */
         .products-grid {
             display: none;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
             margin-bottom: 3rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .product-card {
-            background: var(--bg-card);
-            border-radius: 15px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            border: 1px solid var(--border-color);
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(139, 92, 246, 0.2);
             position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
         }
 
         .product-card:hover {
-            border-color: var(--primary-red);
-            transform: translateY(-5px);
+            border-color: var(--light-purple);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.2);
         }
 
         .product-badge {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: var(--primary-red);
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(90deg, var(--primary-purple), var(--neon-pink));
             color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
+            padding: 6px 15px;
+            border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 600;
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
         }
 
         .product-price {
-            color: var(--success-green);
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 1rem 0;
+            color: var(--light-purple);
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 1.5rem 0;
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
         }
 
         .buy-btn {
-            background: linear-gradient(90deg, var(--primary-red), var(--dark-red));
+            background: linear-gradient(90deg, var(--primary-purple), var(--dark-purple));
             color: white;
             border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
+            padding: 1rem 2rem;
+            border-radius: 12px;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 700;
             width: 100%;
             transition: all 0.3s ease;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
         }
 
         .buy-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+            background: linear-gradient(90deg, var(--light-purple), var(--primary-purple));
         }
 
         .buy-btn:disabled {
@@ -319,109 +589,108 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(15, 15, 35, 0.95);
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .modal-content {
-            background: var(--bg-card);
-            padding: 2rem;
-            border-radius: 20px;
+            background: rgba(26, 26, 46, 0.95);
+            padding: 2.5rem;
+            border-radius: 25px;
             max-width: 500px;
             width: 90%;
             max-height: 90vh;
             overflow-y: auto;
-            border: 2px solid var(--primary-red);
+            border: 2px solid var(--primary-purple);
             position: relative;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 50px rgba(139, 92, 246, 0.3);
         }
 
         .close-modal {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
             border: none;
-            color: var(--text-gray);
-            font-size: 1.5rem;
+            color: var(--text-light);
+            font-size: 1.8rem;
             cursor: pointer;
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
+            transition: all 0.3s ease;
         }
 
         .close-modal:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
         }
 
         .payment-methods {
             display: grid;
-            gap: 15px;
+            gap: 20px;
             margin: 2rem 0;
         }
 
         .payment-method {
             background: rgba(255, 255, 255, 0.05);
             border: 2px solid var(--border-color);
-            padding: 1rem;
-            border-radius: 10px;
+            padding: 1.5rem;
+            border-radius: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
         }
 
         .payment-method:hover {
-            border-color: var(--primary-red);
-            background: rgba(220, 38, 38, 0.1);
+            border-color: var(--light-purple);
+            background: rgba(139, 92, 246, 0.1);
+            transform: translateX(5px);
         }
 
         .payment-method.active {
-            border-color: var(--primary-red);
-            background: rgba(220, 38, 38, 0.2);
+            border-color: var(--light-purple);
+            background: rgba(139, 92, 246, 0.2);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
         }
 
         .payment-icon {
-            font-size: 2rem;
-            color: var(--light-red);
-        }
-
-        .qr-container {
-            text-align: center;
-            padding: 1rem;
-            background: white;
-            border-radius: 10px;
-            margin: 1rem 0;
-        }
-
-        .qr-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
+            font-size: 2.5rem;
+            color: var(--light-purple);
         }
 
         .confirm-payment {
-            background: var(--success-green);
+            background: linear-gradient(90deg, var(--success-green), #0ea271);
             color: white;
             border: none;
-            padding: 1rem 2rem;
-            border-radius: 8px;
+            padding: 1.2rem 2.5rem;
+            border-radius: 12px;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 700;
             width: 100%;
-            margin-top: 1rem;
+            margin-top: 1.5rem;
             transition: all 0.3s ease;
+            font-size: 1.1rem;
         }
 
         .confirm-payment:hover {
             opacity: 0.9;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
         }
 
         .confirm-payment:disabled {
@@ -434,109 +703,276 @@
         .order-status {
             display: none;
             text-align: center;
-            padding: 3rem;
-            background: var(--bg-card);
-            border-radius: 20px;
+            padding: 4rem;
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 25px;
             margin: 2rem auto;
             max-width: 600px;
+            border: 2px solid var(--primary-purple);
+            backdrop-filter: blur(10px);
+            animation: slideInUp 0.5s ease;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .status-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
+            font-size: 5rem;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.5));
         }
 
         .status-pending {
-            color: var(--warning-yellow);
-        }
-
-        .status-success {
-            color: var(--success-green);
-        }
-
-        .status-error {
-            color: var(--primary-red);
+            color: var(--light-purple);
+            animation: pulse 2s infinite;
         }
 
         /* Loading */
         .loading {
             display: none;
             text-align: center;
-            padding: 2rem;
+            padding: 3rem;
         }
 
         .loading-spinner {
             border: 4px solid var(--border-color);
-            border-top: 4px solid var(--primary-red);
+            border-top: 4px solid var(--primary-purple);
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 60px;
+            height: 60px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
         }
 
         /* Telegram Banner */
         .telegram-banner {
             background: linear-gradient(90deg, var(--telegram-blue) 0%, #34b7f1 100%);
-            padding: 1rem;
-            border-radius: 15px;
-            margin: 2rem auto;
+            padding: 1.5rem;
+            border-radius: 20px;
+            margin: 3rem auto;
             max-width: 600px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 136, 204, 0.3);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
         }
 
         .telegram-banner a {
             color: white;
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 700;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            font-size: 1.2rem;
         }
 
         .telegram-banner a:hover {
             text-decoration: underline;
         }
 
+        /* Orders History */
+        .orders-history {
+            display: none;
+            max-width: 900px;
+            margin: 2rem auto;
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 25px;
+            padding: 2.5rem;
+            border: 2px solid var(--primary-purple);
+            backdrop-filter: blur(10px);
+            animation: slideInLeft 0.5s ease;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .orders-history h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--light-purple);
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+        }
+
+        .orders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .order-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .order-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--light-purple);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.2);
+        }
+
+        .order-id {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--light-purple);
+            margin-bottom: 1rem;
+        }
+
+        .order-details {
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        .no-orders {
+            text-align: center;
+            padding: 4rem;
+            color: var(--text-gray);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
-                gap: 15px;
+                gap: 20px;
             }
 
             .categories {
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             }
 
             .hero h2 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
 
             .user-info {
-                padding: 1rem;
+                padding: 1rem 1.5rem;
+            }
+
+            .logo-icon {
+                font-size: 2rem;
+            }
+
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+
+            .loading-logo {
+                font-size: 3rem;
+            }
+
+            .loading-bar {
+                width: 250px;
+            }
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--light-purple);
+            border-radius: 50%;
+            animation: floatParticle 15s infinite linear;
+            opacity: 0.3;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loading-screen">
+        <div class="airplane-container">
+            <div class="airplane"></div>
+        </div>
+        <div class="loading-content">
+            <div class="loading-logo">🎮 MITYA PUBG</div>
+            <div class="loading-bar">
+                <div class="loading-progress" id="loading-progress"></div>
+            </div>
+            <div class="loading-percent" id="loading-percent">0%</div>
+            <div class="loading-text" id="loading-text">Загружаем магазин...</div>
+        </div>
+    </div>
+
+    <!-- Particles -->
+    <div class="particles" id="particles"></div>
+
     <!-- Header -->
     <header class="header">
         <nav class="nav-container">
-            <div class="logo">
+            <div class="logo" onclick="showMain()">
                 <div class="logo-icon">🎮</div>
                 <h1>MITYA PUBG STORE</h1>
             </div>
             <div class="nav-buttons">
-                <button class="nav-btn" onclick="showMain()">🏠 Главная</button>
-                <button class="nav-btn" onclick="showHelp()">❓ Помощь</button>
-                <button class="nav-btn" onclick="editProfile()">👤 Профиль</button>
+                <button class="nav-btn" onclick="showMain()">
+                    <i class="fas fa-home"></i> Главная
+                </button>
+                <button class="nav-btn" onclick="showOrdersHistory()">
+                    <i class="fas fa-history"></i> Мои заказы
+                </button>
+                <button class="nav-btn" onclick="showHelp()">
+                    <i class="fas fa-question-circle"></i> Помощь
+                </button>
+                <button class="nav-btn" onclick="editProfile()">
+                    <i class="fas fa-user"></i> Профиль
+                </button>
             </div>
         </nav>
     </header>
@@ -545,25 +981,27 @@
     <div class="container">
         <!-- Registration Form -->
         <div class="registration-form" id="registration-form">
-            <h2 style="text-align: center; margin-bottom: 2rem;">📝 Регистрация</h2>
+            <h2 style="text-align: center; margin-bottom: 2rem;">
+                <i class="fas fa-user-plus"></i> Регистрация
+            </h2>
             <p style="text-align: center; color: var(--text-gray); margin-bottom: 2rem;">
                 Для покупок нужно зарегистрироваться
             </p>
             
             <div class="form-group">
-                <label class="form-label">Telegram username (без @):</label>
+                <label class="form-label"><i class="fas fa-at"></i> Telegram username (без @):</label>
                 <input type="text" id="reg-username" class="form-input" placeholder="username" required>
                 <div class="form-hint">Ваш ник в Telegram. Без символа @</div>
             </div>
             
             <div class="form-group">
-                <label class="form-label">Ваше имя:</label>
+                <label class="form-label"><i class="fas fa-user"></i> Ваше имя:</label>
                 <input type="text" id="reg-name" class="form-input" placeholder="Иван" required>
                 <div class="form-hint">Как к вам обращаться</div>
             </div>
             
             <div class="form-group">
-                <label class="form-label">Telegram ID (если знаете):</label>
+                <label class="form-label"><i class="fas fa-id-card"></i> Telegram ID (если знаете):</label>
                 <input type="text" id="reg-telegram-id" class="form-input" placeholder="1234567890">
                 <div class="form-hint">
                     Можно найти в боте через /start или оставить пустым.<br>
@@ -572,20 +1010,20 @@
             </div>
             
             <button class="buy-btn" onclick="completeRegistration()" style="margin-top: 1rem;">
-                ✅ Зарегистрироваться
+                <i class="fas fa-check-circle"></i> Зарегистрироваться
             </button>
             
             <button class="nav-btn" onclick="cancelRegistration()" 
                     style="margin-top: 1rem; width: 100%; background: transparent;">
-                ⏪ Отмена
+                <i class="fas fa-arrow-left"></i> Отмена
             </button>
             
             <div class="telegram-banner" style="margin-top: 2rem;">
                 <p style="margin-bottom: 0.5rem; font-weight: 600;">
-                    💡 Для удобства откройте сайт через Telegram бота!
+                    <i class="fas fa-lightbulb"></i> Для удобства откройте сайт через Telegram бота!
                 </p>
                 <a href="https://t.me/MITYA_PUBG_BOT" target="_blank">
-                    📲 Перейти в бота
+                    <i class="fab fa-telegram"></i> Перейти в бота
                 </a>
             </div>
         </div>
@@ -594,6 +1032,17 @@
         <section class="hero" id="main-section">
             <!-- User info will be inserted here by JavaScript -->
         </section>
+
+        <!-- Orders History -->
+        <div class="orders-history" id="orders-history-section">
+            <h2><i class="fas fa-history"></i> История моих заказов</h2>
+            <div id="orders-container">
+                <!-- Orders will be loaded here -->
+            </div>
+            <button class="nav-btn" onclick="showMain()" style="margin-top: 2rem; width: 100%;">
+                <i class="fas fa-arrow-left"></i> Назад в магазин
+            </button>
+        </div>
 
         <!-- Products Section -->
         <div class="products-grid" id="products-section"></div>
@@ -612,7 +1061,7 @@
     <div class="modal" id="payment-modal">
         <div class="modal-content">
             <button class="close-modal" onclick="closePaymentModal()">×</button>
-            <h2 id="modal-title">Выбор способа оплаты</h2>
+            <h2 id="modal-title"><i class="fas fa-credit-card"></i> Выбор способа оплаты</h2>
             <div id="modal-content"></div>
         </div>
     </div>
@@ -621,9 +1070,9 @@
     <div class="modal" id="help-modal">
         <div class="modal-content">
             <button class="close-modal" onclick="closeHelpModal()">×</button>
-            <h2>❓ Помощь и часто задаваемые вопросы</h2>
+            <h2><i class="fas fa-question-circle"></i> Помощь и часто задаваемые вопросы</h2>
             <div style="margin-top: 1rem; line-height: 1.6;">
-                <h3>🛒 Как купить?</h3>
+                <h3><i class="fas fa-shopping-cart"></i> Как купить?</h3>
                 <p>1. Выберите категорию → товар</p>
                 <p>2. Введите ID игрока (только цифры)</p>
                 <p>3. Выберите способ оплаты</p>
@@ -631,27 +1080,26 @@
                 <p>5. Админ получит уведомление</p>
                 <p>6. Админ напишет вам в течение 5-30 минут</p>
                 
-                <h3 style="margin-top: 1.5rem;">💳 Доступные способы оплаты:</h3>
-                <p>• 💳 Криптовалюта (USDT)</p>
-                <p>• 📱 QR-код</p>
-                <p>• 🏦 Ссылка на Сбербанк</p>
+                <h3 style="margin-top: 1.5rem;"><i class="fas fa-wallet"></i> Доступные способы оплаты:</h3>
+                <p>• <i class="fas fa-coins"></i> Криптовалюта (USDT)</p>
+                <p>• <i class="fas fa-university"></i> Ссылка на Сбербанк</p>
                 
-                <h3 style="margin-top: 1.5rem;">✅ После подтверждения:</h3>
+                <h3 style="margin-top: 1.5rem;"><i class="fas fa-check-circle"></i> После подтверждения:</h3>
                 <p>• Администратор @astmatiks_exe напишет вам</p>
                 <p>• Обычно в течение 5-30 минут</p>
                 <p>• Доставка происходит сразу после связи</p>
                 
-                <h3 style="margin-top: 1.5rem;">📱 Telegram бот:</h3>
+                <h3 style="margin-top: 1.5rem;"><i class="fab fa-telegram"></i> Telegram бот:</h3>
                 <p>• Откройте сайт через бота для удобства</p>
                 <p>• В боте есть мини-приложение с быстрым доступом</p>
                 <p>• Бот: @MITYA_PUBG_BOT</p>
                 
-                <h3 style="margin-top: 1.5rem;">📞 Поддержка:</h3>
+                <h3 style="margin-top: 1.5rem;"><i class="fas fa-headset"></i> Поддержка:</h3>
                 <p>@astmatiks_exe</p>
                 
                 <div class="telegram-banner" style="margin-top: 1.5rem;">
                     <a href="https://t.me/MITYA_PUBG_BOT" target="_blank">
-                        📲 Открыть Telegram бота
+                        <i class="fab fa-telegram"></i> Открыть Telegram бота
                     </a>
                 </div>
             </div>
@@ -661,15 +1109,15 @@
     <script>
         // Конфигурация
         const CONFIG = {
-    BOT_TOKEN: "8435320902:AAGYTrY3PKo3zo3ewRXIg4L91B1KbMJMqZ8",
-    ADMIN_ID: "8354109183",
-    SUPPORT_USERNAME: "astmatiks_exe",
-    BOT_USERNAME: "MITYA_PUBG_BOT",
-    QR_CODE_URL: "https://iimg.su/i/EFnIjv",
-    SBER_PAYMENT_URL: "https://www.sberbank.com/sms/pbpn?requisiteNumber=79657230692",
-    API_URL: "http://localhost:8081/api/create_order", // Полный URL
-    CRYPTO_WALLET: "0x742d35Cc6634C0532925a3b844Bc9e98"
-};
+            BOT_TOKEN: "8435320902:AAGYTrY3PKo3zo3ewRXIg4L91B1KbMJMqZ8",
+            ADMIN_ID: "8354109183",
+            SUPPORT_USERNAME: "astmatiks_exe",
+            BOT_USERNAME: "MITYA_PUBG_BOT",
+            SBER_PAYMENT_URL: "https://www.sberbank.com/sms/pbpn?requisiteNumber=79657230692",
+            API_URL: "http://localhost:8081/api/create_order",
+            CRYPTO_WALLET: "0x742d35Cc6634C0532925a3b844Bc9e98",
+            HISTORY_API_URL: "http://localhost:8081/api/get_user_orders"
+        };
 
         // Данные товаров
         const PRODUCTS = {
@@ -733,6 +1181,72 @@
                 telegramId: ''
             }
         };
+
+        // Создание частиц
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.animationDelay = `${Math.random() * 15}s`;
+                particle.style.animationDuration = `${15 + Math.random() * 10}s`;
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Загрузочный экран
+        function initLoadingScreen() {
+            const loadingScreen = document.getElementById('loading-screen');
+            const progressBar = document.getElementById('loading-progress');
+            const percentText = document.getElementById('loading-percent');
+            const loadingText = document.getElementById('loading-text');
+            
+            let progress = 0;
+            const texts = [
+                "Загружаем магазин...",
+                "Подключаем к Telegram...",
+                "Загружаем товары...",
+                "Готовим интерфейс...",
+                "Почти готово..."
+            ];
+            
+            const interval = setInterval(() => {
+                progress += 2;
+                if (progress > 100) progress = 100;
+                
+                progressBar.style.width = `${progress}%`;
+                percentText.textContent = `${progress}%`;
+                
+                // Меняем текст каждые 20%
+                if (progress % 20 === 0) {
+                    const textIndex = Math.min(Math.floor(progress / 20) - 1, texts.length - 1);
+                    if (textIndex >= 0) {
+                        loadingText.textContent = texts[textIndex];
+                    }
+                }
+                
+                if (progress === 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        loadingScreen.classList.add('hidden');
+                        setTimeout(() => {
+                            loadingScreen.style.display = 'none';
+                            createParticles();
+                            initApp();
+                        }, 800);
+                    }, 500);
+                }
+            }, 30);
+        }
+
+        // Инициализация приложения после загрузки
+        function initApp() {
+            const userData = getUserData();
+            if (userData) {
+                showMain();
+            }
+        }
 
         // Проверяем Telegram WebApp
         function checkTelegramWebApp() {
@@ -798,6 +1312,7 @@
             document.getElementById('registration-form').style.display = 'block';
             document.getElementById('main-section').style.display = 'none';
             document.getElementById('products-section').style.display = 'none';
+            document.getElementById('orders-history-section').style.display = 'none';
             document.getElementById('order-status').style.display = 'none';
             
             // Очищаем поля формы
@@ -807,42 +1322,41 @@
         }
 
         // Завершение регистрации
-// В функции completeRegistration() на сайте
-function completeRegistration() {
-    const username = document.getElementById('reg-username').value.trim();
-    const name = document.getElementById('reg-name').value.trim();
-    const telegramId = document.getElementById('reg-telegram-id').value.trim();
-    
-    if (!username) {
-        alert('Введите Telegram username!');
-        return;
-    }
-    
-    if (!name) {
-        alert('Введите ваше имя!');
-        return;
-    }
-    
-    if (!telegramId) {
-        alert('Введите ваш Telegram ID!\n\nКак найти Telegram ID:\n1. Напишите боту @userinfobot\n2. Он покажет ваш ID\n3. Скопируйте цифры и вставьте сюда');
-        return;
-    }
-    
-    if (!telegramId.match(/^\d+$/)) {
-        alert('Telegram ID должен содержать только цифры!');
-        return;
-    }
-    
-    // Сохраняем данные
-    currentState.userData = {
-        username: username,
-        firstName: name,
-        telegramId: telegramId  // Теперь точно есть
-    };
-    
-    saveUserData(currentState.userData);
-    showMain();
-}
+        function completeRegistration() {
+            const username = document.getElementById('reg-username').value.trim();
+            const name = document.getElementById('reg-name').value.trim();
+            const telegramId = document.getElementById('reg-telegram-id').value.trim();
+            
+            if (!username) {
+                alert('Введите Telegram username!');
+                return;
+            }
+            
+            if (!name) {
+                alert('Введите ваше имя!');
+                return;
+            }
+            
+            if (!telegramId) {
+                alert('Введите ваш Telegram ID!\n\nКак найти Telegram ID:\n1. Напишите боту @userinfobot\n2. Он покажет ваш ID\n3. Скопируйте цифры и вставьте сюда');
+                return;
+            }
+            
+            if (!telegramId.match(/^\d+$/)) {
+                alert('Telegram ID должен содержать только цифры!');
+                return;
+            }
+            
+            // Сохраняем данные
+            currentState.userData = {
+                username: username,
+                firstName: name,
+                telegramId: telegramId
+            };
+            
+            saveUserData(currentState.userData);
+            showMain();
+        }
 
         // Отмена регистрации
         function cancelRegistration() {
@@ -876,6 +1390,7 @@ function completeRegistration() {
             // Скрываем другие секции
             document.getElementById('registration-form').style.display = 'none';
             document.getElementById('products-section').style.display = 'none';
+            document.getElementById('orders-history-section').style.display = 'none';
             document.getElementById('order-status').style.display = 'none';
             document.getElementById('loading').style.display = 'none';
             
@@ -884,15 +1399,15 @@ function completeRegistration() {
             heroSection.style.display = 'block';
             heroSection.innerHTML = `
                 <div class="user-info">
-                    <p>👋 Привет, <b>${userData.firstName}</b>!</p>
-                    <p>📱 Telegram: <span class="username">@${userData.username || 'не указан'}</span></p>
-                    ${userData.telegramId ? `<p>🆔 ID: ${userData.telegramId}</p>` : ''}
+                    <p><i class="fas fa-hand-wave"></i> Привет, <b>${userData.firstName}</b>!</p>
+                    <p><i class="fab fa-telegram"></i> Telegram: <span class="username">@${userData.username || 'не указан'}</span></p>
+                    ${userData.telegramId ? `<p><i class="fas fa-id-card"></i> ID: ${userData.telegramId}</p>` : ''}
                     <button class="edit-profile-btn" onclick="editProfile()">
-                        ✏️ Изменить профиль
+                        <i class="fas fa-edit"></i> Изменить профиль
                     </button>
                 </div>
 
-                <h2>🎮 MITYA PUBG STORE</h2>
+                <h2><i class="fas fa-gamepad"></i> MITYA PUBG STORE</h2>
                 <p>Быстрая доставка, лучшие цены, гарантия качества</p>
 
                 <div class="categories">
@@ -925,13 +1440,155 @@ function completeRegistration() {
 
                 <div class="telegram-banner">
                     <p style="margin-bottom: 0.5rem; font-weight: 600;">
-                        💡 Откройте сайт через Telegram бота для удобства!
+                        <i class="fas fa-lightbulb"></i> Откройте сайт через Telegram бота для удобства!
                     </p>
                     <a href="https://t.me/${CONFIG.BOT_USERNAME}" target="_blank">
-                        📲 Перейти в бота @${CONFIG.BOT_USERNAME}
+                        <i class="fab fa-telegram"></i> Перейти в бота @${CONFIG.BOT_USERNAME}
                     </a>
                 </div>
             `;
+        }
+
+        // Показать историю заказов
+        async function showOrdersHistory() {
+            const userData = getUserData();
+            if (!userData) {
+                alert('Сначала зарегистрируйтесь!');
+                return;
+            }
+
+            // Скрываем другие секции
+            document.getElementById('main-section').style.display = 'none';
+            document.getElementById('products-section').style.display = 'none';
+            document.getElementById('orders-history-section').style.display = 'block';
+            document.getElementById('order-status').style.display = 'none';
+            
+            // Показываем загрузку
+            const ordersContainer = document.getElementById('orders-container');
+            ordersContainer.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>Загружаем историю...</p></div>';
+            
+            try {
+                // Пробуем получить заказы с сервера
+                const orders = await getOrdersFromServer(userData.telegramId);
+                
+                // Если нет заказов с сервера, используем локальные
+                if (orders.length === 0) {
+                    ordersContainer.innerHTML = `
+                        <div class="no-orders">
+                            <div class="status-icon" style="font-size: 3rem; color: var(--text-gray);"><i class="fas fa-inbox"></i></div>
+                            <h3>Заказов пока нет</h3>
+                            <p style="margin-top: 1rem;">Совершите свою первую покупку!</p>
+                            <button class="nav-btn" onclick="showMain()" style="margin-top: 1rem;">
+                                <i class="fas fa-shopping-cart"></i> Перейти в магазин
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    // Показываем карточки заказов
+                    let html = '<div class="orders-grid">';
+                    
+                    orders.forEach(order => {
+                        const date = new Date(order.created_at).toLocaleString('ru-RU', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                        
+                        html += `
+                            <div class="order-card">
+                                <div class="order-id">
+                                    <i class="fas fa-hashtag"></i> ${order.order_id}
+                                </div>
+                                <div class="order-details">
+                                    <p><i class="fas fa-gamepad"></i> <strong>${order.product_name}</strong></p>
+                                    <p><i class="fas fa-coins"></i> Цена: ${order.price}₽</p>
+                                    <p><i class="fas fa-calendar"></i> Дата: ${date}</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    html += `
+                        </div>
+                        <p style="text-align: center; color: var(--text-gray); margin-top: 2rem;">
+                            <i class="fas fa-chart-bar"></i> Всего заказов: ${orders.length}
+                        </p>
+                    `;
+                    
+                    ordersContainer.innerHTML = html;
+                }
+                
+            } catch (error) {
+                console.error('Ошибка загрузки истории:', error);
+                ordersContainer.innerHTML = `
+                    <div class="no-orders">
+                        <div class="status-icon" style="font-size: 3rem; color: var(--primary-purple);"><i class="fas fa-exclamation-triangle"></i></div>
+                        <h3>Не удалось загрузить историю</h3>
+                        <p style="margin-top: 1rem; color: var(--text-gray);">
+                            ${error.message || 'Попробуйте позже'}
+                        </p>
+                        <button class="nav-btn" onclick="showMain()" style="margin-top: 1rem;">
+                            <i class="fas fa-home"></i> Вернуться в магазин
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Получить заказы с сервера
+        async function getOrdersFromServer(telegramId) {
+            try {
+                const response = await fetch(`${CONFIG.HISTORY_API_URL}?user_id=${telegramId}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ошибка: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    return result.orders || [];
+                } else {
+                    throw new Error(result.message || 'Ошибка сервера');
+                }
+                
+            } catch (error) {
+                console.warn('Не удалось получить заказы с сервера:', error);
+                
+                // Возвращаем заказы из localStorage
+                return getOrdersFromLocalStorage();
+            }
+        }
+
+        // Получить заказы из localStorage
+        function getOrdersFromLocalStorage() {
+            const orders = [];
+            
+            // Ищем все сохраненные заказы
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                
+                if (key.startsWith('order_')) {
+                    try {
+                        const orderData = JSON.parse(localStorage.getItem(key));
+                        const orderId = key.replace('order_', '');
+                        
+                        orders.push({
+                            order_id: orderId,
+                            product_name: orderData.product?.name || 'Неизвестно',
+                            price: orderData.product?.price || 0,
+                            created_at: orderData.timestamp || new Date().toISOString()
+                        });
+                    } catch (e) {
+                        console.warn('Ошибка чтения заказа:', key, e);
+                    }
+                }
+            }
+            
+            // Сортируем по дате (новые сверху)
+            return orders.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         }
 
         // Показать товары категории
@@ -941,6 +1598,7 @@ function completeRegistration() {
 
             document.getElementById('main-section').style.display = 'none';
             document.getElementById('products-section').style.display = 'grid';
+            document.getElementById('orders-history-section').style.display = 'none';
             document.getElementById('order-status').style.display = 'none';
             
             const productsSection = document.getElementById('products-section');
@@ -959,7 +1617,7 @@ function completeRegistration() {
                             <p style="color: var(--text-gray); margin: 0.5rem 0;">${product.amount}</p>
                             <div class="product-price">${product.price}₽</div>
                             <button class="buy-btn" onclick="selectProduct(${product.id})">
-                                Купить за ${product.price}₽
+                                <i class="fas fa-shopping-cart"></i> Купить за ${product.price}₽
                             </button>
                         </div>
                     `;
@@ -968,7 +1626,7 @@ function completeRegistration() {
             
             html += `
                 <button class="nav-btn" onclick="showMain()" style="grid-column: 1/-1; margin-top: 1rem; width: 100%;">
-                    ◀️ Назад в магазин
+                    <i class="fas fa-arrow-left"></i> Назад в магазин
                 </button>
             `;
             
@@ -995,7 +1653,7 @@ function completeRegistration() {
             currentState.selectedProduct = selectedProduct;
 
             // Запрашиваем ID игрока
-            const playerId = prompt('Введите ваш ID PUBG Mobile (только цифры, минимум 9 символов):');
+            const playerId = prompt('Введите ваш ID PUBG Mobile (только цифры, минимум 9 символов):\n\nПример: 514217766');
             if (!playerId) return;
             
             if (!playerId.match(/^\d+$/)) {
@@ -1014,7 +1672,7 @@ function completeRegistration() {
             showPaymentMethods();
         }
 
-        // Показать способы оплаты
+        // Показать способы оплаты (БЕЗ QR)
         function showPaymentMethods() {
             const userData = getUserData();
             if (!userData) return;
@@ -1026,30 +1684,23 @@ function completeRegistration() {
             modalTitle.textContent = `Оплата: ${currentState.selectedProduct.name}`;
             
             modalContent.innerHTML = `
-                <p>💰 Цена: <b>${currentState.selectedProduct.price}₽</b></p>
-                <p>👤 Ваш ID: <b>${currentState.playerId}</b></p>
+                <p><i class="fas fa-coins"></i> Цена: <b>${currentState.selectedProduct.price}₽</b></p>
+                <p><i class="fas fa-id-card"></i> Ваш ID: <b>${currentState.playerId}</b></p>
                 <p style="color: var(--text-gray); font-size: 0.9rem;">
-                    Пользователь: @${userData.username}
+                    <i class="fab fa-telegram"></i> Пользователь: @${userData.username}
                 </p>
                 
-                <h3 style="margin: 1.5rem 0 1rem;">Выберите способ оплаты:</h3>
+                <h3 style="margin: 1.5rem 0 1rem;"><i class="fas fa-credit-card"></i> Выберите способ оплаты:</h3>
                 <div class="payment-methods">
                     <div class="payment-method" onclick="selectPaymentMethod('crypto')">
-                        <div class="payment-icon">💳</div>
+                        <div class="payment-icon"><i class="fas fa-coins"></i></div>
                         <div>
                             <h4>Криптовалюта (USDT)</h4>
                             <p>Оплата USDT на кошелек</p>
                         </div>
                     </div>
-                    <div class="payment-method" onclick="selectPaymentMethod('qr')">
-                        <div class="payment-icon">📱</div>
-                        <div>
-                            <h4>QR-код</h4>
-                            <p>Оплата по QR-коду</p>
-                        </div>
-                    </div>
                     <div class="payment-method" onclick="selectPaymentMethod('sber')">
-                        <div class="payment-icon">🏦</div>
+                        <div class="payment-icon"><i class="fas fa-university"></i></div>
                         <div>
                             <h4>Ссылка на Сбербанк</h4>
                             <p>Оплата через Сбербанк Онлайн</p>
@@ -1073,26 +1724,20 @@ function completeRegistration() {
             // Добавляем активный класс выбранному методу
             event.currentTarget.classList.add('active');
             
-            const methods = {
-                'crypto': 'Криптовалюта (USDT)',
-                'qr': 'QR-код',
-                'sber': 'Ссылка на Сбербанк'
-            };
-            
             let instruction = '';
             
             switch(method) {
                 case 'crypto':
                     instruction = `
-                        <h4 style="margin-top: 1.5rem;">💳 Оплата криптовалютой (USDT)</h4>
-                        <div style="background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 10px; border: 1px solid var(--border-color); margin: 1rem 0;">
+                        <h4 style="margin-top: 1.5rem;"><i class="fas fa-coins"></i> Оплата криптовалютой (USDT)</h4>
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--border-color); margin: 1.5rem 0;">
                             <p><b>Кошелек:</b></p>
-                            <p style="word-break: break-all; background: rgba(0, 0, 0, 0.2); padding: 0.5rem; border-radius: 5px; font-family: monospace;">
+                            <p style="word-break: break-all; background: rgba(0, 0, 0, 0.3); padding: 1rem; border-radius: 10px; font-family: monospace; font-size: 1.1rem; color: var(--light-purple);">
                                 ${CONFIG.CRYPTO_WALLET}
                             </p>
                             <button onclick="copyToClipboard('${CONFIG.CRYPTO_WALLET}')" 
-                                    style="margin-top: 0.5rem; background: var(--bg-card); border: 1px solid var(--border-color); color: white; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">
-                                📋 Скопировать адрес
+                                    style="margin-top: 1rem; background: var(--primary-purple); border: none; color: white; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer; font-weight: 600; width: 100%; transition: all 0.3s ease;">
+                                <i class="fas fa-copy"></i> Скопировать адрес кошелька
                             </button>
                         </div>
                         <p>1. Отправьте ${currentState.selectedProduct.price}₽ в эквиваленте USDT на указанный кошелек</p>
@@ -1100,27 +1745,14 @@ function completeRegistration() {
                     `;
                     break;
                     
-                case 'qr':
-                    instruction = `
-                        <h4 style="margin-top: 1.5rem;">📱 Оплата по QR-коду</h4>
-                        <div class="qr-container">
-                            <p><b>Отсканируйте QR-код для оплаты</b></p>
-                            <img src="${CONFIG.QR_CODE_URL}" alt="QR код для оплаты" 
-                                 onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent('Оплата: ' + currentState.selectedProduct.price + '₽')}'">
-                        </div>
-                        <p>1. Отсканируйте QR-код и оплатите ${currentState.selectedProduct.price}₽</p>
-                        <p>2. После успешной оплаты нажмите кнопку ниже</p>
-                    `;
-                    break;
-                    
                 case 'sber':
                     instruction = `
-                        <h4 style="margin-top: 1.5rem;">🏦 Оплата через Сбербанк</h4>
+                        <h4 style="margin-top: 1.5rem;"><i class="fas fa-university"></i> Оплата через Сбербанк</h4>
                         <p>Перейдите по ссылке для оплаты через Сбербанк Онлайн</p>
-                        <a href="${CONFIG.SBER_PAYMENT_URL}" 
+                        <a href="${CONFIG.SBER_PAYMENT_URL}?amount=${currentState.selectedProduct.price}" 
                            target="_blank" 
-                           style="display: inline-block; background: var(--primary-red); color: white; padding: 1rem 2rem; border-radius: 8px; text-decoration: none; margin: 1rem 0; font-weight: 600;">
-                            📱 Перейти к оплате
+                           style="display: inline-block; background: linear-gradient(90deg, var(--primary-purple), var(--dark-purple)); color: white; padding: 1.2rem 2rem; border-radius: 12px; text-decoration: none; margin: 1.5rem 0; font-weight: 600; font-size: 1.1rem; text-align: center; width: 100%; transition: all 0.3s ease;">
+                           <i class="fas fa-external-link-alt"></i> Перейти к оплате в Сбербанк Онлайн
                         </a>
                         <p>1. Оплатите ${currentState.selectedProduct.price}₽ через Сбербанк Онлайн</p>
                         <p>2. После успешной оплаты нажмите кнопку ниже</p>
@@ -1133,9 +1765,9 @@ function completeRegistration() {
                     ${instruction}
                     <button class="confirm-payment" onclick="confirmPayment('${method}')" 
                             style="margin-top: 1.5rem;">
-                        ✅ Я оплатил ${currentState.selectedProduct.price}₽
+                        <i class="fas fa-check-circle"></i> Я оплатил ${currentState.selectedProduct.price}₽
                     </button>
-                    <p style="font-size: 0.9rem; color: var(--text-gray); margin-top: 0.5rem; text-align: center;">
+                    <p style="font-size: 0.9rem; color: var(--text-gray); margin-top: 1rem; text-align: center;">
                         После нажатия кнопки заказ будет отправлен администратору
                     </p>
                 </div>
@@ -1145,9 +1777,18 @@ function completeRegistration() {
         // Копирование в буфер обмена
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(() => {
-                alert('Адрес скопирован в буфер обмена!');
+                const btn = event.target;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Скопировано!';
+                btn.style.background = 'var(--success-green)';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = 'var(--primary-purple)';
+                }, 2000);
             }).catch(err => {
                 console.error('Ошибка копирования: ', err);
+                alert('Не удалось скопировать. Скопируйте вручную.');
             });
         }
 
@@ -1169,9 +1810,16 @@ function completeRegistration() {
                     playerId: currentState.playerId,
                     paymentMethod: method,
                     userData: userData,
-                    status: 'pending',
-                    timestamp: new Date().toLocaleString('ru-RU')
+                    timestamp: new Date().toISOString()
                 };
+                
+                // Сохраняем заказ в localStorage
+                localStorage.setItem(`order_${orderId}`, JSON.stringify({
+                    product: currentState.selectedProduct,
+                    playerId: currentState.playerId,
+                    price: currentState.selectedProduct.price,
+                    timestamp: currentState.currentOrder.timestamp
+                }));
                 
                 // Отправляем заказ в бот через API
                 const success = await sendOrderToBot(currentState.currentOrder);
@@ -1180,16 +1828,8 @@ function completeRegistration() {
                 document.getElementById('loading').style.display = 'none';
                 
                 if (success) {
-                    // Сохраняем заказ в localStorage
-                    localStorage.setItem(`order_${orderId}`, JSON.stringify({
-                        product: currentState.selectedProduct,
-                        playerId: currentState.playerId,
-                        price: currentState.selectedProduct.price,
-                        timestamp: currentState.currentOrder.timestamp
-                    }));
-                    
                     // Показываем статус заказа
-                    showOrderStatus('pending', orderId);
+                    showOrderStatus(orderId);
                 } else {
                     alert('❌ Ошибка при отправке заказа. Попробуйте еще раз или свяжитесь с поддержкой.');
                     showMain();
@@ -1204,180 +1844,95 @@ function completeRegistration() {
         }
 
         // Отправка заказа в бот через API
-// Отправка заказа в бот через API - ИСПРАВЛЕННАЯ ВЕРСИЯ
-// Замените старую функцию sendOrderToBot на эту:
-async function sendOrderToBot(order) {
-    console.log('📦 Отправка заказа в бот:', order.id);
-    
-    try {
-        // Формируем данные для отправки
-        const orderData = {
-            order_id: order.id,
-            user_id: order.userData.telegramId || '', // ОБЯЗАТЕЛЬНО передаем telegramId!
-            username: order.userData.username || '',
-            first_name: order.userData.firstName || '',
-            product_name: order.product.name,
-            price: order.product.price,
-            player_id: order.playerId,
-            payment_method: order.paymentMethod
-        };
-        
-        console.log('📤 Данные для API:', orderData);
-        
-        // Отправляем на API бота
-        const response = await fetch('http://localhost:8081/api/create_order', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(orderData)
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP ошибка: ${response.status}`);
-        }
-        
-        const result = await response.json();
-        console.log('✅ Ответ API:', result);
-        
-        if (result.status === 'success') {
-            console.log('🎉 Заказ успешно создан!');
-            return true;
-        } else {
-            throw new Error(result.message || 'Ошибка от сервера');
-        }
-        
-    } catch (error) {
-        console.error('❌ Ошибка отправки заказа:', error);
-        
-        // Пробуем отправить напрямую в Telegram
-        try {
-            console.log('🔄 Пробуем прямой запрос в Telegram...');
+        async function sendOrderToBot(order) {
+            console.log('📦 Отправка заказа в бот:', order.id);
             
-            const messageText = `🆕 НОВЫЙ ЗАКАЗ С САЙТА #${order.id}\n\n👤 Пользователь: ${order.userData.firstName} (@${order.userData.username})\n🎮 Товар: ${order.product.name}\n💰 Цена: ${order.product.price}₽\n👾 ID игрока: ${order.playerId}\n💳 Способ оплаты: ${order.paymentMethod}\n\n✅ Пользователь утверждает, что оплатил!`;
-            
-            const telegramResponse = await fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    chat_id: CONFIG.ADMIN_ID,
-                    text: messageText,
-                    parse_mode: 'HTML'
-                })
-            });
-            
-            if (telegramResponse.ok) {
-                console.log('✅ Запасной вариант сработал');
-                return true;
+            try {
+                // Формируем данные для отправки
+                const orderData = {
+                    order_id: order.id,
+                    user_id: order.userData.telegramId || '',
+                    username: order.userData.username || '',
+                    first_name: order.userData.firstName || '',
+                    product_name: order.product.name,
+                    price: order.product.price,
+                    player_id: order.playerId,
+                    payment_method: order.paymentMethod
+                };
+                
+                console.log('📤 Данные для API:', orderData);
+                
+                // Отправляем на API бота
+                const response = await fetch('http://localhost:8081/api/create_order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(orderData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ошибка: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log('✅ Ответ API:', result);
+                
+                if (result.status === 'success') {
+                    console.log('🎉 Заказ успешно создан!');
+                    return true;
+                } else {
+                    throw new Error(result.message || 'Ошибка от сервера');
+                }
+                
+            } catch (error) {
+                console.error('❌ Ошибка отправки заказа:', error);
+                return false;
             }
-        } catch (telegramError) {
-            console.error('❌ Запасной вариант тоже не сработал:', telegramError);
         }
-        
-        return false;
-    }
-}
+
         // Показать статус заказа
-        function showOrderStatus(status, orderId) {
+        function showOrderStatus(orderId) {
             const orderStatus = document.getElementById('order-status');
             orderStatus.style.display = 'block';
             
             // Скрываем другие секции
             document.getElementById('main-section').style.display = 'none';
             document.getElementById('products-section').style.display = 'none';
+            document.getElementById('orders-history-section').style.display = 'none';
             
-            let statusHtml = '';
             const order = currentState.currentOrder;
             
-            if (status === 'pending') {
-                statusHtml = `
-                    <div class="status-icon status-pending">⏳</div>
-                    <h2>Заказ создан!</h2>
-                    <p>🆔 Номер заказа: <b>#${orderId}</b></p>
-                    <p>🎮 Товар: ${order.product.name}</p>
-                    <p>💰 Сумма: ${order.product.price}₽</p>
-                    <p>👤 Ваш ID: ${order.playerId}</p>
-                    <p style="margin-top: 1.5rem; color: var(--warning-yellow);">
-                        ✅ <b>Админ уведомлен об оплате!</b>
+            const statusHtml = `
+                <div class="status-icon status-pending">
+                    <i class="fas fa-paper-plane"></i>
+                </div>
+                <h2>Заказ отправлен!</h2>
+                <p><i class="fas fa-hashtag"></i> Номер заказа: <b>#${orderId}</b></p>
+                <p><i class="fas fa-gamepad"></i> Товар: ${order.product.name}</p>
+                <p><i class="fas fa-coins"></i> Сумма: ${order.product.price}₽</p>
+                <p><i class="fas fa-id-card"></i> Ваш ID: ${order.playerId}</p>
+                <p style="margin-top: 1.5rem; color: var(--light-purple);">
+                    ✅ <b>Админ получил уведомление!</b>
+                </p>
+                <div style="background: rgba(139, 92, 246, 0.1); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--light-purple); margin: 1.5rem 0;">
+                    <p><b><i class="fas fa-clock"></i> Ожидайте подтверждения админа</b></p>
+                    <p style="font-size: 0.95rem; color: var(--text-gray); margin-top: 0.8rem;">
+                        Обычно это занимает 1-10 минут.<br>
+                        Вы получите уведомление в Telegram.
                     </p>
-                    <div style="background: rgba(245, 158, 11, 0.1); padding: 1rem; border-radius: 10px; border: 1px solid var(--warning-yellow); margin: 1rem 0;">
-                        <p><b>⏳ Ожидайте подтверждения админа</b></p>
-                        <p style="font-size: 0.9rem; color: var(--text-gray); margin-top: 0.5rem;">
-                            Обычно это занимает 1-10 минут.<br>
-                            Вы получите уведомление в Telegram.
-                        </p>
-                    </div>
-                    <button class="nav-btn" onclick="showMain()" style="margin-top: 1rem; width: 100%;">
-                        🏠 Вернуться в магазин
+                </div>
+                <div style="margin-top: 2rem;">
+                    <button class="nav-btn" onclick="showOrdersHistory()" style="width: 100%; margin-bottom: 0.5rem;">
+                        <i class="fas fa-history"></i> Посмотреть историю заказов
                     </button>
-                `;
-            } else if (status === 'completed') {
-                statusHtml = `
-                    <div class="status-icon status-success">✅</div>
-                    <h2>Заказ подтвержден!</h2>
-                    <p>🆔 Номер заказа: <b>#${orderId}</b></p>
-                    <p>🎮 Товар: ${order.product.name}</p>
-                    <p>💰 Сумма: ${order.product.price}₽</p>
-                    <p>👤 Ваш ID: ${order.playerId}</p>
-                    <p style="margin-top: 1.5rem; color: var(--success-green);">
-                        🎉 <b>Ваш заказ подтвержден администратором!</b>
-                    </p>
-                    <div style="background: rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: 10px; border: 1px solid var(--success-green); margin: 1rem 0;">
-                        <p><b>📝 Администратор @${CONFIG.SUPPORT_USERNAME} напишет вам в течение 5-30 минут</b></p>
-                        <p style="font-size: 0.9rem; color: var(--text-gray); margin-top: 0.5rem;">
-                            Следите за сообщениями в Telegram.<br>
-                            Доставка происходит сразу после связи.
-                        </p>
-                    </div>
-                    <p style="color: var(--text-gray); margin-top: 1rem;">
-                        Спасибо за покупку! ❤️
-                    </p>
-                    <button class="nav-btn" onclick="showMain()" style="margin-top: 1rem; width: 100%;">
-                        🏠 Вернуться в магазин
+                    <button class="nav-btn" onclick="showMain()" style="width: 100%;">
+                        <i class="fas fa-home"></i> Вернуться в магазин
                     </button>
-                `;
-            } else if (status === 'rejected') {
-                statusHtml = `
-                    <div class="status-icon status-error">❌</div>
-                    <h2>Заказ отклонен</h2>
-                    <p>🆔 Номер заказа: <b>#${orderId}</b></p>
-                    <p style="margin-top: 1rem;">
-                        Возможно, оплата не поступила или возникли проблемы.
-                    </p>
-                    <div style="background: rgba(220, 38, 38, 0.1); padding: 1rem; border-radius: 10px; border: 1px solid var(--primary-red); margin: 1.5rem 0;">
-                        <p style="color: var(--primary-red); font-weight: 600;">
-                            📞 Свяжитесь с поддержкой: @${CONFIG.SUPPORT_USERNAME}
-                        </p>
-                        <p style="font-size: 0.9rem; color: var(--text-gray); margin-top: 0.5rem;">
-                            Для решения вопроса и возврата средств
-                        </p>
-                    </div>
-                    <button class="nav-btn" onclick="showMain()" style="margin-top: 1rem; width: 100%;">
-                        🏠 Вернуться в магазин
-                    </button>
-                `;
-            }
+                </div>
+            `;
             
             orderStatus.innerHTML = statusHtml;
-        }
-
-        // Проверить статус заказа по URL параметрам
-        function checkOrderStatusFromURL() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const status = urlParams.get('status');
-            const orderId = urlParams.get('order_id');
-            
-            if (status && orderId) {
-                // Загружаем данные заказа из localStorage
-                const savedOrder = localStorage.getItem(`order_${orderId}`);
-                if (savedOrder) {
-                    const orderData = JSON.parse(savedOrder);
-                    currentState.selectedProduct = orderData;
-                    showOrderStatus(status, orderId);
-                    return true;
-                }
-            }
-            return false;
         }
 
         // Закрыть модальные окна
@@ -1394,21 +1949,10 @@ async function sendOrderToBot(order) {
             document.getElementById('help-modal').style.display = 'flex';
         }
 
-        // Инициализация
+        // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', () => {
-            // Проверяем статус заказа из URL
-            if (!checkOrderStatusFromURL()) {
-                // Показываем главную страницу или форму регистрации
-                const userData = getUserData();
-                if (userData) {
-                    showMain();
-                }
-            }
+            initLoadingScreen();
         });
     </script>
 </body>
 </html>
-
-
-
-
