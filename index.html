@@ -807,38 +807,42 @@
         }
 
         // Завершение регистрации
-        function completeRegistration() {
-            const username = document.getElementById('reg-username').value.trim();
-            const name = document.getElementById('reg-name').value.trim();
-            const telegramId = document.getElementById('reg-telegram-id').value.trim();
-
-            if (!username) {
-                alert('Введите Telegram username!');
-                return;
-            }
-
-            if (!name) {
-                alert('Введите ваше имя!');
-                return;
-            }
-
-            if (telegramId && !telegramId.match(/^\d+$/)) {
-                alert('Telegram ID должен содержать только цифры!');
-                return;
-            }
-
-            // Сохраняем данные
-            currentState.userData = {
-                username: username,
-                firstName: name,
-                telegramId: telegramId
-            };
-            saveUserData(currentState.userData);
-
-            // Скрываем форму и показываем главную
-            document.getElementById('registration-form').style.display = 'none';
-            showMain();
-        }
+// В функции completeRegistration() на сайте
+function completeRegistration() {
+    const username = document.getElementById('reg-username').value.trim();
+    const name = document.getElementById('reg-name').value.trim();
+    const telegramId = document.getElementById('reg-telegram-id').value.trim();
+    
+    if (!username) {
+        alert('Введите Telegram username!');
+        return;
+    }
+    
+    if (!name) {
+        alert('Введите ваше имя!');
+        return;
+    }
+    
+    if (!telegramId) {
+        alert('Введите ваш Telegram ID!\n\nКак найти Telegram ID:\n1. Напишите боту @userinfobot\n2. Он покажет ваш ID\n3. Скопируйте цифры и вставьте сюда');
+        return;
+    }
+    
+    if (!telegramId.match(/^\d+$/)) {
+        alert('Telegram ID должен содержать только цифры!');
+        return;
+    }
+    
+    // Сохраняем данные
+    currentState.userData = {
+        username: username,
+        firstName: name,
+        telegramId: telegramId  // Теперь точно есть
+    };
+    
+    saveUserData(currentState.userData);
+    showMain();
+}
 
         // Отмена регистрации
         function cancelRegistration() {
@@ -1404,6 +1408,7 @@ async function sendOrderToBot(order) {
     </script>
 </body>
 </html>
+
 
 
 
