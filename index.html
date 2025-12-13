@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MITYA PUBG Store</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        :root {
+            --primary-red: #dc2626;
+            --dark-red: #b91c1c;
+            --light-red: #f87171;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-light: #ffffff;
+            --text-gray: #94a3b8;
+            --border-color: #334155;
+            --success-green: #10b981;
+            --warning-yellow: #f59e0b;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(90deg, var(--dark-red) 0%, var(--primary-red) 100%);
+            padding: 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .logo h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Container */
+        .container {
+            padding: 20px;
+            padding-bottom: 90px;
+        }
+
+        /* Categories */
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .category-card {
+            background: var(--bg-card);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 130px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .category-card:hover {
+            border-color: var(--primary-red);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(220, 38, 38, 0.2);
+        }
+
+        .category-card.active {
+            border-color: var(--primary-red);
+            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(220, 38, 38, 0.1) 100%);
+        }
+
+        .category-icon {
+            font-size: 2.8rem;
+            margin-bottom: 12px;
+            color: var(--light-red);
+        }
+
+        /* Products */
+        .products-grid {
+            display: none;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .product-card {
+            background: var(--bg-card);
+            border-radius: 14px;
+            padding: 20px;
+            border-left: 5px solid var(--primary-red);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .product-badge {
+            background: var(--primary-red);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            color: var(--success-green);
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin: 15px 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .buy-btn {
+            background: linear-gradient(90deg, var(--primary-red), var(--dark-red));
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            width: 100%;
+            font-size: 1.1rem;
+            margin-top: 10px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+        }
+
+        .buy-btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
+        }
+
+        .buy-btn:hover {
+            opacity: 0.95;
+        }
+
+        /* Back Button */
+        .back-btn {
+            background: var(--border-color);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: #475569;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 25px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 2px solid var(--primary-red);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            animation: modalSlide 0.3s ease;
+        }
+
+        @keyframes modalSlide {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close-btn {
+            background: var(--primary-red);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 20px;
+            font-size: 1rem;
+        }
+
+        /* Payment Methods */
+        .payment-methods {
+            display: grid;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .payment-method {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--border-color);
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .payment-method:hover {
+            border-color: var(--primary-red);
+            background: rgba(220, 38, 38, 0.1);
+        }
+
+        .payment-method.active {
+            border-color: var(--primary-red);
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.2) 0%, rgba(185, 28, 28, 0.1) 100%);
+        }
+
+        .payment-icon {
+            font-size: 2.4rem;
+            color: var(--light-red);
+        }
+
+        /* QR Code */
+        .qr-container {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .qr-container img {
+            max-width: 280px;
+            height: auto;
+            border-radius: 10px;
+            border: 2px solid var(--border-color);
+        }
+
+        /* Status */
+        .status-container {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .status-icon {
+            font-size: 5rem;
+            margin-bottom: 25px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .status-success {
+            color: var(--success-green);
+        }
+
+        .status-pending {
+            color: var(--warning-yellow);
+        }
+
+        .status-error {
+            color: var(--primary-red);
+        }
+
+        /* Input */
+        .input-field {
+            width: 100%;
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            margin: 15px 0;
+            transition: all 0.2s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-red);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+        }
+
+        /* User Info */
+        .user-info {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(185, 28, 28, 0.05) 100%);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-gray);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Error */
+        .error {
+            color: var(--primary-red);
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(220, 38, 38, 0.1);
+            border-radius: 12px;
+            margin: 20px;
+            border: 1px solid var(--primary-red);
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--bg-card);
+            padding: 15px 20px;
+            border-top: 2px solid var(--primary-red);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 99;
+        }
+
+        .footer-btn {
+            background: var(--border-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .footer-btn:hover {
+            background: #475569;
+        }
+
+        /* Responsive */
+        @media (min-width: 480px) {
+            .categories {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Telegram Web App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <!-- App -->
+    <div id="app">
+        <!-- Loading -->
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <p>Загрузка магазина...</p>
+        </div>
+
+        <!-- Header (показывается после загрузки) -->
+        <div class="header" id="header" style="display: none;">
+            <div class="logo">
+                <h1>🎮 MITYA PUBG STORE</h1>
+            </div>
+            <p style="opacity: 0.9; font-size: 0.95rem;">Купи UC и товары для PUBG Mobile</p>
+        </div>
+
+        <!-- Main Menu -->
+        <div class="container" id="main-menu" style="display: none;">
+            <div class="user-info" id="user-info">
+                <p>👤 Привет, <span id="user-name">друг</span>!</p>
+                <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">Выберите категорию товаров:</p>
+            </div>
+
+            <div class="categories">
+                <div class="category-card" data-category="uc">
+                    <div class="category-icon">💰</div>
+                    <h3>UC</h3>
+                    <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">Unknown Cash</p>
+                </div>
+                <div class="category-card" data-category="prime">
+                    <div class="category-icon">👑</div>
+                    <h3>Prime</h3>
+                    <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">Подписка</p>
+                </div>
+                <div class="category-card" data-category="popularity">
+                    <div class="category-icon">📈</div>
+                    <h3>Популярность</h3>
+                    <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">Звёзды</p>
+                </div>
+                <div class="category-card" data-category="gold">
+                    <div class="category-icon">🏆</div>
+                    <h3>Золотые</h3>
+                    <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">Транспорт</p>
+                </div>
+                <div class="category-card" data-category="porsche">
+                    <div class="category-icon">🚗</div>
+                    <h3>Porsche</h3>
+                    <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">Скины авто</p>
+                </div>
+                <div class="category-card" id="help-btn">
+                    <div class="category-icon">❓</div>
+                    <h3>Помощь</h3>
+                    <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">Инструкция</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products -->
+        <div class="container" id="products-section" style="display: none;">
+            <button class="back-btn" id="back-to-menu">
+                ← Назад в меню
+            </button>
+            <h2 id="category-title" style="margin-bottom: 20px;"></h2>
+            <div class="products-grid" id="products-grid"></div>
+        </div>
+
+        <!-- Status -->
+        <div class="container" id="status-section" style="display: none;">
+            <div class="status-container" id="status-content"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer" style="display: none;" id="footer">
+            <button class="footer-btn" id="support-btn">📞 Поддержка</button>
+            <button class="footer-btn" id="orders-btn">📋 Мои заказы</button>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal-overlay" id="modal-overlay">
+            <div class="modal" id="modal">
+                <!-- Модальное окно заполняется динамически -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Telegram Web App
+        const tg = window.Telegram.WebApp;
+        
+        // Конфигурация
+        const PRODUCTS = {
+            'uc': [
+                {id: 1, name: '60 UC', amount: '60', price: 95},
+                {id: 2, name: '325 UC', amount: '325', price: 475},
+                {id: 3, name: '660 UC', amount: '660', price: 855},
+                {id: 4, name: '1800 UC', amount: '1800', price: 2350},
+                {id: 5, name: '3850 UC', amount: '3850', price: 4730},
+                {id: 6, name: '8100 UC', amount: '8100', price: 9850},
+                {id: 7, name: '120 UC', amount: '120', price: 180},
+                {id: 8, name: '400 UC', amount: '400', price: 585},
+                {id: 9, name: '900 UC', amount: '900', price: 1175},
+                {id: 10, name: '2000 UC', amount: '2000', price: 2600},
+                {id: 11, name: '5000 UC', amount: '5000', price: 6150},
+            ],
+            'prime': [
+                {id: 12, name: 'Prime 30 дней', amount: '30 дней', price: 299},
+                {id: 13, name: 'Prime 90 дней', amount: '90 дней', price: 799},
+                {id: 14, name: 'Prime 180 дней', amount: '180 дней', price: 1499},
+                {id: 15, name: 'Prime 365 дней', amount: '365 дней', price: 2699},
+            ],
+            'popularity': [
+                {id: 16, name: '50 Популярности', amount: '50 звёзд', price: 75},
+                {id: 17, name: '200 Популярности', amount: '200 звёзд', price: 290},
+                {id: 18, name: '500 Популярности', amount: '500 звёзд', price: 690},
+                {id: 19, name: '1000 Популярности', amount: '1000 звёзд', price: 1290},
+                {id: 20, name: '2000 Популярности', amount: '2000 звёзд', price: 2490},
+                {id: 21, name: '5000 Популярности', amount: '5000 звёзд', price: 5990},
+            ],
+            'gold': [
+                {id: 22, name: 'Золотой самолет', amount: 'транспорт', price: 9990},
+                {id: 23, name: 'Золотой вертолет', amount: 'транспорт', price: 7990},
+                {id: 24, name: 'Золотой мотоцикл', amount: 'транспорт', price: 5990},
+                {id: 25, name: 'Золотой спорткар', amount: 'транспорт', price: 6990},
+            ],
+            'porsche': [
+                {id: 26, name: 'Porsche 911', amount: 'скин автомобиля', price: 3999},
+                {id: 27, name: 'Porsche Taycan', amount: 'скин автомобиля', price: 3499},
+                {id: 28, name: 'Porsche Boxster', amount: 'скин автомобиля', price: 2999},
+            ]
+        };
+
+        const categoryNames = {
+            'uc': '💰 UC (Unknown Cash)',
+            'prime': '👑 Prime подписка',
+            'popularity': '📈 Популярность',
+            'gold': '🏆 Золотые транспортные средства',
+            'porsche': '🚗 Porsche скины'
+        };
+
+        const QR_CODE_URL = "https://iimg.su/i/EFnIjv";
+        const SBER_PAYMENT_URL = "https://www.sberbank.com/sms/pbpn?requisiteNumber=79657230692";
+        const SUPPORT_USERNAME = "astmatiks_exe";
+
+        // Состояние приложения
+        let currentState = {
+            selectedProduct: null,
+            playerId: '',
+            orderId: null,
+            currentCategory: null
+        };
+
+        // Инициализация Telegram Web App
+        function initTelegramApp() {
+            try {
+                tg.expand();
+                tg.setHeaderColor('#dc2626');
+                tg.setBackgroundColor('#0f172a');
+                tg.enableClosingConfirmation();
+                
+                // Показываем интерфейс после загрузки
+                setTimeout(() => {
+                    showMainMenu();
+                    
+                    // Проверяем параметры URL для открытия конкретной категории
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const category = urlParams.get('category');
+                    
+                    if (category && PRODUCTS[category]) {
+                        showCategory(category);
+                    }
+                }, 500);
+                
+            } catch (error) {
+                console.error('Telegram Web App error:', error);
+                showMainMenu(); // Показываем интерфейс даже без Telegram
+            }
+        }
+
+        // Показать главное меню
+        function showMainMenu() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('header').style.display = 'block';
+            document.getElementById('main-menu').style.display = 'block';
+            document.getElementById('footer').style.display = 'flex';
+            document.getElementById('products-section').style.display = 'none';
+            document.getElementById('status-section').style.display = 'none';
+            
+            // Показываем имя пользователя если есть
+            const user = tg.initDataUnsafe?.user;
+            if (user) {
+                document.getElementById('user-name').textContent = user.first_name || 'друг';
+            }
+            
+            // Активируем кнопки категорий
+            document.querySelectorAll('.category-card').forEach(card => {
+                const category = card.getAttribute('data-category');
+                if (category) {
+                    card.onclick = () => showCategory(category);
+                }
+            });
+            
+            // Кнопка помощи
+            document.getElementById('help-btn').onclick = showHelp;
+            
+            // Сброс активной категории
+            currentState.currentCategory = null;
+        }
+
+        // Показать категорию товаров
+        function showCategory(category) {
+            currentState.currentCategory = category;
+            
+            document.getElementById('main-menu').style.display = 'none';
+            document.getElementById('products-section').style.display = 'block';
+            
+            const categoryTitle = document.getElementById('category-title');
+            const productsGrid = document.getElementById('products-grid');
+            
+            categoryTitle.textContent = categoryNames[category] || category;
+            
+            const products = PRODUCTS[category] || [];
+            let html = '';
+            
+            if (products.length === 0) {
+                html = '<p style="text-align: center; color: var(--text-gray); padding: 40px;">Товары скоро появятся</p>';
+            } else {
+                products.forEach(product => {
+                    html += `
+                        <div class="product-card">
+                            <div class="product-badge">ПОПУЛЯРНО</div>
+                            <h3>${product.name}</h3>
+                            <p style="color: var(--text-gray); font-size: 0.95rem; margin-top: 5px;">${product.amount}</p>
+                            <div class="product-price">${product.price}₽</div>
+                            <button class="buy-btn" onclick="selectProduct(${product.id})">
+                                Купить сейчас
+                            </button>
+                        </div>
+                    `;
+                });
+            }
+            
+            productsGrid.innerHTML = html;
+            
+            // Кнопка назад
+            document.getElementById('back-to-menu').onclick = showMainMenu;
+        }
+
+        // Выбрать товар
+        function selectProduct(productId) {
+            // Находим товар
+            let selectedProduct = null;
+            for (const category in PRODUCTS) {
+                selectedProduct = PRODUCTS[category].find(p => p.id === productId);
+                if (selectedProduct) break;
+            }
+            
+            if (!selectedProduct) {
+                showError('Товар не найден');
+                return;
+            }
+            
+            currentState.selectedProduct = selectedProduct;
+            
+            // Показываем модальное окно для ввода ID
+            showModal(`
+                <h2 style="margin-bottom: 20px;">${selectedProduct.name}</h2>
+                <p style="color: var(--text-gray); margin-bottom: 5px;">Цена: <strong>${selectedProduct.price}₽</strong></p>
+                <p style="color: var(--text-gray); margin-bottom: 20px;">Количество: ${selectedProduct.amount}</p>
+                
+                <p style="font-weight: 600; margin-bottom: 10px;">Введите ID PUBG Mobile:</p>
+                <input type="text" id="player-id-input" class="input-field" 
+                       placeholder="Только цифры, например: 5123456789" 
+                       pattern="[0-9]*" 
+                       inputmode="numeric"
+                       maxlength="20">
+                <p style="font-size: 0.9rem; color: var(--text-gray); margin-top: 5px;">
+                    ID находится в профиле PUBG Mobile
+                </p>
+                
+                <button class="buy-btn" onclick="processPlayerId()" style="margin-top: 25px;">
+                    Далее → Выбор оплаты
+                </button>
+            `);
+        }
+
+        // Обработка ID игрока
+        function processPlayerId() {
+            const playerId = document.getElementById('player-id-input').value.trim();
+            
+            if (!playerId || !/^\d+$/.test(playerId)) {
+                showError('❌ ID должен содержать только цифры!');
+                return;
+            }
+            
+            if (playerId.length < 9) {
+                showError('❌ ID должен быть минимум 9 цифр!');
+                return;
+            }
+            
+            currentState.playerId = playerId;
+            showPaymentOptions();
+        }
+
+        // Показать способы оплаты
+        function showPaymentOptions() {
+            const paymentMethods = [
+                {id: 'qr', name: 'QR-код', icon: '📱', description: 'Оплата по QR-коду'},
+                {id: 'sber', name: 'Сбербанк', icon: '🏦', description: 'Ссылка на Сбербанк'},
+                {id: 'crypto', name: 'Криптовалюта', icon: '💳', description: 'USDT (TRC20)'}
+            ];
+            
+            let methodsHtml = paymentMethods.map(method => `
+                <div class="payment-method" data-method="${method.id}">
+                    <div class="payment-icon">${method.icon}</div>
+                    <div style="flex: 1;">
+                        <h4 style="margin-bottom: 5px;">${method.name}</h4>
+                        <p style="color: var(--text-gray); font-size: 0.9rem;">${method.description}</p>
+                    </div>
+                </div>
+            `).join('');
+            
+            showModal(`
+                <h2 style="margin-bottom: 10px;">Выберите способ оплаты</h2>
+                <p style="color: var(--text-gray); margin-bottom: 20px;">
+                    Товар: <strong>${currentState.selectedProduct.name}</strong><br>
+                    Цена: <strong>${currentState.selectedProduct.price}₽</strong><br>
+                    Ваш ID: <strong>${currentState.playerId}</strong>
+                </p>
+                
+                <div class="payment-methods" id="payment-methods">
+                    ${methodsHtml}
+                </div>
+                
+                <button class="buy-btn" onclick="processPayment()" style="margin-top: 25px;" id="pay-button" disabled>
+                    Выберите способ оплаты
+                </button>
+            `);
+            
+            // Активируем выбор способа оплаты
+            let selectedMethod = null;
+            document.querySelectorAll('.payment-method').forEach(method => {
+                method.onclick = function() {
+                    document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedMethod = this.getAttribute('data-method');
+                    
+                    const button = document.getElementById('pay-button');
+                    button.textContent = `Оплатить через ${paymentMethods.find(m => m.id === selectedMethod)?.name}`;
+                    button.disabled = false;
+                    
+                    // Сохраняем выбранный метод
+                    currentState.paymentMethod = selectedMethod;
+                };
+            });
+        }
+
+        // Обработка оплаты
+        function processPayment() {
+            if (!currentState.paymentMethod) {
+                showError('Выберите способ оплаты');
+                return;
+            }
+            
+            // Генерируем ID заказа
+            currentState.orderId = 'ORD' + Date.now() + Math.floor(Math.random() * 1000);
+            
+            // Показываем инструкцию по оплате
+            let instruction = '';
+            
+            switch(currentState.paymentMethod) {
+                case 'qr':
+                    instruction = `
+                        <h3 style="margin-bottom: 15px;">📱 Оплата по QR-коду</h3>
+                        <div class="qr-container">
+                            <img src="${QR_CODE_URL}" alt="QR код для оплаты">
+                        </div>
+                        <p style="text-align: center; margin: 15px 0;">
+                            Сумма к оплате: <strong>${currentState.selectedProduct.price}₽</strong>
+                        </p>
+                        <p style="color: var(--text-gray);">
+                            1. Отсканируйте QR-код выше<br>
+                            2. Оплатите точную сумму<br>
+                            3. Нажмите "Я оплатил" ниже
+                        </p>
+                    `;
+                    break;
+                    
+                case 'sber':
+                    instruction = `
+                        <h3 style="margin-bottom: 15px;">🏦 Оплата через Сбербанк</h3>
+                        <p style="margin-bottom: 20px;">
+                            <a href="${SBER_PAYMENT_URL}" 
+                               target="_blank" 
+                               style="display: block; background: linear-gradient(90deg, var(--primary-red), var(--dark-red)); 
+                                      color: white; padding: 16px; border-radius: 10px; text-align: center; 
+                                      text-decoration: none; font-weight: bold; margin: 15px 0;">
+                                Нажмите для перехода к оплате
+                            </a>
+                        </p>
+                        <p style="color: var(--text-gray);">
+                            1. Перейдите по ссылке выше<br>
+                            2. Оплатите <strong>${currentState.selectedProduct.price}₽</strong><br>
+                            3. Вернитесь в это окно и нажмите "Я оплатил"
+                        </p>
+                    `;
+                    break;
+                    
+                case 'crypto':
+                    instruction = `
+                        <h3 style="margin-bottom: 15px;">💳 Оплата криптовалютой</h3>
+                        <p style="padding: 15px; background: rgba(16, 185, 129, 0.1); border-radius: 10px; border: 1px solid var(--success-green);">
+                            Кошелек USDT (TRC20):<br>
+                            <strong style="word-break: break-all;">TАдресКошелькаДляОплаты</strong>
+                        </p>
+                        <p style="color: var(--text-gray); margin-top: 15px;">
+                            1. Отправьте <strong>${currentState.selectedProduct.price}₽</strong> в USDT<br>
+                            2. Убедитесь, что отправили на правильный адрес<br>
+                            3. Нажмите "Я оплатил" ниже
+                        </p>
+                    `;
+                    break;
+            }
+            
+            showModal(`
+                <h2>Инструкция по оплате</h2>
+                ${instruction}
+                
+                <div style="margin-top: 30px;">
+                    <p style="font-size: 0.9rem; color: var(--text-gray);">
+                        Номер заказа: <strong>${currentState.orderId}</strong><br>
+                        После оплаты нажмите кнопку ниже
+                    </p>
+                    
+                    <button class="buy-btn" onclick="confirmPayment()" style="margin-top: 20px;">
+                        ✅ Я оплатил
+                    </button>
+                    
+                    <button class="close-btn" onclick="closeModal()" style="margin-top: 10px;">
+                        Отменить
+                    </button>
+                </div>
+            `);
+        }
+
+        // Подтверждение оплаты
+        async function confirmPayment() {
+            try {
+                showStatus('pending');
+                
+                // В реальном приложении здесь будет отправка на сервер
+                // Например: await sendOrderToServer();
+                
+                // Показываем успех
+                setTimeout(() => {
+                    showStatus('success');
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Payment error:', error);
+                showError('Ошибка при создании заказа');
+            }
+        }
+
+        // Показать статус
+        function showStatus(status) {
+            closeModal();
+            
+            document.getElementById('products-section').style.display = 'none';
+            document.getElementById('status-section').style.display = 'block';
+            document.getElementById('footer').style.display = 'flex';
+            
+            const statusContent = document.getElementById('status-content');
+            
+            if (status === 'pending') {
+                statusContent.innerHTML = `
+                    <div class="status-icon status-pending">⏳</div>
+                    <h2 style="margin-bottom: 15px;">Заказ создается</h2>
+                    <p>Пожалуйста, подождите...</p>
+                `;
+            } else if (status === 'success') {
+                statusContent.innerHTML = `
+                    <div class="status-icon status-success">✅</div>
+                    <h2 style="margin-bottom: 15px;">Заказ успешно создан!</h2>
+                    <p style="margin-bottom: 10px;">Номер заказа: <strong>${currentState.orderId}</strong></p>
+                    <p style="margin-bottom: 10px;">Товар: ${currentState.selectedProduct.name}</p>
+                    <p style="margin-bottom: 10px;">Цена: ${currentState.selectedProduct.price}₽</p>
+                    <p style="margin-bottom: 10px;">Ваш ID: ${currentState.playerId}</p>
+                    
+                    <p style="color: var(--text-gray); margin: 25px 0;">
+                        Админ уведомлен о вашем заказе.<br>
+                        Ожидайте подтверждения (обычно 1-10 минут).
+                    </p>
+                    
+                    <button class="buy-btn" onclick="showMainMenu()" style="margin-top: 10px;">
+                        Вернуться в магазин
+                    </button>
+                    
+                    <button class="close-btn" onclick="tg.close()" style="margin-top: 10px;">
+                        Закрыть Mini App
+                    </button>
+                `;
+            }
+        }
+
+        // Показать помощь
+        function showHelp() {
+            showModal(`
+                <h2 style="margin-bottom: 20px;">❓ Помощь и инструкция</h2>
+                
+                <div style="line-height: 1.6;">
+                    <h4 style="color: var(--light-red); margin: 15px 0 10px 0;">Как купить?</h4>
+                    <p>1. Выберите категорию товара</p>
+                    <p>2. Выберите конкретный товар</p>
+                    <p>3. Введите ID PUBG Mobile (только цифры)</p>
+                    <p>4. Выберите способ оплаты</p>
+                    <p>5. Оплатите по инструкции</p>
+                    <p>6. Нажмите "Я оплатил"</p>
+                    
+                    <h4 style="color: var(--light-red); margin: 20px 0 10px 0;">Где найти ID игрока?</h4>
+                    <p>• Откройте PUBG Mobile</p>
+                    <p>• Перейдите в профиль</p>
+                    <p>• ID указан вверху (только цифры)</p>
+                    <p>• Пример: 5123456789</p>
+                    
+                    <h4 style="color: var(--light-red); margin: 20px 0 10px 0;">Сколько ждать доставки?</h4>
+                    <p>• После оплаты: админ получит уведомление</p>
+                    <p>• После подтверждения админа: 1-15 минут</p>
+                    
+                    <h4 style="color: var(--light-red); margin: 20px 0 10px 0;">Поддержка</h4>
+                    <p>По всем вопросам: @${SUPPORT_USERNAME}</p>
+                </div>
+                
+                <button class="close-btn" onclick="closeModal()" style="margin-top: 25px;">
+                    Закрыть
+                </button>
+            `);
+        }
+
+        // Показать модальное окно
+        function showModal(content) {
+            document.getElementById('modal').innerHTML = content;
+            document.getElementById('modal-overlay').style.display = 'flex';
+        }
+
+        // Закрыть модальное окно
+        function closeModal() {
+            document.getElementById('modal-overlay').style.display = 'none';
+        }
+
+        // Показать ошибку
+        function showError(message) {
+            showModal(`
+                <div style="text-align: center;">
+                    <div class="status-icon status-error">❌</div>
+                    <h3 style="margin: 15px 0;">${message}</h3>
+                    <button class="close-btn" onclick="closeModal()">
+                        Закрыть
+                    </button>
+                </div>
+            `);
+        }
+
+        // Инициализация кнопок футера
+        function initFooterButtons() {
+            document.getElementById('support-btn').onclick = () => {
+                tg.openTelegramLink(`https://t.me/${SUPPORT_USERNAME}`);
+            };
+            
+            document.getElementById('orders-btn').onclick = () => {
+                showModal(`
+                    <h2 style="margin-bottom: 20px;">📋 Мои заказы</h2>
+                    <p style="color: var(--text-gray); text-align: center; padding: 40px 20px;">
+                        История заказов скоро появится<br>
+                        Следите за статусом в чате с ботом
+                    </p>
+                    <button class="close-btn" onclick="closeModal()">
+                        Закрыть
+                    </button>
+                `);
+            };
+        }
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', () => {
+            initTelegramApp();
+            initFooterButtons();
+            
+            // Закрытие модального окна по клику на оверлей
+            document.getElementById('modal-overlay').onclick = function(event) {
+                if (event.target === this) {
+                    closeModal();
+                }
+            };
+        });
+
+        // Отправка данных в бот (заглушка для демо)
+        async function sendOrderToServer() {
+            const orderData = {
+                order_id: currentState.orderId,
+                product: currentState.selectedProduct,
+                player_id: currentState.playerId,
+                payment_method: currentState.paymentMethod,
+                timestamp: new Date().toISOString()
+            };
+            
+            console.log('Order data:', orderData);
+            
+            // В реальном приложении:
+            // 1. Отправляем данные на ваш сервер
+            // 2. Сервер уведомляет Telegram бота
+            // 3. Бот отправляет уведомление админу
+            
+            return new Promise(resolve => setTimeout(() => resolve(true), 1000));
+        }
+    </script>
+</body>
+</html>
