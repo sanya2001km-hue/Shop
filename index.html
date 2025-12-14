@@ -5,29 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FrUKT UC SHOP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Подключаем красивый шрифт -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Montserrat', 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         :root {
-            --primary-purple: #8b5cf6;
-            --dark-purple: #7c3aed;
-            --light-purple: #a78bfa;
-            --bg-dark: #0f0f23;
-            --bg-card: #1a1a2e;
-            --text-light: #f0f0ff;
-            --text-gray: #a0a0c0;
-            --border-color: #2a2a4a;
+            --primary-burgundy: #9d1d36;
+            --dark-burgundy: #7a142a;
+            --light-burgundy: #b82e4a;
+            --gold-accent: #d4af37;
+            --light-gold: #f4e4a6;
+            --bg-dark: #0a0a0a;
+            --bg-card: #1a0a0f;
+            --text-light: #f5f5f5;
+            --text-gray: #c0c0c0;
+            --border-color: #3a1a1f;
             --success-green: #10b981;
             --warning-yellow: #f59e0b;
             --telegram-blue: #0088cc;
-            --neon-pink: #ff00ff;
-            --neon-blue: #00ffff;
+            --neon-red: #ff3366;
+            --neon-gold: #ffd700;
+            --porsche-red: #ff2800;
         }
 
         body {
@@ -37,26 +42,26 @@
             overflow-x: hidden;
             padding-bottom: env(safe-area-inset-bottom);
             background: 
-                radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(124, 58, 237, 0.1) 0%, transparent 50%),
-                linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+                linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-card) 100%),
+                radial-gradient(circle at 20% 80%, rgba(157, 29, 54, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 50%);
+            background-attachment: fixed;
         }
 
-        /* Loading Screen */
+        /* Loading Screen - СОВЕРШЕННО НОВЫЙ ДИЗАЙН */
         .loading-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: var(--bg-dark);
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0f 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
-            padding: 20px;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
         }
 
         .loading-screen.hidden {
@@ -67,101 +72,139 @@
         .loading-content {
             text-align: center;
             z-index: 2;
-            max-width: 100%;
-            padding: 20px;
+            max-width: 90%;
+            padding: 2rem;
+            background: rgba(26, 10, 15, 0.8);
+            border-radius: 20px;
+            border: 2px solid var(--gold-accent);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(157, 29, 54, 0.3);
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .loading-logo {
             font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(90deg, var(--primary-purple), var(--neon-pink));
+            margin-bottom: 2rem;
+            background: linear-gradient(90deg, var(--gold-accent), var(--light-burgundy));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
-            animation: pulse 2s infinite;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            font-family: 'Montserrat', sans-serif;
         }
 
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.8;
-                transform: scale(1.05);
-            }
-        }
-
-        .loading-bar {
-            width: 100%;
-            max-width: 280px;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            margin: 1.5rem auto;
-            overflow: hidden;
+        .loading-animation {
             position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 2rem;
         }
 
-        .loading-progress {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary-purple), var(--light-purple));
-            border-radius: 10px;
-            transition: width 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .loading-progress:after {
-            content: '';
+        .loading-circle {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: shimmer 1.5s infinite;
+            border-radius: 50%;
+            border: 3px solid rgba(212, 175, 55, 0.1);
+            border-top: 3px solid var(--gold-accent);
+            animation: spin 1.5s linear infinite;
         }
 
-        @keyframes shimmer {
-            0% {
-                transform: translateX(-100%);
-            }
-            100% {
-                transform: translateX(100%);
-            }
+        .loading-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--gold-accent);
+            background: linear-gradient(135deg, rgba(157, 29, 54, 0.3), rgba(212, 175, 55, 0.2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .loading-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-bar-container {
+            width: 100%;
+            max-width: 300px;
+            margin: 1.5rem auto;
+        }
+
+        .loading-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .loading-progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold-accent), var(--light-burgundy));
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .loading-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            color: var(--text-gray);
+            font-size: 0.9rem;
         }
 
         .loading-percent {
+            font-weight: 700;
+            color: var(--gold-accent);
             font-size: 1.2rem;
-            font-weight: bold;
-            margin-top: 0.5rem;
-            color: var(--light-purple);
         }
 
         .loading-text {
-            margin-top: 1rem;
             color: var(--text-gray);
             font-size: 0.9rem;
-            animation: fadeInOut 2s infinite;
-        }
-
-        @keyframes fadeInOut {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+            margin-top: 0.3rem;
         }
 
         /* Header */
         .header {
-            background: linear-gradient(90deg, rgba(124, 58, 237, 0.9), rgba(139, 92, 246, 0.9));
+            background: linear-gradient(90deg, rgba(157, 29, 54, 0.95), rgba(122, 20, 42, 0.95));
             padding: 1rem;
-            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+            box-shadow: 0 4px 20px rgba(157, 29, 54, 0.4);
             position: sticky;
             top: 0;
             z-index: 100;
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 2px solid var(--gold-accent);
         }
 
         .nav-container {
@@ -186,18 +229,21 @@
         }
 
         .logo h1 {
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             font-weight: 800;
-            background: linear-gradient(90deg, #ffffff, var(--light-purple));
+            background: linear-gradient(90deg, var(--light-gold), var(--gold-accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
             text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: -0.5px;
         }
 
         .logo-icon {
-            font-size: 1.8rem;
+            font-size: 2rem;
             animation: float 3s ease-in-out infinite;
+            color: var(--gold-accent);
         }
 
         @keyframes float {
@@ -218,11 +264,11 @@
         }
 
         .nav-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            padding: 0.6rem 1.2rem;
-            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(157, 29, 54, 0.7), rgba(122, 20, 42, 0.7));
+            color: var(--light-gold);
+            border: 2px solid var(--gold-accent);
+            padding: 0.7rem 1.3rem;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
@@ -231,19 +277,22 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             flex: 1;
             min-width: 100px;
             max-width: 150px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         .nav-btn i {
             font-size: 0.9rem;
+            color: var(--light-gold);
         }
 
-        .nav-btn:active {
-            transform: scale(0.98);
-            background: rgba(255, 255, 255, 0.2);
+        .nav-btn:hover, .nav-btn:active {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, rgba(157, 29, 54, 0.9), rgba(122, 20, 42, 0.9));
+            box-shadow: 0 6px 15px rgba(157, 29, 54, 0.4);
         }
 
         /* Main Container */
@@ -257,23 +306,16 @@
             animation-delay: 0.5s;
         }
 
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         /* Registration Form */
         .registration-form {
             max-width: 500px;
             margin: 1rem auto;
-            padding: 1.5rem;
-            background: rgba(26, 26, 46, 0.95);
-            border-radius: 15px;
-            border: 2px solid var(--primary-purple);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(26, 10, 15, 0.95), rgba(42, 15, 22, 0.95));
+            border-radius: 20px;
+            border: 2px solid var(--gold-accent);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 15px 35px rgba(157, 29, 54, 0.3);
             animation: slideIn 0.5s ease;
         }
 
@@ -289,159 +331,224 @@
         }
 
         .form-group {
-            margin-bottom: 1.2rem;
+            margin-bottom: 1.5rem;
         }
 
         .form-label {
             display: block;
             margin-bottom: 0.5rem;
-            color: var(--text-light);
+            color: var(--light-gold);
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 1rem;
         }
 
         .form-input {
             width: 100%;
-            padding: 0.8rem 1rem;
-            border-radius: 10px;
+            padding: 1rem;
+            border-radius: 12px;
             border: 2px solid var(--border-color);
             background: rgba(255, 255, 255, 0.05);
             color: var(--text-light);
-            font-size: 0.95rem;
+            font-size: 1rem;
             transition: all 0.3s ease;
         }
 
         .form-input:focus {
             outline: none;
-            border-color: var(--light-purple);
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+            border-color: var(--gold-accent);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
             background: rgba(255, 255, 255, 0.08);
         }
 
         .form-hint {
-            font-size: 0.8rem;
-            color: var(--text-gray);
-            margin-top: 0.3rem;
-            line-height: 1.3;
+            font-size: 0.85rem;
+            color: var(--light-gold);
+            margin-top: 0.5rem;
+            line-height: 1.4;
+            opacity: 0.8;
         }
 
         /* Hero Section */
         .hero {
             text-align: center;
-            padding: 1.5rem;
-            background: rgba(26, 26, 46, 0.7);
-            border-radius: 15px;
-            margin-bottom: 1.5rem;
-            border: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(26, 10, 15, 0.8), rgba(42, 15, 22, 0.8));
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            border: 2px solid var(--gold-accent);
             backdrop-filter: blur(10px);
             position: relative;
             overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
         }
 
         .user-info {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1rem 1.2rem;
+            background: linear-gradient(135deg, rgba(157, 29, 54, 0.2), rgba(212, 175, 55, 0.1));
+            padding: 1.5rem;
             border-radius: 15px;
             display: inline-block;
-            margin-bottom: 1.5rem;
-            border: 1px solid rgba(139, 92, 246, 0.3);
+            margin-bottom: 2rem;
+            border: 1px solid var(--gold-accent);
             backdrop-filter: blur(5px);
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .user-info p {
-            margin: 0.5rem 0;
+            margin: 0.8rem 0;
             color: var(--text-light);
-            font-size: 0.95rem;
+            font-size: 1rem;
             text-align: left;
         }
 
         .user-info .username {
-            color: var(--light-purple);
-            font-weight: 600;
+            color: var(--gold-accent);
+            font-weight: 700;
         }
 
         .edit-profile-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-gray);
-            padding: 0.4rem 1rem;
+            background: linear-gradient(135deg, rgba(157, 29, 54, 0.5), rgba(122, 20, 42, 0.5));
+            border: 1px solid var(--gold-accent);
+            color: var(--light-gold);
+            padding: 0.7rem 1.5rem;
             border-radius: 15px;
             cursor: pointer;
-            font-size: 0.8rem;
-            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            margin-top: 1rem;
             transition: all 0.3s ease;
             width: 100%;
+            font-weight: 600;
         }
 
-        .edit-profile-btn:active {
-            border-color: var(--light-purple);
-            color: var(--light-purple);
+        .edit-profile-btn:hover, .edit-profile-btn:active {
+            background: linear-gradient(135deg, rgba(157, 29, 54, 0.8), rgba(122, 20, 42, 0.8));
+            transform: translateY(-2px);
         }
 
         .hero h2 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(90deg, var(--light-purple), var(--neon-pink));
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, var(--gold-accent), var(--light-burgundy));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            font-weight: 700;
         }
 
         .hero p {
-            font-size: 0.95rem;
-            color: var(--text-gray);
-            margin: 0 auto 1.5rem;
+            font-size: 1.1rem;
+            color: var(--light-gold);
+            margin: 0 auto 2rem;
+            max-width: 600px;
+            line-height: 1.6;
         }
 
         /* Categories */
         .categories {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
-            margin-bottom: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 2rem;
         }
 
         .category-card {
-            background: rgba(26, 26, 46, 0.7);
-            border-radius: 15px;
-            padding: 1.2rem 1rem;
+            background: linear-gradient(135deg, rgba(26, 10, 15, 0.9), rgba(42, 15, 22, 0.9));
+            border-radius: 20px;
+            padding: 1.5rem 1rem;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             border: 2px solid transparent;
             position: relative;
             overflow: hidden;
             backdrop-filter: blur(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold-accent);
+            box-shadow: 0 10px 20px rgba(157, 29, 54, 0.3);
         }
 
         .category-card:active {
-            transform: scale(0.98);
-            border-color: var(--light-purple);
+            transform: translateY(-2px);
+        }
+
+        .category-uc {
+            border-color: #8B4513;
+        }
+        .category-prime {
+            border-color: var(--gold-accent);
+        }
+        .category-popularity {
+            border-color: #FFD700;
+        }
+        .category-gold {
+            border-color: #FFD700;
+        }
+        .category-porsche {
+            border-color: #DC143C;
         }
 
         .category-icon {
-            font-size: 2rem;
-            margin-bottom: 0.8rem;
-            color: var(--light-purple);
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 1rem;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: transform 0.3s ease;
+        }
+
+        .category-uc .category-icon {
+            background-image: url('https://iimg.su/i/tlxCLW');
+        }
+        .category-prime .category-icon {
+            background-image: url('https://iimg.su/i/AdsP2V');
+        }
+        .category-popularity .category-icon {
+            font-size: 2.5rem;
+            color: #FFD700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .category-gold .category-icon {
+            font-size: 2.5rem;
+            color: #FFD700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .category-porsche .category-icon {
+            background-image: url('https://iimg.su/i/Po4yPC');
+            background-size: cover;
+        }
+
+        .category-card:hover .category-icon {
+            transform: scale(1.1);
         }
 
         .category-card h3 {
-            font-size: 0.95rem;
-            margin-bottom: 0.3rem;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--light-gold);
+            font-weight: 600;
         }
 
         .category-card p {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             color: var(--text-gray);
+            line-height: 1.4;
         }
 
         /* Products Grid */
         .products-grid {
             display: none;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 15px;
-            margin-bottom: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 20px;
+            margin-bottom: 2rem;
             animation: fadeIn 0.5s ease;
         }
 
@@ -451,67 +558,122 @@
         }
 
         .product-card {
-            background: rgba(26, 26, 46, 0.8);
-            border-radius: 15px;
-            padding: 1.2rem;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(139, 92, 246, 0.2);
+            background: linear-gradient(135deg, rgba(26, 10, 15, 0.9), rgba(42, 15, 22, 0.9));
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: all 0.4s ease;
+            border: 2px solid var(--border-color);
             position: relative;
             overflow: hidden;
             backdrop-filter: blur(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold-accent);
+            box-shadow: 0 10px 25px rgba(157, 29, 54, 0.3);
         }
 
         .product-card:active {
-            border-color: var(--light-purple);
-            transform: scale(0.98);
+            transform: translateY(-2px);
         }
 
         .product-badge {
             position: absolute;
             top: 10px;
             right: 10px;
-            background: linear-gradient(90deg, var(--primary-purple), var(--neon-pink));
+            background: linear-gradient(90deg, var(--primary-burgundy), var(--gold-accent));
             color: white;
-            padding: 3px 8px;
-            border-radius: 15px;
-            font-size: 0.7rem;
-            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .product-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1rem;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: transform 0.3s ease;
+        }
+
+        .product-uc .product-icon {
+            background-image: url('https://iimg.su/i/tlxCLW');
+        }
+        .product-prime .product-icon {
+            background-image: url('https://iimg.su/i/AdsP2V');
+        }
+        .product-popularity .product-icon {
+            font-size: 2.2rem;
+            color: #FFD700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .product-gold .product-icon {
+            font-size: 2.2rem;
+            color: #FFD700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .product-porsche .product-icon {
+            background-image: url('https://iimg.su/i/Po4yPC');
+            background-size: cover;
+        }
+
+        .product-card:hover .product-icon {
+            transform: scale(1.1);
         }
 
         .product-card h3 {
-            font-size: 0.9rem;
-            margin-bottom: 0.3rem;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--light-gold);
+            min-height: 3rem;
+            font-weight: 600;
         }
 
         .product-card p {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-gray);
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            min-height: 2rem;
+            line-height: 1.4;
         }
 
         .product-price {
-            color: var(--light-purple);
-            font-size: 1.3rem;
+            color: var(--gold-accent);
+            font-size: 1.5rem;
             font-weight: 800;
-            margin: 0.8rem 0;
+            margin: 1rem 0;
+            text-align: center;
         }
 
         .buy-btn {
-            background: linear-gradient(90deg, var(--primary-purple), var(--dark-purple));
-            color: white;
+            background: linear-gradient(135deg, var(--primary-burgundy), var(--dark-burgundy));
+            color: var(--light-gold);
             border: none;
-            padding: 0.8rem;
-            border-radius: 10px;
+            padding: 1rem;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: 700;
             width: 100%;
             transition: all 0.3s ease;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
-        .buy-btn:active {
-            transform: scale(0.98);
-            background: linear-gradient(90deg, var(--light-purple), var(--primary-purple));
+        .buy-btn:hover, .buy-btn:active {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, var(--light-burgundy), var(--primary-burgundy));
+            box-shadow: 0 6px 15px rgba(157, 29, 54, 0.4);
         }
 
         .buy-btn:disabled {
@@ -528,7 +690,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 15, 35, 0.98);
+            background: rgba(10, 10, 10, 0.98);
             z-index: 1000;
             align-items: center;
             justify-content: center;
@@ -543,54 +705,55 @@
         }
 
         .modal-content {
-            background: rgba(26, 26, 46, 0.95);
-            padding: 1.5rem;
-            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(26, 10, 15, 0.98), rgba(42, 15, 22, 0.98));
+            padding: 2rem;
+            border-radius: 20px;
             width: 100%;
             max-width: 500px;
             max-height: 90vh;
             overflow-y: auto;
-            border: 2px solid var(--primary-purple);
+            border: 2px solid var(--gold-accent);
             position: relative;
             backdrop-filter: blur(20px);
-            box-shadow: 0 15px 30px rgba(139, 92, 246, 0.3);
+            box-shadow: 0 20px 40px rgba(157, 29, 54, 0.3);
         }
 
         .close-modal {
             position: absolute;
             top: 15px;
             right: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: var(--text-light);
+            background: rgba(157, 29, 54, 0.3);
+            border: 1px solid var(--gold-accent);
+            color: var(--light-gold);
             font-size: 1.5rem;
             cursor: pointer;
-            width: 35px;
-            height: 35px;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
             transition: all 0.3s ease;
             z-index: 10;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
         }
 
-        .close-modal:active {
-            background: rgba(255, 255, 255, 0.2);
+        .close-modal:hover, .close-modal:active {
+            background: rgba(157, 29, 54, 0.6);
             transform: rotate(90deg);
         }
 
         .payment-methods {
             display: grid;
             gap: 15px;
-            margin: 1.5rem 0;
+            margin: 2rem 0;
         }
 
         .payment-method {
-            background: rgba(255, 255, 255, 0.05);
+            background: linear-gradient(135deg, rgba(157, 29, 54, 0.2), rgba(212, 175, 55, 0.1));
             border: 2px solid var(--border-color);
-            padding: 1rem;
-            border-radius: 12px;
+            padding: 1.2rem;
+            border-radius: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
@@ -598,48 +761,55 @@
             gap: 15px;
         }
 
-        .payment-method:active {
-            border-color: var(--light-purple);
-            background: rgba(139, 92, 246, 0.1);
+        .payment-method:hover, .payment-method:active {
+            border-color: var(--gold-accent);
+            background: linear-gradient(135deg, rgba(157, 29, 54, 0.4), rgba(212, 175, 55, 0.2));
+            transform: translateX(5px);
         }
 
         .payment-method.active {
-            border-color: var(--light-purple);
-            background: rgba(139, 92, 246, 0.2);
+            border-color: var(--gold-accent);
+            background: linear-gradient(135deg, rgba(157, 29, 54, 0.4), rgba(212, 175, 55, 0.3));
+            box-shadow: 0 5px 15px rgba(157, 29, 54, 0.2);
         }
 
         .payment-icon {
-            font-size: 1.8rem;
-            color: var(--light-purple);
+            font-size: 2rem;
+            color: var(--gold-accent);
+            min-width: 40px;
         }
 
         .payment-method h4 {
-            font-size: 0.95rem;
-            margin-bottom: 0.2rem;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            color: var(--light-gold);
         }
 
         .payment-method p {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-gray);
         }
 
         .confirm-payment {
-            background: linear-gradient(90deg, var(--success-green), #0ea271);
+            background: linear-gradient(135deg, var(--success-green), #0ea271);
             color: white;
             border: none;
-            padding: 1rem;
-            border-radius: 10px;
+            padding: 1.2rem;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: 700;
             width: 100%;
-            margin-top: 1rem;
+            margin-top: 1.5rem;
             transition: all 0.3s ease;
-            font-size: 0.95rem;
+            font-size: 1rem;
+            display: block !important;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
         }
 
-        .confirm-payment:active {
+        .confirm-payment:hover, .confirm-payment:active {
             opacity: 0.9;
-            transform: scale(0.98);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
         }
 
         .confirm-payment:disabled {
@@ -652,14 +822,15 @@
         .order-status {
             display: none;
             text-align: center;
-            padding: 2rem 1rem;
-            background: rgba(26, 26, 46, 0.8);
-            border-radius: 15px;
-            margin: 1rem auto;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, rgba(26, 10, 15, 0.9), rgba(42, 15, 22, 0.9));
+            border-radius: 20px;
+            margin: 2rem auto;
             max-width: 500px;
-            border: 2px solid var(--primary-purple);
-            backdrop-filter: blur(10px);
+            border: 2px solid var(--gold-accent);
+            backdrop-filter: blur(15px);
             animation: slideInUp 0.5s ease;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
         }
 
         @keyframes slideInUp {
@@ -674,46 +845,57 @@
         }
 
         .status-icon {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
         }
 
         .status-pending {
-            color: var(--light-purple);
+            color: var(--gold-accent);
             animation: pulse 2s infinite;
         }
 
-        /* Loading */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Loading Spinner */
         .loading {
             display: none;
             text-align: center;
-            padding: 2rem;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, rgba(26, 10, 15, 0.8), rgba(42, 15, 22, 0.8));
+            border-radius: 20px;
+            border: 2px solid var(--gold-accent);
+            margin: 2rem auto;
+            max-width: 400px;
         }
 
         .loading-spinner {
             border: 4px solid var(--border-color);
-            border-top: 4px solid var(--primary-purple);
+            border-top: 4px solid var(--gold-accent);
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            margin: 0 auto 1.5rem;
         }
 
         /* Telegram Banner */
         .telegram-banner {
-            background: linear-gradient(90deg, var(--telegram-blue) 0%, #34b7f1 100%);
-            padding: 1rem;
+            background: linear-gradient(135deg, var(--telegram-blue) 0%, #34b7f1 100%);
+            padding: 1.2rem;
             border-radius: 15px;
-            margin: 1.5rem auto;
+            margin: 2rem auto;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 5px 15px rgba(0, 136, 204, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 136, 204, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .telegram-banner:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0, 136, 204, 0.4);
         }
 
         .telegram-banner a {
@@ -722,21 +904,22 @@
             font-weight: 700;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            font-size: 1rem;
+            gap: 12px;
+            font-size: 1.1rem;
         }
 
         /* Orders History */
         .orders-history {
             display: none;
             width: 100%;
-            margin: 1rem auto;
-            background: rgba(26, 26, 46, 0.8);
-            border-radius: 15px;
-            padding: 1.5rem;
-            border: 2px solid var(--primary-purple);
-            backdrop-filter: blur(10px);
+            margin: 2rem auto;
+            background: linear-gradient(135deg, rgba(26, 10, 15, 0.9), rgba(42, 15, 22, 0.9));
+            border-radius: 20px;
+            padding: 2rem;
+            border: 2px solid var(--gold-accent);
+            backdrop-filter: blur(15px);
             animation: slideInLeft 0.5s ease;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
         }
 
         @keyframes slideInLeft {
@@ -752,53 +935,76 @@
 
         .orders-history h2 {
             text-align: center;
-            margin-bottom: 1.5rem;
-            color: var(--light-purple);
-            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            color: var(--gold-accent);
+            font-size: 1.8rem;
+            font-weight: 700;
         }
 
         .orders-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
         }
 
         .order-card {
-            background: rgba(255, 255, 255, 0.05);
+            background: linear-gradient(135deg, rgba(157, 29, 54, 0.2), rgba(212, 175, 55, 0.1));
             border-radius: 15px;
-            padding: 1.2rem;
-            border: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 1.5rem;
+            border: 1px solid var(--gold-accent);
             transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .order-card:active {
-            transform: scale(0.98);
-            border-color: var(--light-purple);
+        .order-card:hover, .order-card:active {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(157, 29, 54, 0.3);
         }
 
         .order-id {
-            font-size: 1rem;
+            font-size: 1.2rem;
             font-weight: 700;
-            color: var(--light-purple);
-            margin-bottom: 0.8rem;
+            color: var(--gold-accent);
+            margin-bottom: 1rem;
         }
 
         .order-details {
             color: var(--text-gray);
-            line-height: 1.5;
-            font-size: 0.9rem;
+            line-height: 1.6;
+            font-size: 0.95rem;
         }
 
         .no-orders {
             text-align: center;
-            padding: 2rem;
-            color: var(--text-gray);
+            padding: 3rem 2rem;
+            color: var(--light-gold);
+            background: linear-gradient(135deg, rgba(157, 29, 54, 0.1), rgba(212, 175, 55, 0.05));
+            border-radius: 15px;
+            border: 2px dashed var(--gold-accent);
         }
 
         /* Мобильная адаптация */
-        @media (max-width: 480px) {
-            .container {
-                padding: 0 0.8rem;
+        @media (max-width: 768px) {
+            .loading-logo {
+                font-size: 2rem;
+            }
+            
+            .loading-animation {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .loading-image {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .logo h1 {
+                font-size: 1.3rem;
+            }
+            
+            .hero h2 {
+                font-size: 1.6rem;
             }
             
             .categories {
@@ -810,22 +1016,12 @@
             }
             
             .nav-btn {
-                padding: 0.5rem 1rem;
-                font-size: 0.8rem;
-                min-width: 80px;
-            }
-            
-            .hero {
-                padding: 1rem;
-            }
-            
-            .hero h2 {
-                font-size: 1.3rem;
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
             }
             
             .modal-content {
-                padding: 1.2rem;
-                margin: 1rem;
+                padding: 1.5rem;
             }
             
             .orders-grid {
@@ -833,10 +1029,22 @@
             }
         }
 
-        @media (max-width: 360px) {
-            .categories,
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 0.8rem;
+            }
+            
+            .categories {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
             .products-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .hero {
+                padding: 1.5rem;
             }
             
             .nav-buttons {
@@ -846,6 +1054,16 @@
             
             .nav-btn {
                 max-width: none;
+                margin-bottom: 5px;
+            }
+            
+            .category-icon, .product-icon {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .product-card {
+                padding: 1.2rem;
             }
         }
 
@@ -863,7 +1081,7 @@
 
         /* Прокрутка для модальных окон */
         .modal-content::-webkit-scrollbar {
-            width: 5px;
+            width: 6px;
         }
 
         .modal-content::-webkit-scrollbar-track {
@@ -872,14 +1090,14 @@
         }
 
         .modal-content::-webkit-scrollbar-thumb {
-            background: var(--primary-purple);
+            background: var(--gold-accent);
             border-radius: 10px;
         }
 
         /* Улучшенный input для мобильных */
         input[type="text"],
         input[type="number"] {
-            font-size: 16px; /* Предотвращает увеличение в iOS */
+            font-size: 16px;
         }
 
         /* Touch-friendly элементы */
@@ -916,11 +1134,23 @@
     <div class="loading-screen" id="loading-screen">
         <div class="loading-content">
             <div class="loading-logo">🎮 FrUKT UC SHOP</div>
-            <div class="loading-bar">
-                <div class="loading-progress" id="loading-progress"></div>
+            
+            <div class="loading-animation">
+                <div class="loading-circle"></div>
+                <div class="loading-image">
+                    <img src="https://iimg.su/i/tlxCLW" alt="UC Icon" onerror="this.style.display='none'; this.parentElement.innerHTML='💰';">
+                </div>
             </div>
-            <div class="loading-percent" id="loading-percent">0%</div>
-            <div class="loading-text" id="loading-text">Загружаем магазин...</div>
+            
+            <div class="loading-bar-container">
+                <div class="loading-bar">
+                    <div class="loading-progress" id="loading-progress"></div>
+                </div>
+                <div class="loading-info">
+                    <span class="loading-text" id="loading-text">Инициализация...</span>
+                    <span class="loading-percent" id="loading-percent">0%</span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -952,10 +1182,10 @@
     <div class="container">
         <!-- Registration Form (скрыта по умолчанию) -->
         <div class="registration-form" id="registration-form" style="display: none;">
-            <h2 style="text-align: center; margin-bottom: 1rem; font-size: 1.2rem;">
+            <h2 style="text-align: center; margin-bottom: 1.5rem; font-size: 1.8rem;">
                 <i class="fas fa-user-plus"></i> Регистрация
             </h2>
-            <p style="text-align: center; color: var(--text-gray); margin-bottom: 1.5rem; font-size: 0.9rem;">
+            <p style="text-align: center; color: var(--light-gold); margin-bottom: 2rem; font-size: 1rem;">
                 Для покупок нужно зарегистрироваться
             </p>
             
@@ -1012,7 +1242,7 @@
         <!-- Loading -->
         <div class="loading" id="loading" style="display: none;">
             <div class="loading-spinner"></div>
-            <p>Отправка заказа...</p>
+            <p style="color: var(--light-gold); font-size: 1.1rem;">Отправка заказа...</p>
         </div>
 
         <!-- Order Status -->
@@ -1023,7 +1253,7 @@
     <div class="modal" id="payment-modal">
         <div class="modal-content">
             <button class="close-modal" onclick="closePaymentModal()">×</button>
-            <h2 id="modal-title" style="font-size: 1.2rem;"><i class="fas fa-credit-card"></i> Выбор способа оплаты</h2>
+            <h2 id="modal-title" style="font-size: 1.5rem;"><i class="fas fa-credit-card"></i> Выбор способа оплаты</h2>
             <div id="modal-content"></div>
         </div>
     </div>
@@ -1032,34 +1262,34 @@
     <div class="modal" id="help-modal">
         <div class="modal-content">
             <button class="close-modal" onclick="closeHelpModal()">×</button>
-            <h2 style="font-size: 1.2rem;"><i class="fas fa-question-circle"></i> Помощь и FAQ</h2>
-            <div style="margin-top: 1rem; line-height: 1.5; font-size: 0.9rem;">
-                <h3 style="font-size: 1rem; margin-top: 1rem;"><i class="fas fa-shopping-cart"></i> Как купить?</h3>
-                <p>1. Выберите категорию → товар</p>
-                <p>2. Введите ID игрока (только цифры)</p>
-                <p>3. Выберите способ оплаты</p>
-                <p>4. После оплаты нажмите "Я оплатил"</p>
-                <p>5. Админ получит уведомление</p>
-                <p>6. Админ напишет вам в течение 5-30 минут</p>
+            <h2 style="font-size: 1.5rem;"><i class="fas fa-question-circle"></i> Помощь и FAQ</h2>
+            <div style="margin-top: 1.5rem; line-height: 1.6; font-size: 0.95rem;">
+                <h3 style="font-size: 1.2rem; margin-top: 1.5rem; color: var(--gold-accent);"><i class="fas fa-shopping-cart"></i> Как купить?</h3>
+                <p style="margin: 0.5rem 0;"><i class="fas fa-chevron-right" style="color: var(--gold-accent);"></i> 1. Выберите категорию → товар</p>
+                <p style="margin: 0.5rem 0;"><i class="fas fa-chevron-right" style="color: var(--gold-accent);"></i> 2. Введите ID игрока (только цифры)</p>
+                <p style="margin: 0.5rem 0;"><i class="fas fa-chevron-right" style="color: var(--gold-accent);"></i> 3. Выберите способ оплаты</p>
+                <p style="margin: 0.5rem 0;"><i class="fas fa-chevron-right" style="color: var(--gold-accent);"></i> 4. После оплаты нажмите "Я оплатил"</p>
+                <p style="margin: 0.5rem 0;"><i class="fas fa-chevron-right" style="color: var(--gold-accent);"></i> 5. Админ получит уведомление</p>
+                <p style="margin: 0.5rem 0;"><i class="fas fa-chevron-right" style="color: var(--gold-accent);"></i> 6. Админ напишет вам в течение 5-30 минут</p>
                 
-                <h3 style="font-size: 1rem; margin-top: 1rem;"><i class="fas fa-wallet"></i> Способы оплаты:</h3>
-                <p>• <i class="fas fa-coins"></i> Криптовалюта (USDT)</p>
-                <p>• <i class="fas fa-university"></i> Ссылка на Сбербанк</p>
+                <h3 style="font-size: 1.2rem; margin-top: 1.5rem; color: var(--gold-accent);"><i class="fas fa-wallet"></i> Способы оплаты:</h3>
+                <p style="margin: 0.5rem 0;"><i class="fas fa-coins" style="color: var(--gold-accent);"></i> Криптовалюта (USDT)</p>
+                <p style="margin: 0.5rem 0;"><i class="fas fa-university" style="color: var(--gold-accent);"></i> Ссылка на Сбербанк</p>
                 
-                <h3 style="font-size: 1rem; margin-top: 1rem;"><i class="fas fa-check-circle"></i> После подтверждения:</h3>
-                <p>• Администратор напишет вам</p>
-                <p>• Обычно в течение 5-30 минут</p>
-                <p>• Доставка происходит сразу после связи</p>
+                <h3 style="font-size: 1.2rem; margin-top: 1.5rem; color: var(--gold-accent);"><i class="fas fa-check-circle"></i> После подтверждения:</h3>
+                <p style="margin: 0.5rem 0;"><i class="fas fa-bolt" style="color: var(--gold-accent);"></i> Администратор напишет вам</p>
+                <p style="margin: 0.5rem 0;"><i class="fas fa-clock" style="color: var(--gold-accent);"></i> Обычно в течение 5-30 минут</p>
+                <p style="margin: 0.5rem 0;"><i class="fas fa-rocket" style="color: var(--gold-accent);"></i> Доставка происходит сразу после связи</p>
                 
-                <h3 style="font-size: 1rem; margin-top: 1rem;"><i class="fab fa-telegram"></i> Telegram бот:</h3>
-                <p>• Откройте сайт через бота для удобства</p>
-                <p>• В боте есть мини-приложение с быстрым доступом</p>
-                <p>• Бот: @FrUKT_UC_BOT</p>
+                <h3 style="font-size: 1.2rem; margin-top: 1.5rem; color: var(--gold-accent);"><i class="fab fa-telegram"></i> Telegram бот:</h3>
+                <p style="margin: 0.5rem 0;"><i class="fas fa-mobile-alt" style="color: var(--gold-accent);"></i> Откройте сайт через бота для удобства</p>
+                <p style="margin: 0.5rem 0;"><i class="fas fa-bolt" style="color: var(--gold-accent);"></i> В боте есть мини-приложение с быстрым доступом</p>
+                <p style="margin: 0.5rem 0;"><i class="fas fa-robot" style="color: var(--gold-accent);"></i> Бот: @FrUKT_UC_BOT</p>
                 
-                <h3 style="font-size: 1rem; margin-top: 1rem;"><i class="fas fa-headset"></i> Поддержка:</h3>
-                <p>@astmatiks_exe</p>
+                <h3 style="font-size: 1.2rem; margin-top: 1.5rem; color: var(--gold-accent);"><i class="fas fa-headset"></i> Поддержка:</h3>
+                <p style="margin: 0.5rem 0; color: var(--light-gold);">@astmatiks_exe</p>
                 
-                <div class="telegram-banner" style="margin-top: 1rem;">
+                <div class="telegram-banner" style="margin-top: 2rem;">
                     <a href="https://t.me/FrUKT_UC_BOT" target="_blank">
                         <i class="fab fa-telegram"></i> Открыть Telegram бота
                     </a>
@@ -1084,28 +1314,42 @@
         // Данные товаров
         const PRODUCTS = {
             'uc': [
-                {id: 1, name: '60 UC', amount: '60', price: 95},
-                {id: 2, name: '325 UC', amount: '325', price: 475},
-                {id: 3, name: '660 UC', amount: '660', price: 855},
-                {id: 4, name: '1800 UC', amount: '1800', price: 2350},
-                {id: 5, name: '3850 UC', amount: '3850', price: 4730},
-                {id: 6, name: '8100 UC', amount: '8100', price: 9850}
+                {id: 1, name: '60 UC', amount: '60 UC', price: 95, icon: 'uc'},
+                {id: 2, name: '325 UC', amount: '325 UC', price: 475, icon: 'uc'},
+                {id: 3, name: '660 UC', amount: '660 UC', price: 855, icon: 'uc'},
+                {id: 4, name: '1800 UC', amount: '1800 UC', price: 2350, icon: 'uc'},
+                {id: 5, name: '3850 UC', amount: '3850 UC', price: 4730, icon: 'uc'},
+                {id: 6, name: '8100 UC', amount: '8100 UC', price: 9850, icon: 'uc'},
+                {id: 17, name: '120 UC', amount: '120 UC', price: 185, icon: 'uc'},
+                {id: 18, name: '500 UC', amount: '500 UC', price: 650, icon: 'uc'},
+                {id: 19, name: '1000 UC', amount: '1000 UC', price: 1250, icon: 'uc'}
             ],
             'prime': [
-                {id: 7, name: 'Prime 30 дней', amount: '30 дней', price: 299},
-                {id: 8, name: 'Prime 90 дней', amount: '90 дней', price: 799},
-                {id: 9, name: 'Prime 180 дней', amount: '180 дней', price: 1499},
-                {id: 10, name: 'Prime 365 дней', amount: '365 дней', price: 2699}
+                {id: 7, name: 'Prime 30 дней', amount: '30 дней', price: 299, icon: 'prime'},
+                {id: 8, name: 'Prime 90 дней', amount: '90 дней', price: 799, icon: 'prime'},
+                {id: 9, name: 'Prime 180 дней', amount: '180 дней', price: 1499, icon: 'prime'},
+                {id: 10, name: 'Prime 365 дней', amount: '365 дней', price: 2699, icon: 'prime'}
             ],
             'popularity': [
-                {id: 11, name: '50 Популярности', amount: '50 звёзд', price: 75},
-                {id: 12, name: '200 Популярности', amount: '200 звёзд', price: 290},
-                {id: 13, name: '500 Популярности', amount: '500 звёзд', price: 690},
-                {id: 14, name: '1000 Популярности', amount: '1000 звёзд', price: 1290}
+                {id: 11, name: '50 Популярности', amount: '50 звёзд', price: 75, icon: 'star'},
+                {id: 12, name: '200 Популярности', amount: '200 звёзд', price: 290, icon: 'star'},
+                {id: 13, name: '500 Популярности', amount: '500 звёзд', price: 690, icon: 'star'},
+                {id: 14, name: '1000 Популярности', amount: '1000 звёзд', price: 1290, icon: 'star'},
+                {id: 20, name: '2500 Популярности', amount: '2500 звёзд', price: 2990, icon: 'star'},
+                {id: 21, name: '5000 Популярности', amount: '5000 звёзд', price: 5690, icon: 'star'},
+                {id: 22, name: '10000 Популярности', amount: '10000 звёзд', price: 10990, icon: 'star'}
             ],
             'gold': [
-                {id: 15, name: 'Золотой самолет', amount: 'транспорт', price: 9990},
-                {id: 16, name: 'Золотой вертолет', amount: 'транспорт', price: 7990}
+                {id: 15, name: 'Золотой самолет', amount: 'транспорт', price: 9990, icon: 'gold'},
+                {id: 16, name: 'Золотой вертолет', amount: 'транспорт', price: 7990, icon: 'gold'},
+                {id: 23, name: 'Золотой мотоцикл', amount: 'транспорт', price: 5990, icon: 'gold'},
+                {id: 24, name: 'Золотой спорткар', amount: 'транспорт', price: 12990, icon: 'gold'}
+            ],
+            'porsche': [
+                {id: 25, name: 'Porsche 911', amount: 'эксклюзивный транспорт', price: 19990, icon: 'porsche'},
+                {id: 26, name: 'Porsche Cayenne', amount: 'эксклюзивный транспорт', price: 17990, icon: 'porsche'},
+                {id: 27, name: 'Porsche Taycan', amount: 'электрокар', price: 21990, icon: 'porsche'},
+                {id: 28, name: 'Porsche Macan', amount: 'кроссовер', price: 15990, icon: 'porsche'}
             ]
         };
 
@@ -1113,8 +1357,9 @@
         const categoryNames = {
             'uc': '💰 UC (Unknown Cash)',
             'prime': '👑 Prime подписка',
-            'popularity': '📈 Популярность',
-            'gold': '🏆 Золотые транспортные средства'
+            'popularity': '⭐ Популярность',
+            'gold': '🏆 Золотые транспортные средства',
+            'porsche': '🏎️ Porsche транспортные средства'
         };
 
         // Состояние приложения
@@ -1125,7 +1370,7 @@
             userData: null
         };
 
-        // Загрузочный экран
+        // Загрузочный экран - РАБОЧАЯ ВЕРСИЯ
         function initLoadingScreen() {
             const loadingScreen = document.getElementById('loading-screen');
             const progressBar = document.getElementById('loading-progress');
@@ -1133,40 +1378,48 @@
             const loadingText = document.getElementById('loading-text');
             
             let progress = 0;
-            const texts = [
-                "Загружаем магазин...",
-                "Проверяем профиль...",
-                "Загружаем товары...",
-                "Готовим интерфейс...",
-                "Почти готово..."
+            const steps = [
+                { text: "Загрузка данных...", progress: 20 },
+                { text: "Инициализация магазина...", progress: 40 },
+                { text: "Проверка профиля...", progress: 60 },
+                { text: "Загрузка товаров...", progress: 80 },
+                { text: "Завершение...", progress: 100 }
             ];
             
             const interval = setInterval(() => {
-                progress += 2;
-                if (progress > 100) progress = 100;
-                
-                progressBar.style.width = `${progress}%`;
-                percentText.textContent = `${progress}%`;
-                
-                // Меняем текст каждые 20%
-                if (progress % 20 === 0) {
-                    const textIndex = Math.min(Math.floor(progress / 20) - 1, texts.length - 1);
-                    if (textIndex >= 0) {
-                        loadingText.textContent = texts[textIndex];
+                // Плавное увеличение прогресса
+                if (progress < 100) {
+                    progress += 2;
+                    if (progress > 100) progress = 100;
+                    
+                    progressBar.style.width = `${progress}%`;
+                    percentText.textContent = `${progress}%`;
+                    
+                    // Обновляем текст на каждом этапе
+                    const currentStep = steps.find(step => progress <= step.progress);
+                    if (currentStep) {
+                        loadingText.textContent = currentStep.text;
                     }
                 }
                 
-                if (progress === 100) {
+                if (progress >= 100) {
                     clearInterval(interval);
+                    
+                    // Короткая пауза перед скрытием
                     setTimeout(() => {
                         loadingScreen.classList.add('hidden');
+                        
+                        // Убираем экран загрузки и запускаем приложение
                         setTimeout(() => {
                             loadingScreen.style.display = 'none';
-                            initApp();
-                        }, 800);
-                    }, 500);
+                            // Запускаем инициализацию приложения асинхронно
+                            setTimeout(() => {
+                                initApp();
+                            }, 50);
+                        }, 500);
+                    }, 300);
                 }
-            }, 30);
+            }, 50); // Увеличил интервал для более плавной анимации
         }
 
         // Инициализация приложения после загрузки
@@ -1184,6 +1437,10 @@
                 currentState.userData = userData;
                 showMain();
             }
+            
+            // Активируем контейнер
+            document.querySelector('.container').style.opacity = '1';
+            document.querySelector('.container').style.transform = 'translateY(0)';
         }
 
         // Проверяем Telegram WebApp
@@ -1349,25 +1606,30 @@
                     <p>Быстрая доставка, лучшие цены, гарантия качества</p>
 
                     <div class="categories">
-                        <div class="category-card" onclick="showProducts('uc')">
-                            <div class="category-icon">💰</div>
+                        <div class="category-card category-uc" onclick="showProducts('uc')">
+                            <div class="category-icon"></div>
                             <h3>UC</h3>
                             <p>Unknown Cash для PUBG</p>
                         </div>
-                        <div class="category-card" onclick="showProducts('prime')">
-                            <div class="category-icon">👑</div>
+                        <div class="category-card category-prime" onclick="showProducts('prime')">
+                            <div class="category-icon"></div>
                             <h3>Prime</h3>
                             <p>Премиум подписка</p>
                         </div>
-                        <div class="category-card" onclick="showProducts('popularity')">
-                            <div class="category-icon">📈</div>
+                        <div class="category-card category-popularity" onclick="showProducts('popularity')">
+                            <div class="category-icon">⭐</div>
                             <h3>Популярность</h3>
                             <p>Звёзды популярности</p>
                         </div>
-                        <div class="category-card" onclick="showProducts('gold')">
+                        <div class="category-card category-gold" onclick="showProducts('gold')">
                             <div class="category-icon">🏆</div>
                             <h3>Золотые</h3>
                             <p>Эксклюзивные транспортные средства</p>
+                        </div>
+                        <div class="category-card category-porsche" onclick="showProducts('porsche')">
+                            <div class="category-icon"></div>
+                            <h3>Porsche</h3>
+                            <p>Эксклюзивные автомобили</p>
                         </div>
                     </div>
 
@@ -1392,25 +1654,30 @@
                     <p>Быстрая доставка, лучшие цены, гарантия качества</p>
 
                     <div class="categories">
-                        <div class="category-card" onclick="if(!getUserData()){alert('Сначала зарегистрируйтесь!'); editProfile();}else{showProducts(\'uc\')}">
-                            <div class="category-icon">💰</div>
+                        <div class="category-card category-uc" onclick="if(!getUserData()){alert('Сначала зарегистрируйтесь!'); editProfile();}else{showProducts('uc')}">
+                            <div class="category-icon"></div>
                             <h3>UC</h3>
                             <p>Unknown Cash для PUBG</p>
                         </div>
-                        <div class="category-card" onclick="if(!getUserData()){alert('Сначала зарегистрируйтесь!'); editProfile();}else{showProducts(\'prime\')}">
-                            <div class="category-icon">👑</div>
+                        <div class="category-card category-prime" onclick="if(!getUserData()){alert('Сначала зарегистрируйтесь!'); editProfile();}else{showProducts('prime')}">
+                            <div class="category-icon"></div>
                             <h3>Prime</h3>
                             <p>Премиум подписка</p>
                         </div>
-                        <div class="category-card" onclick="if(!getUserData()){alert('Сначала зарегистрируйтесь!'); editProfile();}else{showProducts(\'popularity\')}">
-                            <div class="category-icon">📈</div>
+                        <div class="category-card category-popularity" onclick="if(!getUserData()){alert('Сначала зарегистрируйтесь!'); editProfile();}else{showProducts('popularity')}">
+                            <div class="category-icon">⭐</div>
                             <h3>Популярность</h3>
                             <p>Звёзды популярности</p>
                         </div>
-                        <div class="category-card" onclick="if(!getUserData()){alert('Сначала зарегистрируйтесь!'); editProfile();}else{showProducts(\'gold\')}">
+                        <div class="category-card category-gold" onclick="if(!getUserData()){alert('Сначала зарегистрируйтесь!'); editProfile();}else{showProducts('gold')}">
                             <div class="category-icon">🏆</div>
                             <h3>Золотые</h3>
                             <p>Эксклюзивные транспортные средства</p>
+                        </div>
+                        <div class="category-card category-porsche" onclick="if(!getUserData()){alert('Сначала зарегистрируйтесь!'); editProfile();}else{showProducts('porsche')}">
+                            <div class="category-icon"></div>
+                            <h3>Porsche</h3>
+                            <p>Эксклюзивные автомобили</p>
                         </div>
                     </div>
 
@@ -1484,7 +1751,7 @@
                     
                     html += `
                         </div>
-                        <p style="text-align: center; color: var(--text-gray); margin-top: 1rem;">
+                        <p style="text-align: center; color: var(--light-gold); margin-top: 1rem;">
                             <i class="fas fa-chart-bar"></i> Всего заказов: ${orders.length}
                         </p>
                     `;
@@ -1496,9 +1763,9 @@
                 console.error('Ошибка загрузки истории:', error);
                 ordersContainer.innerHTML = `
                     <div class="no-orders">
-                        <div class="status-icon" style="font-size: 2rem; color: var(--primary-purple);"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="status-icon" style="font-size: 2rem; color: var(--gold-accent);"><i class="fas fa-exclamation-triangle"></i></div>
                         <h3>Не удалось загрузить историю</h3>
-                        <p style="margin-top: 0.5rem; color: var(--text-gray);">
+                        <p style="margin-top: 0.5rem; color: var(--light-gold);">
                             Попробуйте позже
                         </p>
                         <button class="nav-btn" onclick="showMain()" style="margin-top: 1rem; width: 100%;">
@@ -1576,17 +1843,33 @@
             const productsSection = document.getElementById('products-section');
             const products = PRODUCTS[category] || [];
             
-            let html = `<h2 style="grid-column: 1/-1; margin-bottom: 0.5rem; font-size: 1.2rem;">${categoryNames[category]}</h2>`;
+            let html = `<h2 style="grid-column: 1/-1; margin-bottom: 1rem; font-size: 1.5rem; color: var(--gold-accent);">${categoryNames[category]}</h2>`;
             
             if (products.length === 0) {
-                html += '<p style="grid-column: 1/-1; text-align: center; color: var(--text-gray); padding: 1rem;">Товаров пока нет</p>';
+                html += '<p style="grid-column: 1/-1; text-align: center; color: var(--light-gold); padding: 1rem;">Товаров пока нет</p>';
             } else {
                 products.forEach(product => {
+                    const productClass = `product-${category}`;
+                    let iconHtml = '';
+                    
+                    if (product.icon === 'uc') {
+                        iconHtml = '<div class="product-icon" style="background-image: url(\'https://iimg.su/i/tlxCLW\')"></div>';
+                    } else if (product.icon === 'prime') {
+                        iconHtml = '<div class="product-icon" style="background-image: url(\'https://iimg.su/i/AdsP2V\')"></div>';
+                    } else if (product.icon === 'porsche') {
+                        iconHtml = '<div class="product-icon" style="background-image: url(\'https://iimg.su/i/Po4yPC\')"></div>';
+                    } else if (product.icon === 'star') {
+                        iconHtml = `<div class="product-icon">${product.id >= 21 ? '✨' : '⭐'}</div>`;
+                    } else if (product.icon === 'gold') {
+                        iconHtml = `<div class="product-icon">${product.id === 15 ? '✈️' : product.id === 16 ? '🚁' : product.id === 23 ? '🏍️' : '🚗'}</div>`;
+                    }
+                    
                     html += `
-                        <div class="product-card">
+                        <div class="product-card ${productClass}">
                             <div class="product-badge">ПОПУЛЯРНЫЙ</div>
+                            ${iconHtml}
                             <h3>${product.name}</h3>
-                            <p style="color: var(--text-gray); margin: 0.3rem 0;">${product.amount}</p>
+                            <p style="color: var(--light-gold); margin: 0.5rem 0;">${product.amount}</p>
                             <div class="product-price">${product.price}₽</div>
                             <button class="buy-btn" onclick="selectProduct(${product.id})">
                                 <i class="fas fa-shopping-cart"></i> Купить за ${product.price}₽
@@ -1597,7 +1880,7 @@
             }
             
             html += `
-                <button class="nav-btn" onclick="showMain()" style="grid-column: 1/-1; margin-top: 0.5rem; width: 100%;">
+                <button class="nav-btn" onclick="showMain()" style="grid-column: 1/-1; margin-top: 1rem; width: 100%;">
                     <i class="fas fa-arrow-left"></i> Назад в магазин
                 </button>
             `;
@@ -1639,13 +1922,28 @@
             const modalContent = document.getElementById('modal-content');
             
             modalTitle.textContent = `Введите ID игрока`;
+            
+            let iconHtml = '';
+            if (product.icon === 'uc') {
+                iconHtml = '<div style="width: 60px; height: 60px; margin: 0 auto 0.5rem; background-image: url(\'https://iimg.su/i/tlxCLW\'); background-size: contain; background-position: center; background-repeat: no-repeat;"></div>';
+            } else if (product.icon === 'prime') {
+                iconHtml = '<div style="width: 60px; height: 60px; margin: 0 auto 0.5rem; background-image: url(\'https://iimg.su/i/AdsP2V\'); background-size: contain; background-position: center; background-repeat: no-repeat;"></div>';
+            } else if (product.icon === 'porsche') {
+                iconHtml = '<div style="width: 60px; height: 60px; margin: 0 auto 0.5rem; background-image: url(\'https://iimg.su/i/Po4yPC\'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>';
+            } else if (product.icon === 'star') {
+                iconHtml = `<div style="font-size: 2.5rem; margin-bottom: 0.5rem;">${product.id >= 21 ? '✨' : '⭐'}</div>`;
+            } else if (product.icon === 'gold') {
+                iconHtml = `<div style="font-size: 2.5rem; margin-bottom: 0.5rem;">${product.id === 15 ? '✈️' : product.id === 16 ? '🚁' : product.id === 23 ? '🏍️' : '🚗'}</div>`;
+            }
+            
             modalContent.innerHTML = `
                 <div style="text-align: center;">
+                    ${iconHtml}
                     <p><i class="fas fa-gamepad"></i> Товар: <b>${product.name}</b></p>
                     <p><i class="fas fa-coins"></i> Цена: <b>${product.price}₽</b></p>
                     
                     <div style="margin: 1.5rem 0;">
-                        <label style="display: block; text-align: left; margin-bottom: 0.5rem; font-weight: 600;">
+                        <label style="display: block; text-align: left; margin-bottom: 0.5rem; font-weight: 600; color: var(--light-gold);">
                             <i class="fas fa-id-card"></i> Ваш ID PUBG Mobile:
                         </label>
                         <input type="text" 
@@ -1655,13 +1953,13 @@
                                pattern="\\d*"
                                inputmode="numeric"
                                style="font-size: 1.1rem; text-align: center; letter-spacing: 1px;">
-                        <p class="form-hint" style="text-align: left; margin-top: 0.3rem;">
+                        <p class="form-hint" style="text-align: left; margin-top: 0.5rem; color: var(--light-gold);">
                             Только цифры (минимум 9 символов)
                         </p>
                     </div>
                     
                     <button class="confirm-payment" onclick="processPlayerId()" 
-                            style="margin-top: 1rem; background: var(--primary-purple);">
+                            style="margin-top: 1rem; background: linear-gradient(135deg, var(--primary-burgundy), var(--dark-burgundy));">
                         <i class="fas fa-arrow-right"></i> Продолжить
                     </button>
                     
@@ -1715,34 +2013,42 @@
             modalTitle.textContent = `Оплата: ${currentState.selectedProduct.name}`;
             
             modalContent.innerHTML = `
-                <p><i class="fas fa-coins"></i> Цена: <b>${currentState.selectedProduct.price}₽</b></p>
-                <p><i class="fas fa-id-card"></i> Ваш ID: <b>${currentState.playerId}</b></p>
-                <p style="color: var(--text-gray); font-size: 0.85rem;">
-                    <i class="fab fa-telegram"></i> Пользователь: @${userData.username}
-                </p>
-                
-                <h3 style="margin: 1.5rem 0 1rem; font-size: 1rem;"><i class="fas fa-credit-card"></i> Выберите способ оплаты:</h3>
-                <div class="payment-methods">
-                    <div class="payment-method" onclick="selectPaymentMethod('crypto')">
-                        <div class="payment-icon"><i class="fas fa-coins"></i></div>
-                        <div>
-                            <h4>Криптовалюта (USDT)</h4>
-                            <p>Оплата USDT на кошелек</p>
+                <div style="text-align: center;">
+                    <div style="margin-bottom: 1rem;">
+                        ${currentState.selectedProduct.icon === 'uc' ? '<div style="width: 60px; height: 60px; margin: 0 auto 0.5rem; background-image: url(\'https://iimg.su/i/tlxCLW\'); background-size: contain; background-position: center; background-repeat: no-repeat;"></div>' : 
+                          currentState.selectedProduct.icon === 'prime' ? '<div style="width: 60px; height: 60px; margin: 0 auto 0.5rem; background-image: url(\'https://iimg.su/i/AdsP2V\'); background-size: contain; background-position: center; background-repeat: no-repeat;"></div>' :
+                          currentState.selectedProduct.icon === 'porsche' ? '<div style="width: 60px; height: 60px; margin: 0 auto 0.5rem; background-image: url(\'https://iimg.su/i/Po4yPC\'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>' :
+                          `<div style="font-size: 2.5rem; margin-bottom: 0.5rem;">${currentState.selectedProduct.id >= 21 ? '✨' : '⭐'}</div>`}
+                    </div>
+                    <p><i class="fas fa-coins"></i> Цена: <b>${currentState.selectedProduct.price}₽</b></p>
+                    <p><i class="fas fa-id-card"></i> Ваш ID: <b>${currentState.playerId}</b></p>
+                    <p style="color: var(--light-gold); font-size: 0.9rem;">
+                        <i class="fab fa-telegram"></i> Пользователь: @${userData.username}
+                    </p>
+                    
+                    <h3 style="margin: 1.5rem 0 1rem; font-size: 1.2rem; color: var(--gold-accent);"><i class="fas fa-credit-card"></i> Выберите способ оплаты:</h3>
+                    <div class="payment-methods">
+                        <div class="payment-method" onclick="selectPaymentMethod('crypto')">
+                            <div class="payment-icon"><i class="fas fa-coins"></i></div>
+                            <div>
+                                <h4>Криптовалюта (USDT)</h4>
+                                <p>Оплата USDT на кошелек</p>
+                            </div>
+                        </div>
+                        <div class="payment-method" onclick="selectPaymentMethod('sber')">
+                            <div class="payment-icon"><i class="fas fa-university"></i></div>
+                            <div>
+                                <h4>Ссылка на Сбербанк</h4>
+                                <p>Оплата через Сбербанк Онлайн</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="payment-method" onclick="selectPaymentMethod('sber')">
-                        <div class="payment-icon"><i class="fas fa-university"></i></div>
-                        <div>
-                            <h4>Ссылка на Сбербанк</h4>
-                            <p>Оплата через Сбербанк Онлайн</p>
-                        </div>
-                    </div>
+                    
+                    <button class="nav-btn" onclick="closePaymentModal()" 
+                            style="margin-top: 1rem; width: 100%; background: transparent;">
+                        <i class="fas fa-times"></i> Отмена
+                    </button>
                 </div>
-                
-                <button class="nav-btn" onclick="closePaymentModal()" 
-                        style="margin-top: 1rem; width: 100%; background: transparent;">
-                    <i class="fas fa-times"></i> Отмена
-                </button>
             `;
             
             modal.style.display = 'flex';
@@ -1768,19 +2074,19 @@
                     copyText = CONFIG.CRYPTO_WALLET;
                     instruction = `
                         <div style="margin-top: 1.5rem;">
-                            <h4 style="font-size: 1rem;"><i class="fas fa-coins"></i> Оплата криптовалютой (USDT)</h4>
-                            <div style="background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 12px; border: 1px solid var(--border-color); margin: 1rem 0;">
-                                <p style="margin-bottom: 0.5rem; font-size: 0.9rem;"><b>Кошелек:</b></p>
-                                <div style="word-break: break-all; background: rgba(0, 0, 0, 0.3); padding: 0.8rem; border-radius: 8px; font-family: monospace; font-size: 0.9rem; color: var(--light-purple); margin-bottom: 1rem;">
+                            <h4 style="font-size: 1.2rem; color: var(--gold-accent);"><i class="fas fa-coins"></i> Оплата криптовалютой (USDT)</h4>
+                            <div style="background: linear-gradient(135deg, rgba(157, 29, 54, 0.2), rgba(212, 175, 55, 0.1)); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--gold-accent); margin: 1rem 0;">
+                                <p style="margin-bottom: 0.5rem; font-size: 1rem; color: var(--light-gold);"><b>Кошелек:</b></p>
+                                <div style="word-break: break-all; background: rgba(0, 0, 0, 0.3); padding: 1rem; border-radius: 10px; font-family: monospace; font-size: 0.95rem; color: var(--gold-accent); margin-bottom: 1rem; border: 1px solid var(--border-color);">
                                     ${copyText}
                                 </div>
                                 <button onclick="copyToClipboard('${copyText}')" 
-                                        style="background: var(--primary-purple); border: none; color: white; padding: 0.7rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%; font-size: 0.9rem;">
+                                        style="background: linear-gradient(135deg, var(--primary-burgundy), var(--dark-burgundy)); border: none; color: var(--light-gold); padding: 1rem; border-radius: 10px; cursor: pointer; font-weight: 700; width: 100%; font-size: 1rem;">
                                     <i class="fas fa-copy"></i> Скопировать адрес кошелька
                                 </button>
                             </div>
-                            <p style="font-size: 0.9rem;">1. Отправьте ${currentState.selectedProduct.price}₽ в эквиваленте USDT</p>
-                            <p style="font-size: 0.9rem;">2. После оплаты нажмите кнопку ниже</p>
+                            <p style="font-size: 1rem; color: var(--light-gold);"><i class="fas fa-arrow-right"></i> 1. Отправьте ${currentState.selectedProduct.price}₽ в эквиваленте USDT</p>
+                            <p style="font-size: 1rem; color: var(--light-gold);"><i class="fas fa-arrow-right"></i> 2. После оплаты нажмите кнопку ниже</p>
                         </div>
                     `;
                     break;
@@ -1789,30 +2095,33 @@
                     const sberUrl = `${CONFIG.SBER_PAYMENT_URL}?amount=${currentState.selectedProduct.price}`;
                     instruction = `
                         <div style="margin-top: 1.5rem;">
-                            <h4 style="font-size: 1rem;"><i class="fas fa-university"></i> Оплата через Сбербанк</h4>
-                            <p style="font-size: 0.9rem;">Нажмите на кнопку для перехода к оплате</p>
+                            <h4 style="font-size: 1.2rem; color: var(--gold-accent);"><i class="fas fa-university"></i> Оплата через Сбербанк</h4>
+                            <p style="font-size: 1rem; color: var(--light-gold);">Нажмите на кнопку для перехода к оплате</p>
                             <a href="${sberUrl}" 
                                target="_blank" 
-                               onclick="setTimeout(() => document.getElementById('confirm-sber').style.display = 'block', 1000)"
-                               style="display: inline-block; background: linear-gradient(90deg, #21a038, #1e8e34); color: white; padding: 1rem; border-radius: 10px; text-decoration: none; margin: 1rem 0; font-weight: 600; font-size: 1rem; text-align: center; width: 100%;">
+                               onclick="setTimeout(() => { document.getElementById('confirm-sber').style.display = 'block'; }, 1000)"
+                               style="display: inline-block; background: linear-gradient(135deg, #21a038, #1e8e34); color: white; padding: 1.2rem; border-radius: 12px; text-decoration: none; margin: 1rem 0; font-weight: 700; font-size: 1.1rem; text-align: center; width: 100%; border: 2px solid #1e8e34;">
                                <i class="fas fa-external-link-alt"></i> Перейти к оплате
                             </a>
-                            <p style="font-size: 0.9rem;">1. Оплатите ${currentState.selectedProduct.price}₽ через Сбербанк Онлайн</p>
-                            <p style="font-size: 0.9rem;">2. После успешной оплаты нажмите кнопку ниже</p>
+                            <p style="font-size: 1rem; color: var(--light-gold);"><i class="fas fa-arrow-right"></i> 1. Оплатите ${currentState.selectedProduct.price}₽ через Сбербанк Онлайн</p>
+                            <p style="font-size: 1rem; color: var(--light-gold);"><i class="fas fa-arrow-right"></i> 2. После успешной оплаты нажмите кнопку ниже</p>
                         </div>
                     `;
                     break;
             }
             
-            modalContent.innerHTML += `
-                ${instruction}
+            // Сохраняем текущий HTML перед добавлением инструкции
+            const currentHtml = modalContent.innerHTML;
+            
+            // Очищаем и добавляем заново с правильной кнопкой
+            modalContent.innerHTML = currentHtml + instruction + `
                 <button class="confirm-payment" onclick="confirmPayment('${method}')" 
                         id="confirm-${method}"
-                        style="margin-top: 1rem; display: ${method === 'sber' ? 'none' : 'block'};" 
-                        id="${method === 'sber' ? 'confirm-sber' : ''}">
+                        style="margin-top: 1.5rem; ${method === 'sber' ? 'display: none;' : ''}" 
+                        ${method === 'sber' ? 'id="confirm-sber"' : ''}>
                     <i class="fas fa-check-circle"></i> Я оплатил ${currentState.selectedProduct.price}₽
                 </button>
-                <p style="font-size: 0.8rem; color: var(--text-gray); margin-top: 0.5rem; text-align: center;">
+                <p style="font-size: 0.9rem; color: var(--light-gold); margin-top: 1rem; text-align: center;">
                     После нажатия заказ будет отправлен администратору
                 </p>
             `;
@@ -1828,7 +2137,7 @@
                 
                 setTimeout(() => {
                     btn.innerHTML = originalText;
-                    btn.style.background = 'var(--primary-purple)';
+                    btn.style.background = 'linear-gradient(135deg, var(--primary-burgundy), var(--dark-burgundy))';
                 }, 2000);
             }).catch(err => {
                 console.error('Ошибка копирования: ', err);
@@ -1847,7 +2156,7 @@
                 
                 setTimeout(() => {
                     btn.innerHTML = originalText;
-                    btn.style.background = 'var(--primary-purple)';
+                    btn.style.background = 'linear-gradient(135deg, var(--primary-burgundy), var(--dark-burgundy))';
                 }, 2000);
             });
         }
@@ -1965,18 +2274,24 @@
                 <div class="status-icon status-pending">
                     <i class="fas fa-paper-plane"></i>
                 </div>
-                <h2>Заказ отправлен!</h2>
-                <p><i class="fas fa-hashtag"></i> Номер: <b>#${orderId}</b></p>
+                <h2 style="color: var(--gold-accent);">Заказ отправлен!</h2>
+                <p><i class="fas fa-hashtag"></i> Номер: <b style="color: var(--light-burgundy);">#${orderId}</b></p>
+                <div style="margin: 1rem 0;">
+                    ${order.product.icon === 'uc' ? '<div style="width: 60px; height: 60px; margin: 0 auto; background-image: url(\'https://iimg.su/i/tlxCLW\'); background-size: contain; background-position: center; background-repeat: no-repeat;"></div>' : 
+                      order.product.icon === 'prime' ? '<div style="width: 60px; height: 60px; margin: 0 auto; background-image: url(\'https://iimg.su/i/AdsP2V\'); background-size: contain; background-position: center; background-repeat: no-repeat;"></div>' :
+                      order.product.icon === 'porsche' ? '<div style="width: 60px; height: 60px; margin: 0 auto; background-image: url(\'https://iimg.su/i/Po4yPC\'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>' :
+                      `<div style="font-size: 2.5rem;">${order.product.id >= 21 ? '✨' : '⭐'}</div>`}
+                </div>
                 <p><i class="fas fa-gamepad"></i> Товар: ${order.product.name}</p>
                 <p><i class="fas fa-coins"></i> Сумма: ${order.product.price}₽</p>
                 <p><i class="fas fa-id-card"></i> Ваш ID: ${order.playerId}</p>
-                <div style="background: rgba(139, 92, 246, 0.1); padding: 1rem; border-radius: 12px; border: 1px solid var(--light-purple); margin: 1rem 0;">
+                <div style="background: linear-gradient(135deg, rgba(157, 29, 54, 0.2), rgba(212, 175, 55, 0.1)); padding: 1.5rem; border-radius: 12px; border: 2px solid var(--gold-accent); margin: 1.5rem 0;">
                     <p><b><i class="fas fa-clock"></i> Ожидайте подтверждения админа</b></p>
-                    <p style="font-size: 0.9rem; color: var(--text-gray); margin-top: 0.5rem;">
+                    <p style="font-size: 1rem; color: var(--light-gold); margin-top: 0.5rem;">
                         Обычно это занимает 1-10 минут.
                     </p>
                 </div>
-                <div style="margin-top: 1.5rem;">
+                <div style="margin-top: 2rem;">
                     <button class="nav-btn" onclick="showOrdersHistory()" style="width: 100%; margin-bottom: 0.5rem;">
                         <i class="fas fa-history"></i> Посмотреть заказы
                     </button>
@@ -2026,8 +2341,11 @@
         });
 
         // Инициализация при загрузке страницы
-        document.addEventListener('DOMContentLoaded', () => {
-            initLoadingScreen();
+        document.addEventListener('DOMContentLoaded', function() {
+            // Запускаем загрузку после полной загрузки страницы
+            setTimeout(function() {
+                initLoadingScreen();
+            }, 100);
             
             // Предотвращение масштабирования на мобильных
             document.addEventListener('touchmove', function(event) {
@@ -2038,6 +2356,13 @@
             
             // Улучшенная обработка касаний для iOS
             document.addEventListener('touchstart', function() {}, {passive: true});
+            
+            // Предотвращение скрытия кнопки оплаты
+            document.addEventListener('DOMNodeInserted', function(event) {
+                if (event.target.classList && event.target.classList.contains('confirm-payment')) {
+                    event.target.style.display = 'block';
+                }
+            });
         });
     </script>
 </body>
