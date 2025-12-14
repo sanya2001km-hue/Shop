@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>FrUKT UC SHOP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Подключаем красивый шрифт -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
@@ -34,9 +33,10 @@
             --neon-red: #ff3366;
             --neon-gold: #ffd700;
             --porsche-red: #ff2800;
+            --crypto-green: #00d09c;
+            --crypto-dark: #121212;
         }
 
-        /* Основные исправления для мобильной прокрутки */
         html, body {
             height: 100%;
             overflow-x: hidden;
@@ -58,7 +58,6 @@
             position: relative;
         }
 
-        /* Loading Screen - СОВЕРШЕННО НОВЫЙ ДИЗАЙН */
         .loading-screen {
             position: fixed;
             top: 0;
@@ -206,7 +205,6 @@
             margin-top: 0.3rem;
         }
 
-        /* Header */
         .header {
             background: linear-gradient(90deg, rgba(157, 29, 54, 0.95), rgba(122, 20, 42, 0.95));
             padding: 1rem;
@@ -306,7 +304,6 @@
             box-shadow: 0 6px 15px rgba(157, 29, 54, 0.4);
         }
 
-        /* Main Container */
         .container {
             max-width: 1200px;
             margin: 1rem auto;
@@ -319,7 +316,6 @@
             overflow-y: visible;
         }
 
-        /* Registration Form */
         .registration-form {
             max-width: 500px;
             margin: 1rem auto;
@@ -381,7 +377,6 @@
             opacity: 0.8;
         }
 
-        /* Hero Section */
         .hero {
             text-align: center;
             padding: 2rem;
@@ -456,7 +451,6 @@
             line-height: 1.6;
         }
 
-        /* Categories */
         .categories {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -518,14 +512,14 @@
             background-image: url('https://i.pinimg.com/originals/87/b3/82/87b382eda6d893f38f598ab4f2b2fd9f.png');
         }
         .category-prime .category-icon {
-            background-image: url('https://iimg.su/i/AdsP2V');
+            background-image: url('https://images.seeklogo.com/logo-png/11/1/prime-logo-png_seeklogo-111956.png');
         }
         .category-popularity .category-icon {
-            background-image: url('https://i.playerok.com/lgEk6FQHzQzivIMttUDANyfqZ0QX8G7jIuvlBfUjkUo/wm:0.8:soea:5:2:0.2/rs:fill:0:1000:0/g:no/quality:99/czM6Ly9wbGF5ZXJvay8vaW1hZ2VzLzFmMGQ4YmViLTEwMjktNmUxMC05ZGZiLTJjMDI0ZTNiNGU2NC5qcGc.jpg');
+            background-image: url('https://static.wikia.nocookie.net/battlelandsroyale/images/6/62/Star_Icon.png/revision/latest?cb=20181207211624');
             background-size: cover;
         }
         .category-gold .category-icon {
-            background-image: url('https://iimg.su/i/Po4yPC');
+            background-image: url('https://cdn-icons-png.flaticon.com/512/3135/3135715.png');
             background-size: cover;
         }
         .category-porsche .category-icon {
@@ -550,7 +544,6 @@
             line-height: 1.4;
         }
 
-        /* Products Grid */
         .products-grid {
             display: none;
             grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
@@ -619,15 +612,15 @@
             background-size: contain;
         }
         .product-prime .product-icon {
-            background-image: url('https://iimg.su/i/AdsP2V');
+            background-image: url('https://images.seeklogo.com/logo-png/11/1/prime-logo-png_seeklogo-111956.png');
             background-size: contain;
         }
         .product-popularity .product-icon {
-            background-image: url('https://i.playerok.com/lgEk6FQHzQzivIMttUDANyfqZ0QX8G7jIuvlBfUjkUo/wm:0.8:soea:5:2:0.2/rs:fill:0:1000:0/g:no/quality:99/czM6Ly9wbGF5ZXJvay8vaW1hZ2VzLzFmMGQ4YmViLTEwMjktNmUxMC05ZGZiLTJjMDI0ZTNiNGU2NC5qcGc.jpg');
+            background-image: url('https://static.wikia.nocookie.net/battlelandsroyale/images/6/62/Star_Icon.png/revision/latest?cb=20181207211624');
             background-size: cover;
         }
         .product-gold .product-icon {
-            background-image: url('https://iimg.su/i/Po4yPC');
+            background-image: url('https://cdn-icons-png.flaticon.com/512/3135/3135715.png');
             background-size: cover;
         }
         .product-porsche .product-icon {
@@ -690,7 +683,6 @@
             transform: none;
         }
 
-        /* Payment Modal */
         .modal {
             display: none;
             position: fixed;
@@ -785,10 +777,25 @@
             box-shadow: 0 5px 15px rgba(157, 29, 54, 0.2);
         }
 
+        .payment-method.crypto {
+            background: linear-gradient(135deg, rgba(0, 208, 156, 0.2), rgba(0, 208, 156, 0.1));
+            border-color: var(--crypto-green);
+        }
+
+        .payment-method.crypto:hover,
+        .payment-method.crypto.active {
+            background: linear-gradient(135deg, rgba(0, 208, 156, 0.4), rgba(0, 208, 156, 0.2));
+            border-color: var(--crypto-green);
+        }
+
         .payment-icon {
             font-size: 2rem;
             color: var(--gold-accent);
             min-width: 40px;
+        }
+
+        .payment-method.crypto .payment-icon {
+            color: var(--crypto-green);
         }
 
         .payment-method h4 {
@@ -830,7 +837,37 @@
             transform: none;
         }
 
-        /* Order Status */
+        .crypto-instructions {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(0, 208, 156, 0.1), rgba(0, 208, 156, 0.05));
+            border-radius: 15px;
+            border: 2px solid var(--crypto-green);
+        }
+
+        .crypto-qr {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .crypto-qr canvas {
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid var(--crypto-green);
+            max-width: 200px;
+            margin: 0 auto;
+        }
+
+        .crypto-address-box {
+            background: rgba(0, 208, 156, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid var(--crypto-green);
+            margin: 1rem 0;
+            word-break: break-all;
+        }
+
         .order-status {
             display: none;
             text-align: center;
@@ -871,7 +908,6 @@
             50% { opacity: 0.7; }
         }
 
-        /* Loading Spinner */
         .loading {
             display: none;
             text-align: center;
@@ -893,7 +929,6 @@
             margin: 0 auto 1.5rem;
         }
 
-        /* Telegram Banner */
         .telegram-banner {
             background: linear-gradient(135deg, var(--telegram-blue) 0%, #34b7f1 100%);
             padding: 1.2rem;
@@ -920,7 +955,6 @@
             font-size: 1.1rem;
         }
 
-        /* Orders History */
         .orders-history {
             display: none;
             width: 100%;
@@ -998,7 +1032,6 @@
             border: 2px dashed var(--gold-accent);
         }
 
-        /* Мобильная адаптация */
         @media (max-width: 768px) {
             body {
                 overflow-y: auto !important;
@@ -1057,7 +1090,6 @@
                 touch-action: manipulation;
             }
             
-            /* Улучшаем прокрутку на мобильных */
             .container {
                 padding: 0 0.8rem;
                 overflow-y: visible;
@@ -1130,7 +1162,6 @@
             }
         }
 
-        /* Исправление для iOS Safari */
         @supports (-webkit-touch-callout: none) {
             body {
                 min-height: -webkit-fill-available;
@@ -1146,13 +1177,11 @@
                 padding-top: calc(1rem + env(safe-area-inset-top));
             }
             
-            /* Исправление для фиксированных элементов */
             .header {
                 position: -webkit-sticky;
             }
         }
 
-        /* Прокрутка для модальных окон */
         .modal-content::-webkit-scrollbar {
             width: 6px;
         }
@@ -1167,13 +1196,11 @@
             border-radius: 10px;
         }
 
-        /* Улучшенный input для мобильных */
         input[type="text"],
         input[type="number"] {
-            font-size: 16px; /* Предотвращает масштабирование в iOS */
+            font-size: 16px;
         }
 
-        /* Touch-friendly элементы */
         button, 
         .nav-btn,
         .category-card,
@@ -1183,7 +1210,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Предотвращение выделения текста при тапе */
         .nav-btn,
         .buy-btn,
         .confirm-payment,
@@ -1194,7 +1220,6 @@
             -webkit-touch-callout: none;
         }
 
-        /* Улучшенная анимация для мобильных */
         @media (prefers-reduced-motion: reduce) {
             * {
                 animation-duration: 0.01ms !important;
@@ -1203,25 +1228,21 @@
             }
         }
 
-        /* Предотвращение bounce-эффекта на iOS */
         @supports (-webkit-touch-callout: none) {
             .modal-content {
                 overscroll-behavior: contain;
             }
         }
 
-        /* Улучшение для длинных страниц */
         .container > * {
             margin-bottom: 1.5rem;
         }
 
-        /* Гарантия видимости кнопок навигации */
         .nav-buttons {
             position: relative;
             z-index: 10;
         }
 
-        /* Фикс для слишком высоких экранов */
         @media (min-height: 800px) {
             .container {
                 padding-bottom: 2rem;
@@ -1230,7 +1251,6 @@
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
     <div class="loading-screen" id="loading-screen">
         <div class="loading-content">
             <div class="loading-logo">🎮 FrUKT UC SHOP</div>
@@ -1254,7 +1274,6 @@
         </div>
     </div>
 
-    <!-- Header -->
     <header class="header">
         <nav class="nav-container">
             <div class="logo" onclick="showMain()">
@@ -1278,9 +1297,7 @@
         </nav>
     </header>
 
-    <!-- Main Container -->
     <div class="container">
-        <!-- Registration Form (скрыта по умолчанию) -->
         <div class="registration-form" id="registration-form" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 1.5rem; font-size: 1.8rem;">
                 <i class="fas fa-user-plus"></i> Регистрация
@@ -1320,36 +1337,26 @@
             </button>
         </div>
 
-        <!-- Hero Section -->
-        <section class="hero" id="main-section" style="display: none;">
-            <!-- User info will be inserted here by JavaScript -->
-        </section>
+        <section class="hero" id="main-section" style="display: none;"></section>
 
-        <!-- Orders History -->
         <div class="orders-history" id="orders-history-section" style="display: none;">
             <h2><i class="fas fa-history"></i> История заказов</h2>
-            <div id="orders-container">
-                <!-- Orders will be loaded here -->
-            </div>
+            <div id="orders-container"></div>
             <button class="nav-btn" onclick="showMain()" style="margin-top: 1rem; width: 100%;">
                 <i class="fas fa-arrow-left"></i> Назад в магазин
             </button>
         </div>
 
-        <!-- Products Section -->
         <div class="products-grid" id="products-section"></div>
 
-        <!-- Loading -->
         <div class="loading" id="loading" style="display: none;">
             <div class="loading-spinner"></div>
             <p style="color: var(--light-gold); font-size: 1.1rem;">Отправка заказа...</p>
         </div>
 
-        <!-- Order Status -->
         <div class="order-status" id="order-status"></div>
     </div>
 
-    <!-- Payment Modal -->
     <div class="modal" id="payment-modal">
         <div class="modal-content">
             <button class="close-modal" onclick="closePaymentModal()">×</button>
@@ -1358,7 +1365,6 @@
         </div>
     </div>
 
-    <!-- Help Modal -->
     <div class="modal" id="help-modal">
         <div class="modal-content">
             <button class="close-modal" onclick="closeHelpModal()">×</button>
@@ -1373,7 +1379,7 @@
                 <p style="margin: 0.5rem 0;"><i class="fas fa-chevron-right" style="color: var(--gold-accent);"></i> 6. Админ напишет вам в течение 5-30 минут</p>
                 
                 <h3 style="font-size: 1.2rem; margin-top: 1.5rem; color: var(--gold-accent);"><i class="fas fa-wallet"></i> Способы оплаты:</h3>
-                <p style="margin: 0.5rem 0;"><i class="fas fa-coins" style="color: var(--gold-accent);"></i> Криптовалюта (USDT)</p>
+                <p style="margin: 0.5rem 0;"><i class="fas fa-coins" style="color: var(--gold-accent);"></i> Криптовалюта (USDT) - через Crypto Bot</p>
                 <p style="margin: 0.5rem 0;"><i class="fas fa-university" style="color: var(--gold-accent);"></i> Ссылка на Сбербанк</p>
                 
                 <h3 style="font-size: 1.2rem; margin-top: 1.5rem; color: var(--gold-accent);"><i class="fas fa-check-circle"></i> После подтверждения:</h3>
@@ -1391,7 +1397,7 @@
                 
                 <div class="telegram-banner" style="margin-top: 2rem;">
                     <a href="https://t.me/FrUKT_UC_BOT" target="_blank">
-                        <i class="fab fa-telegram"></i> Открыть Telegram бота
+                        <i class="fab fa-telegram"></i> Открыть Telegram бота @FrUKT_UC_BOT
                     </a>
                 </div>
             </div>
@@ -1399,7 +1405,6 @@
     </div>
 
     <script>
-        // Конфигурация
         const CONFIG = {
             BOT_TOKEN: "8435320902:AAGYTrY3PKo3zo3ewRXIg4L91B1KbMJMqZ8",
             ADMIN_ID: "8354109183",
@@ -1407,11 +1412,11 @@
             BOT_USERNAME: "FrUKT_UC_BOT",
             SBER_PAYMENT_URL: "https://www.sberbank.com/sms/pbpn?requisiteNumber=79657230692",
             API_URL: "http://localhost:8081/api/create_order",
-            CRYPTO_WALLET: "0x742d35Cc6634C0532925a3b844Bc9e98",
-            HISTORY_API_URL: "http://localhost:8081/api/get_user_orders"
+            HISTORY_API_URL: "http://localhost:8081/api/get_user_orders",
+            CRYPTO_API_URL: "http://localhost:8081/api/crypto_wallet",
+            EXCHANGE_RATE_API: "http://localhost:8081/api/exchange_rate" // Новый API для курса
         };
 
-        // Данные товаров
         const PRODUCTS = {
             'uc': [
                 {id: 1, name: '60 UC', amount: '60 UC', price: 95, icon: 'uc'},
@@ -1453,7 +1458,6 @@
             ]
         };
 
-        // Названия категорий
         const categoryNames = {
             'uc': '💰 UC (Unknown Cash)',
             'prime': '👑 Prime подписка',
@@ -1462,16 +1466,45 @@
             'porsche': '🏎️ Porsche транспортные средства'
         };
 
-        // Состояние приложения
         let currentState = {
             selectedProduct: null,
             playerId: '',
             currentOrder: null,
-            userData: null
+            userData: null,
+            cryptoWallet: null,
+            exchangeRate: 95 // Стандартный курс, если API не ответит
         };
 
-        // Загрузочный экран - РАБОЧАЯ ВЕРСИЯ
-        function initLoadingScreen() {
+        // Функция для получения курса валют
+        async function getExchangeRate() {
+            try {
+                const response = await fetch(CONFIG.EXCHANGE_RATE_API);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ошибка: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    return result.rate || 95;
+                } else {
+                    throw new Error(result.message || 'Ошибка сервера');
+                }
+                
+            } catch (error) {
+                console.error('Ошибка получения курса:', error);
+                return 95; // Возвращаем стандартный курс
+            }
+        }
+
+        // Функция для расчета суммы в USDT
+        function calculateUsdtAmount(rubAmount) {
+            return (rubAmount / currentState.exchangeRate).toFixed(2);
+        }
+
+        // Инициализация с загрузкой курса
+        async function initLoadingScreen() {
             const loadingScreen = document.getElementById('loading-screen');
             const progressBar = document.getElementById('loading-progress');
             const percentText = document.getElementById('loading-percent');
@@ -1480,14 +1513,13 @@
             let progress = 0;
             const steps = [
                 { text: "Загрузка данных...", progress: 20 },
-                { text: "Инициализация магазина...", progress: 40 },
+                { text: "Получение курса валют...", progress: 40 },
                 { text: "Проверка профиля...", progress: 60 },
                 { text: "Загрузка товаров...", progress: 80 },
                 { text: "Завершение...", progress: 100 }
             ];
             
             const interval = setInterval(() => {
-                // Плавное увеличение прогресса
                 if (progress < 100) {
                     progress += 2;
                     if (progress > 100) progress = 100;
@@ -1495,7 +1527,6 @@
                     progressBar.style.width = `${progress}%`;
                     percentText.textContent = `${progress}%`;
                     
-                    // Обновляем текст на каждом этапе
                     const currentStep = steps.find(step => progress <= step.progress);
                     if (currentStep) {
                         loadingText.textContent = currentStep.text;
@@ -1505,32 +1536,28 @@
                 if (progress >= 100) {
                     clearInterval(interval);
                     
-                    // Короткая пауза перед скрытием
                     setTimeout(() => {
                         loadingScreen.classList.add('hidden');
                         
-                        // Убираем экран загрузки и запускаем приложение
                         setTimeout(() => {
                             loadingScreen.style.display = 'none';
-                            // Запускаем инициализацию приложения асинхронно
-                            setTimeout(() => {
+                            setTimeout(async () => {
+                                // Загружаем курс валют перед инициализацией
+                                currentState.exchangeRate = await getExchangeRate();
                                 initApp();
                             }, 50);
                         }, 500);
                     }, 300);
                 }
-            }, 50); // Увеличил интервал для более плавной анимации
+            }, 50);
         }
 
-        // Инициализация приложения после загрузки
         function initApp() {
             const userData = getUserData();
             if (!userData) {
-                // Показываем форму регистрации только если пользователь не зарегистрирован
                 if (!localStorage.getItem('user_registered')) {
                     showRegistrationForm();
                 } else {
-                    // Если пользователь был зарегистрирован, но данные потерялись
                     showMain();
                 }
             } else {
@@ -1538,39 +1565,28 @@
                 showMain();
             }
             
-            // Активируем контейнер
             document.querySelector('.container').style.opacity = '1';
             document.querySelector('.container').style.transform = 'translateY(0)';
             
-            // Добавляем обработчик для улучшения прокрутки на мобильных
             improveMobileScrolling();
         }
 
-        // Улучшение прокрутки на мобильных устройствах
         function improveMobileScrolling() {
-            // Предотвращаем блокировку прокрутки
             document.body.style.overflow = 'auto';
             document.body.style.webkitOverflowScrolling = 'touch';
             
-            // Разрешаем прокрутку во всех контейнерах
             const scrollableElements = document.querySelectorAll('.modal-content, .orders-history, .container');
             scrollableElements.forEach(el => {
                 el.style.webkitOverflowScrolling = 'touch';
                 el.style.overflowY = 'auto';
             });
             
-            // Убираем фиксацию высоты
-            document.documentElement.style.height = 'auto';
-            document.body.style.height = 'auto';
-            
-            // Исправление для iOS
             if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
                 document.body.style.position = 'relative';
                 document.body.style.minHeight = '100vh';
             }
         }
 
-        // Проверяем Telegram WebApp
         function checkTelegramWebApp() {
             if (window.Telegram && Telegram.WebApp) {
                 const tg = Telegram.WebApp;
@@ -1587,20 +1603,16 @@
             return null;
         }
 
-        // Получить данные пользователя
         function getUserData() {
-            // Проверяем, была ли уже регистрация
             if (!localStorage.getItem('user_registered')) {
                 return null;
             }
 
-            // Проверяем Telegram WebApp
             const tgUser = checkTelegramWebApp();
             if (tgUser) {
                 return tgUser;
             }
 
-            // Проверяем localStorage
             const savedUsername = localStorage.getItem('pubg_username');
             const savedFirstName = localStorage.getItem('pubg_first_name');
             const savedTelegramId = localStorage.getItem('pubg_telegram_id');
@@ -1616,7 +1628,6 @@
             return null;
         }
 
-        // Сохранить данные пользователя
         function saveUserData(userData) {
             localStorage.setItem('user_registered', 'true');
             if (userData.username) {
@@ -1630,7 +1641,6 @@
             }
         }
 
-        // Показать форму регистрации (только один раз)
         function showRegistrationForm() {
             document.getElementById('registration-form').style.display = 'block';
             document.getElementById('main-section').style.display = 'none';
@@ -1638,18 +1648,15 @@
             document.getElementById('orders-history-section').style.display = 'none';
             document.getElementById('order-status').style.display = 'none';
             
-            // Очищаем поля формы
             document.getElementById('reg-username').value = '';
             document.getElementById('reg-name').value = '';
             document.getElementById('reg-telegram-id').value = '';
             
-            // Фокус на первое поле
             setTimeout(() => {
                 document.getElementById('reg-username').focus();
             }, 300);
         }
 
-        // Завершение регистрации
         function completeRegistration() {
             const username = document.getElementById('reg-username').value.trim();
             const name = document.getElementById('reg-name').value.trim();
@@ -1670,7 +1677,6 @@
                 return;
             }
             
-            // Сохраняем данные
             currentState.userData = {
                 username: username.replace('@', ''),
                 firstName: name,
@@ -1681,39 +1687,30 @@
             showMain();
         }
 
-        // Отмена регистрации
         function cancelRegistration() {
-            // Если пользователь отменяет регистрацию в первый раз,
-            // все равно показываем главную страницу
             showMain();
         }
 
-        // Редактирование профиля
         function editProfile() {
             const userData = getUserData();
             if (userData) {
-                // Заполняем форму текущими данными
                 document.getElementById('reg-username').value = userData.username;
                 document.getElementById('reg-name').value = userData.firstName;
                 document.getElementById('reg-telegram-id').value = userData.telegramId || '';
                 
-                // Показываем форму
                 showRegistrationForm();
             }
         }
 
-        // Показать главную страницу
         function showMain() {
             const userData = getUserData();
             
-            // Скрываем другие секции
             document.getElementById('registration-form').style.display = 'none';
             document.getElementById('products-section').style.display = 'none';
             document.getElementById('orders-history-section').style.display = 'none';
             document.getElementById('order-status').style.display = 'none';
             document.getElementById('loading').style.display = 'none';
             
-            // Обновляем приветствие
             const heroSection = document.getElementById('main-section');
             heroSection.style.display = 'block';
             
@@ -1767,7 +1764,6 @@
                     </div>
                 `;
             } else {
-                // Если пользователь не зарегистрирован
                 heroSection.innerHTML = `
                     <div class="user-info">
                         <p><i class="fas fa-exclamation-circle"></i> Вы не зарегистрированы</p>
@@ -1817,7 +1813,6 @@
             }
         }
 
-        // Показать историю заказов
         async function showOrdersHistory() {
             const userData = getUserData();
             if (!userData) {
@@ -1826,13 +1821,11 @@
                 return;
             }
 
-            // Скрываем другие секции
             document.getElementById('main-section').style.display = 'none';
             document.getElementById('products-section').style.display = 'none';
             document.getElementById('orders-history-section').style.display = 'block';
             document.getElementById('order-status').style.display = 'none';
             
-            // Показываем загрузку
             const ordersContainer = document.getElementById('orders-container');
             ordersContainer.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>Загружаем историю...</p></div>';
             
@@ -1903,7 +1896,6 @@
             }
         }
 
-        // Получить заказы с сервера
         async function getOrdersFromServer(telegramId) {
             try {
                 const response = await fetch(`${CONFIG.HISTORY_API_URL}?user_id=${telegramId}`);
@@ -1926,14 +1918,13 @@
             }
         }
 
-        // Получить заказы из localStorage
         function getOrdersFromLocalStorage() {
             const orders = [];
             
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
                 
-                if (key.startsWith('order_')) {
+                if (key.startsWith('order_') && !key.includes('failed') && !key.includes('success')) {
                     try {
                         const orderData = JSON.parse(localStorage.getItem(key));
                         const orderId = key.replace('order_', '');
@@ -1953,7 +1944,6 @@
             return orders.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         }
 
-        // Показать товары категории
         function showProducts(category) {
             const userData = getUserData();
             if (!userData) {
@@ -1982,13 +1972,13 @@
                     if (product.icon === 'uc') {
                         iconHtml = '<div class="product-icon" style="background-image: url(\'https://i.pinimg.com/originals/87/b3/82/87b382eda6d893f38f598ab4f2b2fd9f.png\')"></div>';
                     } else if (product.icon === 'prime') {
-                        iconHtml = '<div class="product-icon" style="background-image: url(\'https://iimg.su/i/AdsP2V\')"></div>';
+                        iconHtml = '<div class="product-icon" style="background-image: url(\'https://images.seeklogo.com/logo-png/11/1/prime-logo-png_seeklogo-111956.png\')"></div>';
                     } else if (product.icon === 'porsche') {
                         iconHtml = '<div class="product-icon" style="background-image: url(\'https://50.img.avito.st/image/1/1.2yUdH7a4d8wrtrXJJ1DTVFm-dcqjvvXEa7t1zq22f8ar.O1qd1SDLl5chZ1qqsiI6KNMl6i5kHBba1ALaXVUddTc\')"></div>';
                     } else if (product.icon === 'popularity') {
-                        iconHtml = '<div class="product-icon" style="background-image: url(\'https://i.playerok.com/lgEk6FQHzQzivIMttUDANyfqZ0QX8G7jIuvlBfUjkUo/wm:0.8:soea:5:2:0.2/rs:fill:0:1000:0/g:no/quality:99/czM6Ly9wbGF5ZXJvay8vaW1hZ2VzLzFmMGQ4YmViLTEwMjktNmUxMC05ZGZiLTJjMDI0ZTNiNGU2NC5qcGc.jpg\')"></div>';
+                        iconHtml = '<div class="product-icon" style="background-image: url(\'https://static.wikia.nocookie.net/battlelandsroyale/images/6/62/Star_Icon.png/revision/latest?cb=20181207211624\')"></div>';
                     } else if (product.icon === 'gold') {
-                        iconHtml = '<div class="product-icon" style="background-image: url(\'https://iimg.su/i/Po4yPC\')"></div>';
+                        iconHtml = '<div class="product-icon" style="background-image: url(\'https://cdn-icons-png.flaticon.com/512/3135/3135715.png\')"></div>';
                     }
                     
                     html += `
@@ -2015,7 +2005,6 @@
             productsSection.innerHTML = html;
         }
 
-        // Выбор товара
         function selectProduct(productId) {
             const userData = getUserData();
             if (!userData) {
@@ -2024,7 +2013,6 @@
                 return;
             }
 
-            // Находим товар
             let selectedProduct = null;
             for (const category in PRODUCTS) {
                 selectedProduct = PRODUCTS[category].find(p => p.id === productId);
@@ -2037,12 +2025,9 @@
             }
             
             currentState.selectedProduct = selectedProduct;
-
-            // Запрашиваем ID игрока через мобильный-дружеский промпт
             showPlayerIdPrompt(selectedProduct);
         }
 
-        // Мобильный-дружеский промпт для ввода ID игрока
         function showPlayerIdPrompt(product) {
             const modal = document.getElementById('payment-modal');
             const modalTitle = document.getElementById('modal-title');
@@ -2054,13 +2039,13 @@
             if (product.icon === 'uc') {
                 iconHtml = '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://i.pinimg.com/originals/87/b3/82/87b382eda6d893f38f598ab4f2b2fd9f.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>';
             } else if (product.icon === 'prime') {
-                iconHtml = '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://iimg.su/i/AdsP2V\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>';
+                iconHtml = '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://images.seeklogo.com/logo-png/11/1/prime-logo-png_seeklogo-111956.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>';
             } else if (product.icon === 'porsche') {
                 iconHtml = '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://50.img.avito.st/image/1/1.2yUdH7a4d8wrtrXJJ1DTVFm-dcqjvvXEa7t1zq22f8ar.O1qd1SDLl5chZ1qqsiI6KNMl6i5kHBba1ALaXVUddTc\'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>';
             } else if (product.icon === 'popularity') {
-                iconHtml = '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://i.playerok.com/lgEk6FQHzQzivIMttUDANyfqZ0QX8G7jIuvlBfUjkUo/wm:0.8:soea:5:2:0.2/rs:fill:0:1000:0/g:no/quality:99/czM6Ly9wbGF5ZXJvay8vaW1hZ2VzLzFmMGQ4YmViLTEwMjktNmUxMC05ZGZiLTJjMDI0ZTNiNGU2NC5qcGc.jpg\'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>';
+                iconHtml = '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://static.wikia.nocookie.net/battlelandsroyale/images/6/62/Star_Icon.png/revision/latest?cb=20181207211624\'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>';
             } else if (product.icon === 'gold') {
-                iconHtml = '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://iimg.su/i/Po4yPC\'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>';
+                iconHtml = '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://cdn-icons-png.flaticon.com/512/3135/3135715.png\'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>';
             }
             
             modalContent.innerHTML = `
@@ -2099,14 +2084,11 @@
             
             modal.style.display = 'flex';
             
-            // Фокус на input
             setTimeout(() => {
-                const input = document.getElementById('player-id-input');
-                if (input) input.focus();
+                document.getElementById('player-id-input').focus();
             }, 300);
         }
 
-        // Обработка ввода ID игрока
         function processPlayerId() {
             const playerId = document.getElementById('player-id-input').value.trim();
             
@@ -2129,7 +2111,6 @@
             showPaymentMethods();
         }
 
-        // Показать способы оплаты
         function showPaymentMethods() {
             const userData = getUserData();
             if (!userData) return;
@@ -2146,12 +2127,12 @@
                         ${currentState.selectedProduct.icon === 'uc' ? 
                           '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://i.pinimg.com/originals/87/b3/82/87b382eda6d893f38f598ab4f2b2fd9f.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>' : 
                           currentState.selectedProduct.icon === 'prime' ? 
-                          '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://iimg.su/i/AdsP2V\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>' :
+                          '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://images.seeklogo.com/logo-png/11/1/prime-logo-png_seeklogo-111956.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>' :
                           currentState.selectedProduct.icon === 'porsche' ? 
                           '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://50.img.avito.st/image/1/1.2yUdH7a4d8wrtrXJJ1DTVFm-dcqjvvXEa7t1zq22f8ar.O1qd1SDLl5chZ1qqsiI6KNMl6i5kHBba1ALaXVUddTc\'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>' :
                           currentState.selectedProduct.icon === 'popularity' ?
-                          '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://i.playerok.com/lgEk6FQHzQzivIMttUDANyfqZ0QX8G7jIuvlBfUjkUo/wm:0.8:soea:5:2:0.2/rs:fill:0:1000:0/g:no/quality:99/czM6Ly9wbGF5ZXJvay8vaW1hZ2VzLzFmMGQ4YmViLTEwMjktNmUxMC05ZGZiLTJjMDI0ZTNiNGU2NC5qcGc.jpg\'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>' :
-                          '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://iimg.su/i/Po4yPC\'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>'}
+                          '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://static.wikia.nocookie.net/battlelandsroyale/images/6/62/Star_Icon.png/revision/latest?cb=20181207211624\'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>' :
+                          '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://cdn-icons-png.flaticon.com/512/3135/3135715.png\'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>'}
                     </div>
                     <p><i class="fas fa-coins"></i> Цена: <b>${currentState.selectedProduct.price}₽</b></p>
                     <p><i class="fas fa-id-card"></i> Ваш ID: <b>${currentState.playerId}</b></p>
@@ -2161,11 +2142,11 @@
                     
                     <h3 style="margin: 1.5rem 0 1rem; font-size: 1.2rem; color: var(--gold-accent);"><i class="fas fa-credit-card"></i> Выберите способ оплаты:</h3>
                     <div class="payment-methods">
-                        <div class="payment-method" onclick="selectPaymentMethod('crypto')">
+                        <div class="payment-method crypto" onclick="selectPaymentMethod('crypto')">
                             <div class="payment-icon"><i class="fas fa-coins"></i></div>
                             <div>
-                                <h4>Криптовалюта (USDT)</h4>
-                                <p>Оплата USDT на кошелек</p>
+                                <h4>Crypto Bot (USDT)</h4>
+                                <p>Оплата криптовалютой через реквизиты</p>
                             </div>
                         </div>
                         <div class="payment-method" onclick="selectPaymentMethod('sber')">
@@ -2187,80 +2168,618 @@
             modal.style.display = 'flex';
         }
 
-        // Выбор способа оплаты
-        function selectPaymentMethod(method) {
+        async function selectPaymentMethod(method) {
             const modalContent = document.getElementById('modal-content');
             
-            // Сбрасываем активный класс у всех методов
             document.querySelectorAll('.payment-method').forEach(el => {
                 el.classList.remove('active');
             });
             
-            // Добавляем активный класс выбранному методу
             event.currentTarget.classList.add('active');
             
-            let instruction = '';
-            let copyText = '';
-            
-            switch(method) {
-                case 'crypto':
-                    copyText = CONFIG.CRYPTO_WALLET;
-                    instruction = `
-                        <div style="margin-top: 1.5rem;">
-                            <h4 style="font-size: 1.2rem; color: var(--gold-accent);"><i class="fas fa-coins"></i> Оплата криптовалютой (USDT)</h4>
-                            <div style="background: linear-gradient(135deg, rgba(157, 29, 54, 0.2), rgba(212, 175, 55, 0.1)); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--gold-accent); margin: 1rem 0;">
-                                <p style="margin-bottom: 0.5rem; font-size: 1rem; color: var(--light-gold);"><b>Кошелек:</b></p>
-                                <div style="word-break: break-all; background: rgba(0, 0, 0, 0.3); padding: 1rem; border-radius: 10px; font-family: monospace; font-size: 0.95rem; color: var(--gold-accent); margin-bottom: 1rem; border: 1px solid var(--border-color);">
-                                    ${copyText}
-                                </div>
-                                <button onclick="copyToClipboard('${copyText}')" 
-                                        style="background: linear-gradient(135deg, var(--primary-burgundy), var(--dark-burgundy)); border: none; color: var(--light-gold); padding: 1rem; border-radius: 10px; cursor: pointer; font-weight: 700; width: 100%; font-size: 1rem;">
-                                    <i class="fas fa-copy"></i> Скопировать адрес кошелька
-                                </button>
-                            </div>
-                            <p style="font-size: 1rem; color: var(--light-gold);"><i class="fas fa-arrow-right"></i> 1. Отправьте ${currentState.selectedProduct.price}₽ в эквиваленте USDT</p>
-                            <p style="font-size: 1rem; color: var(--light-gold);"><i class="fas fa-arrow-right"></i> 2. После оплаты нажмите кнопку ниже</p>
-                        </div>
-                    `;
-                    break;
-                    
-                case 'sber':
-                    const sberUrl = `${CONFIG.SBER_PAYMENT_URL}?amount=${currentState.selectedProduct.price}`;
-                    instruction = `
-                        <div style="margin-top: 1.5rem;">
-                            <h4 style="font-size: 1.2rem; color: var(--gold-accent);"><i class="fas fa-university"></i> Оплата через Сбербанк</h4>
-                            <p style="font-size: 1rem; color: var(--light-gold);">Нажмите на кнопку для перехода к оплате</p>
-                            <a href="${sberUrl}" 
-                               target="_blank" 
-                               onclick="setTimeout(() => { document.getElementById('confirm-sber').style.display = 'block'; }, 1000)"
-                               style="display: inline-block; background: linear-gradient(135deg, #21a038, #1e8e34); color: white; padding: 1.2rem; border-radius: 12px; text-decoration: none; margin: 1rem 0; font-weight: 700; font-size: 1.1rem; text-align: center; width: 100%; border: 2px solid #1e8e34;">
-                               <i class="fas fa-external-link-alt"></i> Перейти к оплате
-                            </a>
-                            <p style="font-size: 1rem; color: var(--light-gold);"><i class="fas fa-arrow-right"></i> 1. Оплатите ${currentState.selectedProduct.price}₽ через Сбербанк Онлайн</p>
-                            <p style="font-size: 1rem; color: var(--light-gold);"><i class="fas fa-arrow-right"></i> 2. После успешной оплаты нажмите кнопку ниже</p>
-                        </div>
-                    `;
-                    break;
+            if (method === 'crypto') {
+                await showCryptoPayment();
+            } else if (method === 'sber') {
+                showSberPayment();
             }
+        }
+
+        async function showCryptoPayment() {
+            const modalContent = document.getElementById('modal-content');
             
-            // Сохраняем текущий HTML перед добавлением инструкции
-            const currentHtml = modalContent.innerHTML;
+            const loadingHtml = `
+                <div style="text-align: center; padding: 2rem;">
+                    <div class="loading-spinner" style="border-top-color: var(--crypto-green);"></div>
+                    <p style="color: var(--light-gold); margin-top: 1rem;">Получаем реквизиты для оплаты...</p>
+                </div>
+            `;
             
-            // Очищаем и добавляем заново с правильной кнопкой
-            modalContent.innerHTML = currentHtml + instruction + `
-                <button class="confirm-payment" onclick="confirmPayment('${method}')" 
-                        id="confirm-${method}"
-                        style="margin-top: 1.5rem; ${method === 'sber' ? 'display: none;' : ''}" 
-                        ${method === 'sber' ? 'id="confirm-sber"' : ''}>
-                    <i class="fas fa-check-circle"></i> Я оплатил ${currentState.selectedProduct.price}₽
+            modalContent.innerHTML = modalContent.innerHTML.replace(
+                /<button class="nav-btn" onclick="closePaymentModal\(\)".*?<\/button>/s,
+                loadingHtml + '<button class="nav-btn" onclick="closePaymentModal()" style="margin-top: 1rem; width: 100%; background: transparent;"><i class="fas fa-times"></i> Отмена</button>'
+            );
+            
+            try {
+                const cryptoWallet = await getCryptoWallet();
+                currentState.cryptoWallet = cryptoWallet;
+                
+                displayCryptoPaymentInfo(cryptoWallet);
+                
+            } catch (error) {
+                console.error('Ошибка получения реквизитов:', error);
+                
+                modalContent.innerHTML = modalContent.innerHTML.replace(
+                    /<div style="text-align: center; padding: 2rem;">.*?<\/div>/s,
+                    `
+                    <div style="text-align: center; padding: 2rem;">
+                        <div class="status-icon" style="color: var(--warning-yellow); font-size: 2rem;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <p style="color: var(--light-gold); margin-top: 1rem;">Ошибка получения реквизитов</p>
+                        <p style="color: var(--text-gray); font-size: 0.9rem; margin-top: 0.5rem;">
+                            Пожалуйста, выберите другой способ оплаты или попробуйте позже
+                        </p>
+                        <button class="nav-btn" onclick="showPaymentMethods()" style="margin-top: 1rem; width: 100%;">
+                            <i class="fas fa-arrow-left"></i> Назад к выбору оплаты
+                        </button>
+                    </div>
+                    `
+                );
+            }
+        }
+
+        async function getCryptoWallet() {
+            try {
+                const response = await fetch(CONFIG.CRYPTO_API_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ошибка: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    return result.wallet;
+                } else {
+                    throw new Error(result.message || 'Ошибка сервера');
+                }
+                
+            } catch (error) {
+                console.error('Ошибка получения кошелька:', error);
+                
+                return {
+                    address: 'Txxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+                    network: 'TRC20',
+                    currency: 'USDT'
+                };
+            }
+        }
+
+        function displayCryptoPaymentInfo(wallet) {
+            const modalContent = document.getElementById('modal-content');
+            const rubAmount = currentState.selectedProduct.price;
+            const usdtAmount = calculateUsdtAmount(rubAmount);
+            
+            const cryptoHtml = `
+                <div class="crypto-instructions">
+                    <h4 style="font-size: 1.2rem; color: var(--crypto-green); margin-bottom: 1rem;">
+                        <i class="fas fa-coins"></i> Оплата криптовалютой (USDT)
+                    </h4>
+                    
+                    <div style="background: rgba(0, 208, 156, 0.1); padding: 1.5rem; border-radius: 10px; border: 1px solid var(--crypto-green); margin: 1rem 0;">
+                        <p style="color: var(--light-gold); margin-bottom: 0.5rem; font-size: 1.1rem;">
+                            <i class="fas fa-coins"></i> Сумма к оплате:
+                        </p>
+                        <p style="font-size: 1.5rem; color: var(--crypto-green); font-weight: 800; margin-bottom: 1.5rem;">
+                            ${usdtAmount} USDT
+                        </p>
+                        
+                        <p style="color: var(--light-gold); margin-bottom: 0.3rem; font-size: 0.9rem;">
+                            <i class="fas fa-exchange-alt"></i> Курс: 1 USDT = ${currentState.exchangeRate}₽
+                        </p>
+                        <p style="color: var(--text-gray); margin-bottom: 1rem; font-size: 0.9rem;">
+                            (${rubAmount}₽ / ${currentState.exchangeRate} = ${usdtAmount} USDT)
+                        </p>
+                        
+                        <p style="color: var(--light-gold); margin-bottom: 0.5rem;">
+                            <i class="fas fa-wallet"></i> Адрес кошелька:
+                        </p>
+                        <div class="crypto-address-box">
+                            <p style="color: white; font-family: monospace; font-size: 0.9rem; word-break: break-all;">
+                                ${wallet.address}
+                            </p>
+                        </div>
+                        
+                        <p style="color: var(--light-gold); margin: 1rem 0 0.5rem;">
+                            <i class="fas fa-network-wired"></i> Сеть:
+                        </p>
+                        <p style="color: white; font-weight: 600; background: rgba(0, 208, 156, 0.2); padding: 0.5rem; border-radius: 8px; border: 1px solid var(--crypto-green);">
+                            ${wallet.network || 'TRC20'}
+                        </p>
+                        
+                        <div style="margin-top: 1.5rem;">
+                            <button onclick="copyToClipboard('${wallet.address}')" 
+                                    style="background: linear-gradient(135deg, var(--crypto-green), #00b588); color: white; border: none; padding: 0.8rem; border-radius: 10px; cursor: pointer; font-weight: 600; width: 100%; margin-top: 0.5rem; transition: all 0.3s ease;">
+                                <i class="fas fa-copy"></i> Скопировать адрес
+                            </button>
+                            
+                            <button onclick="copyToClipboard('${usdtAmount}')" 
+                                    style="background: transparent; border: 2px solid var(--crypto-green); color: var(--crypto-green); padding: 0.8rem; border-radius: 10px; cursor: pointer; font-weight: 600; width: 100%; margin-top: 0.5rem; transition: all 0.3s ease;">
+                                <i class="fas fa-copy"></i> Скопировать сумму (${usdtAmount} USDT)
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 1.5rem;">
+                        <p style="color: var(--light-gold); font-size: 1rem; margin-bottom: 0.5rem;">
+                            <b><i class="fas fa-info-circle"></i> Инструкция:</b>
+                        </p>
+                        <ol style="color: var(--text-gray); padding-left: 1.5rem; line-height: 1.6; font-size: 0.9rem;">
+                            <li>Откройте ваш крипто-кошелек (Trust Wallet, Binance и т.д.)</li>
+                            <li>Выберите USDT и сеть ${wallet.network || 'TRC20'}</li>
+                            <li>Вставьте скопированный адрес получателя</li>
+                            <li>Введите сумму ${usdtAmount} USDT</li>
+                            <li>Проверьте данные и подтвердите перевод</li>
+                            <li>После оплаты нажмите кнопку ниже</li>
+                        </ol>
+                        
+                        <div style="background: rgba(0, 208, 156, 0.1); padding: 1rem; border-radius: 10px; border: 1px solid var(--crypto-green); margin-top: 1rem;">
+                            <p style="color: var(--light-gold); font-size: 0.9rem;">
+                                <i class="fas fa-exclamation-circle"></i> <b>ВАЖНО:</b> Обязательно укажите сеть ${wallet.network || 'TRC20'}!<br>
+                                Переводы по другим сетям не будут зачислены.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1.5rem;">
+                    <label style="display: block; text-align: left; margin-bottom: 0.5rem; font-weight: 600; color: var(--light-gold);">
+                        <i class="fas fa-receipt"></i> Хэш транзакции (необязательно):
+                    </label>
+                    <input type="text" 
+                           id="tx-hash-input" 
+                           class="form-input" 
+                           placeholder="0x..."
+                           style="font-size: 0.9rem;">
+                    <p class="form-hint" style="text-align: left; margin-top: 0.5rem; color: var(--light-gold);">
+                        Можно указать для быстрой проверки платежа
+                    </p>
+                </div>
+                
+                <button class="confirm-payment" onclick="confirmCryptoPayment()" 
+                        style="margin-top: 1.5rem; background: linear-gradient(135deg, var(--crypto-green), #00b588);">
+                    <i class="fas fa-check-circle"></i> Я оплатил ${usdtAmount} USDT
                 </button>
+                
                 <p style="font-size: 0.9rem; color: var(--light-gold); margin-top: 1rem; text-align: center;">
                     После нажатия заказ будет отправлен администратору
                 </p>
+                
+                <button class="nav-btn" onclick="showPaymentMethods()" 
+                        style="margin-top: 1rem; width: 100%; background: transparent;">
+                    <i class="fas fa-arrow-left"></i> Выбрать другой способ
+                </button>
             `;
+            
+            modalContent.innerHTML = modalContent.innerHTML.replace(
+                /<div style="text-align: center; padding: 2rem;">.*?<\/div>/s,
+                cryptoHtml
+            );
         }
 
-        // Копирование в буфер обмена
+        function showSberPayment() {
+            const modalContent = document.getElementById('modal-content');
+            
+            const sberUrl = `${CONFIG.SBER_PAYMENT_URL}?amount=${currentState.selectedProduct.price}`;
+            
+            const sberHtml = `
+                <div style="margin-top: 1.5rem;">
+                    <h4 style="font-size: 1.2rem; color: var(--gold-accent);"><i class="fas fa-university"></i> Оплата через Сбербанк</h4>
+                    <p style="font-size: 1rem; color: var(--light-gold);">Нажмите на кнопку для перехода к оплате</p>
+                    <a href="${sberUrl}" 
+                       target="_blank" 
+                       onclick="setTimeout(() => { document.getElementById('confirm-sber').style.display = 'block'; }, 1000)"
+                       style="display: inline-block; background: linear-gradient(135deg, #21a038, #1e8e34); color: white; padding: 1.2rem; border-radius: 12px; text-decoration: none; margin: 1rem 0; font-weight: 700; font-size: 1.1rem; text-align: center; width: 100%; border: 2px solid #1e8e34;">
+                       <i class="fas fa-external-link-alt"></i> Перейти к оплате
+                    </a>
+                    <p style="font-size: 1rem; color: var(--light-gold);"><i class="fas fa-arrow-right"></i> 1. Оплатите ${currentState.selectedProduct.price}₽ через Сбербанк Онлайн</p>
+                    <p style="font-size: 1rem; color: var(--light-gold);"><i class="fas fa-arrow-right"></i> 2. После успешной оплаты нажмите кнопку ниже</p>
+                </div>
+                
+                <button class="confirm-payment" onclick="confirmPayment('sber')" 
+                        id="confirm-sber"
+                        style="margin-top: 1.5rem; display: none;">
+                    <i class="fas fa-check-circle"></i> Я оплатил ${currentState.selectedProduct.price}₽
+                </button>
+            `;
+            
+            modalContent.innerHTML = modalContent.innerHTML + sberHtml;
+        }
+
+        async function confirmCryptoPayment() {
+            const userData = getUserData();
+            if (!userData) {
+                alert('❌ Ошибка: данные пользователя не найдены!');
+                return;
+            }
+
+            document.getElementById('loading').style.display = 'block';
+            closePaymentModal();
+            
+            try {
+                const orderId = 'CRYPTO_' + Date.now() + Math.floor(Math.random() * 1000);
+                const txHash = document.getElementById('tx-hash-input')?.value.trim() || '';
+                const rubAmount = currentState.selectedProduct.price;
+                const usdtAmount = calculateUsdtAmount(rubAmount);
+                
+                currentState.currentOrder = {
+                    id: orderId,
+                    product: currentState.selectedProduct,
+                    playerId: currentState.playerId,
+                    paymentMethod: 'crypto',
+                    userData: userData,
+                    timestamp: new Date().toISOString(),
+                    cryptoWallet: currentState.cryptoWallet,
+                    txHash: txHash,
+                    rubAmount: rubAmount,
+                    usdtAmount: usdtAmount,
+                    exchangeRate: currentState.exchangeRate
+                };
+                
+                localStorage.setItem(`order_${orderId}`, JSON.stringify({
+                    product: currentState.selectedProduct,
+                    playerId: currentState.playerId,
+                    price: rubAmount,
+                    timestamp: currentState.currentOrder.timestamp,
+                    paymentMethod: 'crypto',
+                    cryptoWallet: currentState.cryptoWallet,
+                    txHash: txHash,
+                    usdtAmount: usdtAmount,
+                    exchangeRate: currentState.exchangeRate,
+                    status: 'pending'
+                }));
+                
+                console.log('📝 Крипто-заказ сохранен локально:', orderId);
+                
+                const success = await sendOrderToBot(currentState.currentOrder);
+                
+                document.getElementById('loading').style.display = 'none';
+                
+                if (success) {
+                    localStorage.setItem(`order_${orderId}`, JSON.stringify({
+                        product: currentState.selectedProduct,
+                        playerId: currentState.playerId,
+                        price: rubAmount,
+                        timestamp: currentState.currentOrder.timestamp,
+                        paymentMethod: 'crypto',
+                        cryptoWallet: currentState.cryptoWallet,
+                        txHash: txHash,
+                        usdtAmount: usdtAmount,
+                        exchangeRate: currentState.exchangeRate,
+                        status: 'sent',
+                        sent_at: new Date().toISOString()
+                    }));
+                    
+                    showOrderStatus(orderId);
+                } else {
+                    alert('⚠️ Заказ сохранен, но не отправлен на сервер.\nАдминистратор свяжется с вами для уточнения.');
+                    showOrderStatus(orderId, true);
+                }
+                
+            } catch (error) {
+                console.error('❌ Ошибка крипто-оплаты:', error);
+                document.getElementById('loading').style.display = 'none';
+                alert('⚠️ Ошибка обработки крипто-оплаты.\nВаш заказ сохранен.\nАдминистратор @astmatiks_exe свяжется с вами.');
+                showMain();
+            }
+        }
+
+        async function confirmPayment(method) {
+            const userData = getUserData();
+            if (!userData) {
+                alert('❌ Ошибка: данные пользователя не найдены!');
+                return;
+            }
+
+            document.getElementById('loading').style.display = 'block';
+            closePaymentModal();
+            
+            try {
+                const orderId = 'ORD' + Date.now() + Math.floor(Math.random() * 1000);
+                currentState.currentOrder = {
+                    id: orderId,
+                    product: currentState.selectedProduct,
+                    playerId: currentState.playerId,
+                    paymentMethod: method,
+                    userData: userData,
+                    timestamp: new Date().toISOString()
+                };
+                
+                localStorage.setItem(`order_${orderId}`, JSON.stringify({
+                    product: currentState.selectedProduct,
+                    playerId: currentState.playerId,
+                    price: currentState.selectedProduct.price,
+                    timestamp: currentState.currentOrder.timestamp,
+                    status: 'pending'
+                }));
+                
+                console.log('📝 Заказ сохранен локально:', orderId);
+                
+                const success = await sendOrderToBot(currentState.currentOrder);
+                
+                document.getElementById('loading').style.display = 'none';
+                
+                if (success) {
+                    localStorage.setItem(`order_${orderId}`, JSON.stringify({
+                        product: currentState.selectedProduct,
+                        playerId: currentState.playerId,
+                        price: currentState.selectedProduct.price,
+                        timestamp: currentState.currentOrder.timestamp,
+                        status: 'sent',
+                        sent_at: new Date().toISOString()
+                    }));
+                    
+                    showOrderStatus(orderId);
+                } else {
+                    alert('⚠️ Заказ сохранен локально, но не отправлен на сервер.\nАдминистратор свяжется с вами для уточнения деталей.');
+                    showOrderStatus(orderId, true);
+                }
+                
+            } catch (error) {
+                console.error('❌ Критическая ошибка:', error);
+                document.getElementById('loading').style.display = 'none';
+                alert('⚠️ Произошла ошибка при обработке заказа.\nВаш заказ сохранен локально.\nАдминистратор @astmatiks_exe свяжется с вами для уточнения деталей.');
+                showMain();
+            }
+        }
+
+        async function sendOrderToBot(order) {
+            console.log('📦 Отправка заказа в бот:', order.id);
+            
+            try {
+                if (!order.userData || !order.product || !order.playerId) {
+                    console.error('❌ Неполные данные заказа');
+                    return false;
+                }
+                
+                const orderData = {
+                    order_id: order.id,
+                    user_id: order.userData.telegramId || '',
+                    username: order.userData.username || '',
+                    first_name: order.userData.firstName || '',
+                    product_name: order.product.name,
+                    price: order.product.price,
+                    player_id: order.playerId,
+                    payment_method: order.paymentMethod || 'не указан',
+                    timestamp: new Date().toISOString()
+                };
+                
+                if (order.paymentMethod === 'crypto') {
+                    orderData.crypto_wallet = order.cryptoWallet?.address || '';
+                    orderData.crypto_network = order.cryptoWallet?.network || '';
+                    orderData.amount_usdt = order.usdtAmount || calculateUsdtAmount(order.product.price);
+                    orderData.exchange_rate = order.exchangeRate || currentState.exchangeRate;
+                    orderData.tx_hash = order.txHash || '';
+                    orderData.amount_rub = order.rubAmount || order.product.price;
+                }
+                
+                console.log('📤 Данные для API:', orderData);
+                
+                let apiUrl = CONFIG.API_URL;
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(orderData),
+                    signal: AbortSignal.timeout(10000)
+                }).catch(async (error) => {
+                    console.warn('⚠️ API недоступен, пробуем альтернативный метод:', error);
+                    return await sendViaTelegramBot(orderData);
+                });
+                
+                if (!response || !response.ok) {
+                    return await sendViaTelegramBot(orderData);
+                }
+                
+                const result = await response.json();
+                console.log('✅ Ответ API:', result);
+                
+                if (result.status === 'success') {
+                    console.log('🎉 Заказ успешно создан!');
+                    
+                    localStorage.setItem(`order_success_${order.id}`, JSON.stringify({
+                        ...orderData,
+                        status: 'success',
+                        server_response: result
+                    }));
+                    
+                    return true;
+                } else {
+                    throw new Error(result.message || 'Ошибка от сервера');
+                }
+                
+            } catch (error) {
+                console.error('❌ Ошибка отправки заказа:', error);
+                
+                try {
+                    console.log('🔄 Пробуем резервный метод отправки...');
+                    return await sendViaTelegramBot({
+                        order_id: order.id,
+                        product_name: order.product?.name || 'Неизвестно',
+                        price: order.product?.price || 0,
+                        player_id: order.playerId,
+                        payment_method: order.paymentMethod || 'не указан',
+                        crypto_wallet: order.cryptoWallet?.address || '',
+                        crypto_network: order.cryptoWallet?.network || '',
+                        amount_usdt: order.usdtAmount || calculateUsdtAmount(order.product?.price || 0),
+                        exchange_rate: order.exchangeRate || currentState.exchangeRate,
+                        amount_rub: order.rubAmount || order.product?.price || 0
+                    });
+                } catch (backupError) {
+                    console.error('❌ Резервный метод тоже не сработал:', backupError);
+                    
+                    localStorage.setItem(`order_failed_${order.id}`, JSON.stringify({
+                        error: error.message,
+                        order_data: order,
+                        timestamp: new Date().toISOString()
+                    }));
+                    
+                    return false;
+                }
+            }
+        }
+
+        async function sendViaTelegramBot(orderData) {
+            try {
+                let messageText = `
+🎮 *НОВЫЙ ЗАКАЗ FrUKT UC SHOP*
+
+📋 *Детали заказа:*
+├ Номер: #${orderData.order_id}
+├ Товар: ${orderData.product_name}
+├ Цена: ${orderData.price}₽
+├ ID игрока: ${orderData.player_id}
+├ Способ оплаты: ${orderData.payment_method}
+├
+├ 👤 *Данные покупателя:*
+├ Имя: ${orderData.first_name || 'Не указано'}
+├ Telegram: @${orderData.username || 'Не указан'}
+├ ID: ${orderData.user_id || 'Не указан'}
+├
+🕐 Время: ${new Date().toLocaleString('ru-RU')}
+                `;
+                
+                if (orderData.payment_method === 'crypto') {
+                    messageText += `
+├
+├ 💰 *Крипто-оплата:*
+├ Сумма: ${orderData.amount_usdt || calculateUsdtAmount(orderData.price)} USDT
+├ В рублях: ${orderData.amount_rub || orderData.price}₽
+├ Курс: 1 USDT = ${orderData.exchange_rate || currentState.exchangeRate}₽
+├ Кошелек: ${orderData.crypto_wallet || 'Не указан'}
+├ Сеть: ${orderData.crypto_network || 'TRC20'}
+├ Хэш: ${orderData.tx_hash || 'Не указан'}
+                    `;
+                }
+                
+                messageText += `
+✅ *Заказ ожидает обработки!*
+                `;
+                
+                const botToken = CONFIG.BOT_TOKEN;
+                const adminId = CONFIG.ADMIN_ID;
+                
+                const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+                
+                const response = await fetch(telegramUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: adminId,
+                        text: messageText,
+                        parse_mode: 'Markdown',
+                        disable_web_page_preview: true
+                    })
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.text();
+                    throw new Error(`Telegram API error: ${errorData}`);
+                }
+                
+                const result = await response.json();
+                console.log('✅ Заказ отправлен через Telegram Bot API:', result.ok);
+                
+                localStorage.setItem(`order_telegram_${orderData.order_id}`, JSON.stringify({
+                    ...orderData,
+                    telegram_sent: true,
+                    telegram_response: result,
+                    timestamp: new Date().toISOString()
+                }));
+                
+                return true;
+                
+            } catch (error) {
+                console.error('❌ Ошибка отправки через Telegram:', error);
+                throw error;
+            }
+        }
+
+        function showOrderStatus(orderId, isWarning = false) {
+            const orderStatus = document.getElementById('order-status');
+            orderStatus.style.display = 'block';
+            
+            document.getElementById('main-section').style.display = 'none';
+            document.getElementById('products-section').style.display = 'none';
+            document.getElementById('orders-history-section').style.display = 'none';
+            
+            const order = currentState.currentOrder;
+            const iconClass = isWarning ? 'fas fa-exclamation-triangle' : 'fas fa-paper-plane';
+            const iconColor = isWarning ? 'var(--warning-yellow)' : 'var(--gold-accent)';
+            const title = isWarning ? 'Заказ сохранен' : 'Заказ отправлен!';
+            const message = isWarning ? 
+                'Администратор свяжется с вами для подтверждения' : 
+                'Ожидайте подтверждения админа';
+            
+            const statusHtml = `
+                <div class="status-icon status-pending" style="color: ${iconColor};">
+                    <i class="${iconClass}"></i>
+                </div>
+                <h2 style="color: ${iconColor};">${title}</h2>
+                <p><i class="fas fa-hashtag"></i> Номер: <b style="color: var(--light-burgundy);">#${orderId}</b></p>
+                
+                <div style="margin: 1rem 0;">
+                    ${order.product.icon === 'uc' ? 
+                      '<div style="width: 80px; height: 80px; margin: 0 auto; background-image: url(\'https://i.pinimg.com/originals/87/b3/82/87b382eda6d893f38f598ab4f2b2fd9f.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>' : 
+                      order.product.icon === 'prime' ? 
+                      '<div style="width: 80px; height: 80px; margin: 0 auto; background-image: url(\'https://images.seeklogo.com/logo-png/11/1/prime-logo-png_seeklogo-111956.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>' :
+                      order.product.icon === 'porsche' ? 
+                      '<div style="width: 80px; height: 80px; margin: 0 auto; background-image: url(\'https://50.img.avito.st/image/1/1.2yUdH7a4d8wrtrXJJ1DTVFm-dcqjvvXEa7t1zq22f8ar.O1qd1SDLl5chZ1qqsiI6KNMl6i5kHBba1ALaXVUddTc\'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>' :
+                      order.product.icon === 'popularity' ?
+                      '<div style="width: 80px; height: 80px; margin: 0 auto; background-image: url(\'https://static.wikia.nocookie.net/battlelandsroyale/images/6/62/Star_Icon.png/revision/latest?cb=20181207211624\'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>' :
+                      '<div style="width: 80px; height: 80px; margin: 0 auto; background-image: url(\'https://cdn-icons-png.flaticon.com/512/3135/3135715.png\'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>'}
+                </div>
+                
+                <p><i class="fas fa-gamepad"></i> Товар: ${order.product.name}</p>
+                <p><i class="fas fa-coins"></i> Сумма: ${order.product.price}₽</p>
+                <p><i class="fas fa-id-card"></i> Ваш ID: ${order.playerId}</p>
+                <p><i class="fas fa-credit-card"></i> Способ оплаты: ${order.paymentMethod}</p>
+                
+                ${order.paymentMethod === 'crypto' ? `
+                    <div style="background: rgba(0, 208, 156, 0.1); padding: 1rem; border-radius: 12px; border: 2px solid var(--crypto-green); margin: 1rem 0;">
+                        <p><i class="fas fa-coins"></i> Крипто-оплата: ${order.usdtAmount || calculateUsdtAmount(order.product.price)} USDT</p>
+                        <p><i class="fas fa-exchange-alt"></i> Курс: 1 USDT = ${order.exchangeRate || currentState.exchangeRate}₽</p>
+                        <p><i class="fas fa-network-wired"></i> Сеть: ${order.cryptoWallet?.network || 'TRC20'}</p>
+                        ${order.txHash ? `<p><i class="fas fa-receipt"></i> Хэш: ${order.txHash}</p>` : ''}
+                    </div>
+                ` : ''}
+                
+                <div style="background: linear-gradient(135deg, rgba(157, 29, 54, 0.2), rgba(212, 175, 55, 0.1)); padding: 1.5rem; border-radius: 12px; border: 2px solid ${iconColor}; margin: 1.5rem 0;">
+                    <p><b><i class="fas fa-${isWarning ? 'exclamation-circle' : 'clock'}"></i> ${message}</b></p>
+                    <p style="font-size: 1rem; color: var(--light-gold); margin-top: 0.5rem;">
+                        ${isWarning ? 
+                          'Ошибка при отправке. Ваш заказ сохранен. Администратор @astmatiks_exe свяжется с вами.' : 
+                          'Обычно это занимает 1-10 минут.'}
+                    </p>
+                </div>
+                
+                <div style="margin-top: 2rem;">
+                    <button class="nav-btn" onclick="showOrdersHistory()" style="width: 100%; margin-bottom: 0.5rem;">
+                        <i class="fas fa-history"></i> Посмотреть заказы
+                    </button>
+                    <button class="nav-btn" onclick="showMain()" style="width: 100%;">
+                        <i class="fas fa-home"></i> Вернуться в магазин
+                    </button>
+                </div>
+            `;
+            
+            orderStatus.innerHTML = statusHtml;
+        }
+
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(() => {
                 const btn = event.target;
@@ -2270,11 +2789,10 @@
                 
                 setTimeout(() => {
                     btn.innerHTML = originalText;
-                    btn.style.background = 'linear-gradient(135deg, var(--primary-burgundy), var(--dark-burgundy))';
+                    btn.style.background = 'transparent';
                 }, 2000);
             }).catch(err => {
                 console.error('Ошибка копирования: ', err);
-                // Fallback для старых браузеров
                 const textArea = document.createElement('textarea');
                 textArea.value = text;
                 document.body.appendChild(textArea);
@@ -2289,160 +2807,11 @@
                 
                 setTimeout(() => {
                     btn.innerHTML = originalText;
-                    btn.style.background = 'linear-gradient(135deg, var(--primary-burgundy), var(--dark-burgundy))';
+                    btn.style.background = 'transparent';
                 }, 2000);
             });
         }
 
-        // Подтверждение оплаты
-        async function confirmPayment(method) {
-            const userData = getUserData();
-            if (!userData) return;
-
-            // Показываем загрузку
-            document.getElementById('loading').style.display = 'block';
-            closePaymentModal();
-            
-            try {
-                // Создаем заказ
-                const orderId = 'ORD' + Date.now() + Math.floor(Math.random() * 1000);
-                currentState.currentOrder = {
-                    id: orderId,
-                    product: currentState.selectedProduct,
-                    playerId: currentState.playerId,
-                    paymentMethod: method,
-                    userData: userData,
-                    timestamp: new Date().toISOString()
-                };
-                
-                // Сохраняем заказ в localStorage
-                localStorage.setItem(`order_${orderId}`, JSON.stringify({
-                    product: currentState.selectedProduct,
-                    playerId: currentState.playerId,
-                    price: currentState.selectedProduct.price,
-                    timestamp: currentState.currentOrder.timestamp
-                }));
-                
-                // Отправляем заказ в бот через API
-                const success = await sendOrderToBot(currentState.currentOrder);
-                
-                // Скрываем загрузку
-                document.getElementById('loading').style.display = 'none';
-                
-                if (success) {
-                    // Показываем статус заказа
-                    showOrderStatus(orderId);
-                } else {
-                    alert('❌ Ошибка при отправке заказа. Попробуйте еще раз или свяжитесь с поддержкой.');
-                    showMain();
-                }
-                
-            } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('loading').style.display = 'none';
-                alert('❌ Произошла ошибка. Попробуйте еще раз или свяжитесь с поддержкой.');
-                showMain();
-            }
-        }
-
-        // Отправка заказа в бот через API
-        async function sendOrderToBot(order) {
-            console.log('📦 Отправка заказа в бот:', order.id);
-            
-            try {
-                const orderData = {
-                    order_id: order.id,
-                    user_id: order.userData.telegramId || '',
-                    username: order.userData.username || '',
-                    first_name: order.userData.firstName || '',
-                    product_name: order.product.name,
-                    price: order.product.price,
-                    player_id: order.playerId,
-                    payment_method: order.paymentMethod
-                };
-                
-                console.log('📤 Данные для API:', orderData);
-                
-                const response = await fetch('http://localhost:8081/api/create_order', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(orderData)
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ошибка: ${response.status}`);
-                }
-                
-                const result = await response.json();
-                console.log('✅ Ответ API:', result);
-                
-                if (result.status === 'success') {
-                    console.log('🎉 Заказ успешно создан!');
-                    return true;
-                } else {
-                    throw new Error(result.message || 'Ошибка от сервера');
-                }
-                
-            } catch (error) {
-                console.error('❌ Ошибка отправки заказа:', error);
-                return false;
-            }
-        }
-
-        // Показать статус заказа
-        function showOrderStatus(orderId) {
-            const orderStatus = document.getElementById('order-status');
-            orderStatus.style.display = 'block';
-            
-            // Скрываем другие секции
-            document.getElementById('main-section').style.display = 'none';
-            document.getElementById('products-section').style.display = 'none';
-            document.getElementById('orders-history-section').style.display = 'none';
-            
-            const order = currentState.currentOrder;
-            
-            const statusHtml = `
-                <div class="status-icon status-pending">
-                    <i class="fas fa-paper-plane"></i>
-                </div>
-                <h2 style="color: var(--gold-accent);">Заказ отправлен!</h2>
-                <p><i class="fas fa-hashtag"></i> Номер: <b style="color: var(--light-burgundy);">#${orderId}</b></p>
-                <div style="margin: 1rem 0;">
-                    ${order.product.icon === 'uc' ? 
-                      '<div style="width: 80px; height: 80px; margin: 0 auto; background-image: url(\'https://i.pinimg.com/originals/87/b3/82/87b382eda6d893f38f598ab4f2b2fd9f.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>' : 
-                      order.product.icon === 'prime' ? 
-                      '<div style="width: 80px; height: 80px; margin: 0 auto; background-image: url(\'https://iimg.su/i/AdsP2V\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>' :
-                      order.product.icon === 'porsche' ? 
-                      '<div style="width: 80px; height: 80px; margin: 0 auto; background-image: url(\'https://50.img.avito.st/image/1/1.2yUdH7a4d8wrtrXJJ1DTVFm-dcqjvvXEa7t1zq22f8ar.O1qd1SDLl5chZ1qqsiI6KNMl6i5kHBba1ALaXVUddTc\'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>' :
-                      order.product.icon === 'popularity' ?
-                      '<div style="width: 80px; height: 80px; margin: 0 auto; background-image: url(\'https://i.playerok.com/lgEk6FQHzQzivIMttUDANyfqZ0QX8G7jIuvlBfUjkUo/wm:0.8:soea:5:2:0.2/rs:fill:0:1000:0/g:no/quality:99/czM6Ly9wbGF5ZXJvay8vaW1hZ2VzLzFmMGQ4YmViLTEwMjktNmUxMC05ZGZiLTJjMDI0ZTNiNGU2NC5qcGc.jpg\'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>' :
-                      '<div style="width: 80px; height: 80px; margin: 0 auto; background-image: url(\'https://iimg.su/i/Po4yPC\'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>'}
-                </div>
-                <p><i class="fas fa-gamepad"></i> Товар: ${order.product.name}</p>
-                <p><i class="fas fa-coins"></i> Сумма: ${order.product.price}₽</p>
-                <p><i class="fas fa-id-card"></i> Ваш ID: ${order.playerId}</p>
-                <div style="background: linear-gradient(135deg, rgba(157, 29, 54, 0.2), rgba(212, 175, 55, 0.1)); padding: 1.5rem; border-radius: 12px; border: 2px solid var(--gold-accent); margin: 1.5rem 0;">
-                    <p><b><i class="fas fa-clock"></i> Ожидайте подтверждения админа</b></p>
-                    <p style="font-size: 1rem; color: var(--light-gold); margin-top: 0.5rem;">
-                        Обычно это занимает 1-10 минут.
-                    </p>
-                </div>
-                <div style="margin-top: 2rem;">
-                    <button class="nav-btn" onclick="showOrdersHistory()" style="width: 100%; margin-bottom: 0.5rem;">
-                        <i class="fas fa-history"></i> Посмотреть заказы
-                    </button>
-                    <button class="nav-btn" onclick="showMain()" style="width: 100%;">
-                        <i class="fas fa-home"></i> Вернуться в магазин
-                    </button>
-                </div>
-            `;
-            
-            orderStatus.innerHTML = statusHtml;
-        }
-
-        // Закрыть модальные окна
         function closePaymentModal() {
             document.getElementById('payment-modal').style.display = 'none';
         }
@@ -2451,12 +2820,10 @@
             document.getElementById('help-modal').style.display = 'none';
         }
 
-        // Показать помощь
         function showHelp() {
             document.getElementById('help-modal').style.display = 'flex';
         }
 
-        // Закрытие модальных окон по клику вне контента
         document.addEventListener('click', function(event) {
             const paymentModal = document.getElementById('payment-modal');
             const helpModal = document.getElementById('help-modal');
@@ -2470,7 +2837,6 @@
             }
         });
 
-        // Обработка клавиши Escape
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 closePaymentModal();
@@ -2478,44 +2844,53 @@
             }
         });
 
-        // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
-            // Запускаем загрузку после полной загрузки страницы
             setTimeout(function() {
                 initLoadingScreen();
             }, 100);
             
-            // Предотвращение масштабирования на мобильных
             document.addEventListener('touchmove', function(event) {
                 if (event.scale !== 1 && event.scale !== undefined) {
                     event.preventDefault();
                 }
             }, { passive: false });
             
-            // Улучшенная обработка касаний для iOS
             document.addEventListener('touchstart', function() {}, {passive: true});
             
-            // Предотвращение скрытия кнопки оплаты
-            document.addEventListener('DOMNodeInserted', function(event) {
-                if (event.target.classList && event.target.classList.contains('confirm-payment')) {
-                    event.target.style.display = 'block';
-                }
-            });
-            
-            // Исправление прокрутки для мобильных
             if ('ontouchstart' in window) {
                 document.body.style.overflow = 'auto';
                 document.body.style.webkitOverflowScrolling = 'touch';
             }
         });
         
-        // Исправление для прокрутки при открытии модальных окон
-        function fixModalScroll() {
-            const modal = document.getElementById('payment-modal');
-            if (modal.style.display === 'flex') {
-                modal.scrollTop = 0;
+        function debugOrderSystem() {
+            console.log('=== ДЕБАГ СИСТЕМЫ ЗАКАЗОВ ===');
+            console.log('1. CONFIG:', CONFIG);
+            console.log('2. Текущий заказ:', currentState.currentOrder);
+            console.log('3. Данные пользователя:', currentState.userData);
+            console.log('4. Crypto Wallet:', currentState.cryptoWallet);
+            console.log('5. Курс обмена:', currentState.exchangeRate);
+            console.log('6. LocalStorage заказы:');
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.includes('order')) {
+                    console.log(`   ${key}:`, JSON.parse(localStorage.getItem(key)));
+                }
             }
+            
+            fetch(CONFIG.API_URL, { method: 'HEAD' })
+                .then(response => {
+                    console.log('7. API доступен:', response.ok);
+                })
+                .catch(error => {
+                    console.log('7. API НЕ доступен:', error.message);
+                });
+            
+            console.log('=== КОНЕЦ ДЕБАГА ===');
         }
+
+        window.debugOrderSystem = debugOrderSystem;
     </script>
 </body>
 </html>
