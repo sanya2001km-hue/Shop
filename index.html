@@ -56,7 +56,6 @@
             overflow-y: auto;
         }
 
-        /* Убираем скрытие загрузочного экрана из CSS */
         .loading-screen {
             position: fixed;
             top: 0;
@@ -1155,7 +1154,7 @@
                 <p style="margin: 0.5rem 0;"><i class="fas fa-chevron-right" style="color: var(--gold-accent);"></i> 6. Админ напишет вам в течение 5-30 минут</p>
                 
                 <h3 style="font-size: 1.2rem; margin-top: 1.5rem; color: var(--gold-accent);"><i class="fas fa-wallet"></i> Способы оплаты:</h3>
-                <p style="margin: 0.5rem 0;"><i class="fas fa-coins" style="color: var(--gold-accent);"></i> Криптовалюта (USDT) - через Crypto Bot</p>
+                <p style="margin: 0.5rem 0;"><i class="fas fa-coins" style="color: var(--gold-accent);"></i> Криптовалюта (USDT) - через реквизиты</p>
                 <p style="margin: 0.5rem 0;"><i class="fas fa-university" style="color: var(--gold-accent);"></i> Ссылка на Сбербанк</p>
                 
                 <h3 style="font-size: 1.2rem; margin-top: 1.5rem; color: var(--gold-accent);"><i class="fas fa-check-circle"></i> После подтверждения:</h3>
@@ -1181,14 +1180,16 @@
     </div>
 
     <script>
-        // Упрощённая конфигурация
         const CONFIG = {
             BOT_TOKEN: "8435320902:AAGYTrY3PKo3zo3ewRXIg4L91B1KbMJMqZ8",
             ADMIN_ID: "8354109183",
             SUPPORT_USERNAME: "astmatiks_exe",
             BOT_USERNAME: "FrUKT_UC_BOT",
             SBER_PAYMENT_URL: "https://www.sberbank.com/sms/pbpn?requisiteNumber=79657230692",
-            API_URL: "http://localhost:8081/api/create_order"
+            API_URL: "http://localhost:8081/api/create_order",
+            HISTORY_API_URL: "http://localhost:8081/api/get_user_orders",
+            CRYPTO_API_URL: "http://localhost:8081/api/crypto_wallet",
+            EXCHANGE_RATE_API: "http://localhost:8081/api/exchange_rate"
         };
 
         const PRODUCTS = {
@@ -1196,15 +1197,39 @@
                 {id: 1, name: '60 UC', amount: '60 UC', price: 95, icon: 'uc'},
                 {id: 2, name: '325 UC', amount: '325 UC', price: 475, icon: 'uc'},
                 {id: 3, name: '660 UC', amount: '660 UC', price: 855, icon: 'uc'},
-                {id: 4, name: '1800 UC', amount: '1800 UC', price: 2350, icon: 'uc'}
+                {id: 4, name: '1800 UC', amount: '1800 UC', price: 2350, icon: 'uc'},
+                {id: 5, name: '3850 UC', amount: '3850 UC', price: 4730, icon: 'uc'},
+                {id: 6, name: '8100 UC', amount: '8100 UC', price: 9850, icon: 'uc'},
+                {id: 17, name: '120 UC', amount: '120 UC', price: 185, icon: 'uc'},
+                {id: 18, name: '500 UC', amount: '500 UC', price: 650, icon: 'uc'},
+                {id: 19, name: '1000 UC', amount: '1000 UC', price: 1250, icon: 'uc'}
             ],
             'prime': [
                 {id: 7, name: 'Prime 30 дней', amount: '30 дней', price: 299, icon: 'prime'},
-                {id: 8, name: 'Prime 90 дней', amount: '90 дней', price: 799, icon: 'prime'}
+                {id: 8, name: 'Prime 90 дней', amount: '90 дней', price: 799, icon: 'prime'},
+                {id: 9, name: 'Prime 180 дней', amount: '180 дней', price: 1499, icon: 'prime'},
+                {id: 10, name: 'Prime 365 дней', amount: '365 дней', price: 2699, icon: 'prime'}
             ],
             'popularity': [
                 {id: 11, name: '50 Популярности', amount: '50 звёзд', price: 75, icon: 'popularity'},
-                {id: 12, name: '200 Популярности', amount: '200 звёзд', price: 290, icon: 'popularity'}
+                {id: 12, name: '200 Популярности', amount: '200 звёзд', price: 290, icon: 'popularity'},
+                {id: 13, name: '500 Популярности', amount: '500 звёзд', price: 690, icon: 'popularity'},
+                {id: 14, name: '1000 Популярности', amount: '1000 звёзд', price: 1290, icon: 'popularity'},
+                {id: 20, name: '2500 Популярности', amount: '2500 звёзд', price: 2990, icon: 'popularity'},
+                {id: 21, name: '5000 Популярности', amount: '5000 звёзд', price: 5690, icon: 'popularity'},
+                {id: 22, name: '10000 Популярности', amount: '10000 звёзд', price: 10990, icon: 'popularity'}
+            ],
+            'gold': [
+                {id: 15, name: 'Золотой самолет', amount: 'транспорт', price: 9990, icon: 'gold'},
+                {id: 16, name: 'Золотой вертолет', amount: 'транспорт', price: 7990, icon: 'gold'},
+                {id: 23, name: 'Золотой мотоцикл', amount: 'транспорт', price: 5990, icon: 'gold'},
+                {id: 24, name: 'Золотой спорткар', amount: 'транспорт', price: 12990, icon: 'gold'}
+            ],
+            'porsche': [
+                {id: 25, name: 'Porsche 911', amount: 'эксклюзивный транспорт', price: 19990, icon: 'porsche'},
+                {id: 26, name: 'Porsche Cayenne', amount: 'эксклюзивный транспорт', price: 17990, icon: 'porsche'},
+                {id: 27, name: 'Porsche Taycan', amount: 'электрокар', price: 21990, icon: 'porsche'},
+                {id: 28, name: 'Porsche Macan', amount: 'кроссовер', price: 15990, icon: 'porsche'}
             ]
         };
 
@@ -1220,14 +1245,15 @@
             selectedProduct: null,
             playerId: '',
             currentOrder: null,
-            userData: null
+            userData: null,
+            cryptoWallet: null,
+            exchangeRate: 95
         };
 
         // Инициализация
         function initApp() {
             console.log('Инициализация приложения...');
             
-            // Симулируем загрузку
             const loadingScreen = document.getElementById('loading-screen');
             const progressBar = document.getElementById('loading-progress');
             const percentText = document.getElementById('loading-percent');
@@ -1501,11 +1527,15 @@
                     let iconHtml = '';
                     
                     if (product.icon === 'uc') {
-                        iconHtml = '<div class="product-icon"></div>';
+                        iconHtml = '<div class="product-icon" style="background-image: url(\'https://cdn-icons-png.flaticon.com/512/217/217853.png\')"></div>';
                     } else if (product.icon === 'prime') {
-                        iconHtml = '<div class="product-icon"></div>';
+                        iconHtml = '<div class="product-icon" style="background-image: url(\'https://cdn-icons-png.flaticon.com/512/3048/3048120.png\')"></div>';
+                    } else if (product.icon === 'porsche') {
+                        iconHtml = '<div class="product-icon" style="background-image: url(\'https://cdn-icons-png.flaticon.com/512/744/744465.png\')"></div>';
                     } else if (product.icon === 'popularity') {
-                        iconHtml = '<div class="product-icon"></div>';
+                        iconHtml = '<div class="product-icon" style="background-image: url(\'https://cdn-icons-png.flaticon.com/512/1828/1828884.png\')"></div>';
+                    } else if (product.icon === 'gold') {
+                        iconHtml = '<div class="product-icon" style="background-image: url(\'https://cdn-icons-png.flaticon.com/512/3135/3135715.png\')"></div>';
                     }
                     
                     html += `
@@ -1562,11 +1592,22 @@
             
             modalTitle.textContent = `Введите ID игрока`;
             
+            let iconHtml = '';
+            if (product.icon === 'uc') {
+                iconHtml = '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://cdn-icons-png.flaticon.com/512/217/217853.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>';
+            } else if (product.icon === 'prime') {
+                iconHtml = '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://cdn-icons-png.flaticon.com/512/3048/3048120.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>';
+            } else if (product.icon === 'porsche') {
+                iconHtml = '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://cdn-icons-png.flaticon.com/512/744/744465.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>';
+            } else if (product.icon === 'popularity') {
+                iconHtml = '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://cdn-icons-png.flaticon.com/512/1828/1828884.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>';
+            } else if (product.icon === 'gold') {
+                iconHtml = '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://cdn-icons-png.flaticon.com/512/3135/3135715.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>';
+            }
+            
             modalContent.innerHTML = `
                 <div style="text-align: center;">
-                    <div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background: var(--gold-accent); border-radius: 10px; border: 2px solid var(--gold-accent); display: flex; align-items: center; justify-content: center; font-size: 2rem;">
-                        ${product.icon === 'uc' ? '💰' : product.icon === 'prime' ? '👑' : '⭐'}
-                    </div>
+                    ${iconHtml}
                     <p><i class="fas fa-gamepad"></i> Товар: <b>${product.name}</b></p>
                     <p><i class="fas fa-coins"></i> Цена: <b>${product.price}₽</b></p>
                     
@@ -1639,9 +1680,15 @@
             modalContent.innerHTML = `
                 <div style="text-align: center;">
                     <div style="margin-bottom: 1rem;">
-                        <div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background: var(--gold-accent); border-radius: 10px; border: 2px solid var(--gold-accent); display: flex; align-items: center; justify-content: center; font-size: 2rem;">
-                            ${currentState.selectedProduct.icon === 'uc' ? '💰' : currentState.selectedProduct.icon === 'prime' ? '👑' : '⭐'}
-                        </div>
+                        ${currentState.selectedProduct.icon === 'uc' ? 
+                          '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://cdn-icons-png.flaticon.com/512/217/217853.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>' : 
+                          currentState.selectedProduct.icon === 'prime' ? 
+                          '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://cdn-icons-png.flaticon.com/512/3048/3048120.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>' :
+                          currentState.selectedProduct.icon === 'porsche' ? 
+                          '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://cdn-icons-png.flaticon.com/512/744/744465.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>' :
+                          currentState.selectedProduct.icon === 'popularity' ?
+                          '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://cdn-icons-png.flaticon.com/512/1828/1828884.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>' :
+                          '<div style="width: 80px; height: 80px; margin: 0 auto 0.5rem; background-image: url(\'https://cdn-icons-png.flaticon.com/512/3135/3135715.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>'}
                     </div>
                     <p><i class="fas fa-coins"></i> Цена: <b>${currentState.selectedProduct.price}₽</b></p>
                     <p><i class="fas fa-id-card"></i> Ваш ID: <b>${currentState.playerId}</b></p>
@@ -1651,6 +1698,13 @@
                     
                     <h3 style="margin: 1.5rem 0 1rem; font-size: 1.2rem; color: var(--gold-accent);"><i class="fas fa-credit-card"></i> Выберите способ оплаты:</h3>
                     <div class="payment-methods">
+                        <div class="payment-method crypto" onclick="selectPaymentMethod('crypto')">
+                            <div class="payment-icon"><i class="fas fa-coins"></i></div>
+                            <div>
+                                <h4>Crypto Bot (USDT)</h4>
+                                <p>Оплата криптовалютой через реквизиты</p>
+                            </div>
+                        </div>
                         <div class="payment-method" onclick="selectPaymentMethod('sber')">
                             <div class="payment-icon"><i class="fas fa-university"></i></div>
                             <div>
@@ -1671,17 +1725,206 @@
         }
 
         function selectPaymentMethod(method) {
-            const modalContent = document.getElementById('modal-content');
-            
-            document.querySelectorAll('.payment-method').forEach(el => {
+            const paymentMethods = document.querySelectorAll('.payment-method');
+            paymentMethods.forEach(el => {
                 el.classList.remove('active');
             });
             
-            event.target.closest('.payment-method').classList.add('active');
+            event.currentTarget.classList.add('active');
             
-            if (method === 'sber') {
+            if (method === 'crypto') {
+                showCryptoPayment();
+            } else if (method === 'sber') {
                 showSberPayment();
             }
+        }
+
+        async function showCryptoPayment() {
+            const modalContent = document.getElementById('modal-content');
+            
+            const loadingHtml = `
+                <div style="text-align: center; padding: 2rem;">
+                    <div class="loading-spinner" style="border-top-color: var(--crypto-green);"></div>
+                    <p style="color: var(--light-gold); margin-top: 1rem;">Получаем реквизиты для оплаты...</p>
+                </div>
+            `;
+            
+            modalContent.innerHTML = modalContent.innerHTML.replace(
+                /<button class="nav-btn" onclick="closePaymentModal\(\)".*?<\/button>/s,
+                loadingHtml + '<button class="nav-btn" onclick="closePaymentModal()" style="margin-top: 1rem; width: 100%; background: transparent;"><i class="fas fa-times"></i> Отмена</button>'
+            );
+            
+            try {
+                const cryptoWallet = await getCryptoWallet();
+                currentState.cryptoWallet = cryptoWallet;
+                
+                displayCryptoPaymentInfo(cryptoWallet);
+                
+            } catch (error) {
+                console.error('Ошибка получения реквизитов:', error);
+                
+                modalContent.innerHTML = modalContent.innerHTML.replace(
+                    /<div style="text-align: center; padding: 2rem;">.*?<\/div>/s,
+                    `
+                    <div style="text-align: center; padding: 2rem;">
+                        <div class="status-icon" style="color: var(--warning-yellow); font-size: 2rem;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <p style="color: var(--light-gold); margin-top: 1rem;">Ошибка получения реквизитов</p>
+                        <p style="color: var(--text-gray); font-size: 0.9rem; margin-top: 0.5rem;">
+                            Пожалуйста, выберите другой способ оплаты или попробуйте позже
+                        </p>
+                        <button class="nav-btn" onclick="showPaymentMethods()" style="margin-top: 1rem; width: 100%;">
+                            <i class="fas fa-arrow-left"></i> Назад к выбору оплаты
+                        </button>
+                    </div>
+                    `
+                );
+            }
+        }
+
+        async function getCryptoWallet() {
+            try {
+                const response = await fetch(CONFIG.CRYPTO_API_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ошибка: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    return result.wallet;
+                } else {
+                    throw new Error(result.message || 'Ошибка сервера');
+                }
+                
+            } catch (error) {
+                console.error('Ошибка получения кошелька:', error);
+                
+                // Возвращаем тестовые данные для демонстрации
+                return {
+                    address: 'Txxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+                    network: 'TRC20',
+                    currency: 'USDT'
+                };
+            }
+        }
+
+        function calculateUsdtAmount(rubAmount) {
+            return (rubAmount / currentState.exchangeRate).toFixed(2);
+        }
+
+        function displayCryptoPaymentInfo(wallet) {
+            const modalContent = document.getElementById('modal-content');
+            const rubAmount = currentState.selectedProduct.price;
+            const usdtAmount = calculateUsdtAmount(rubAmount);
+            
+            const cryptoHtml = `
+                <div class="crypto-instructions">
+                    <h4 style="font-size: 1.2rem; color: var(--crypto-green); margin-bottom: 1rem;">
+                        <i class="fas fa-coins"></i> Оплата криптовалютой (USDT)
+                    </h4>
+                    
+                    <div style="background: rgba(0, 208, 156, 0.1); padding: 1.5rem; border-radius: 10px; border: 1px solid var(--crypto-green); margin: 1rem 0;">
+                        <p style="color: var(--light-gold); margin-bottom: 0.5rem; font-size: 1.1rem;">
+                            <i class="fas fa-coins"></i> Сумма к оплате:
+                        </p>
+                        <p style="font-size: 1.5rem; color: var(--crypto-green); font-weight: 800; margin-bottom: 1.5rem;">
+                            ${usdtAmount} USDT
+                        </p>
+                        
+                        <p style="color: var(--light-gold); margin-bottom: 0.3rem; font-size: 0.9rem;">
+                            <i class="fas fa-exchange-alt"></i> Курс: 1 USDT = ${currentState.exchangeRate}₽
+                        </p>
+                        <p style="color: var(--text-gray); margin-bottom: 1rem; font-size: 0.9rem;">
+                            (${rubAmount}₽ / ${currentState.exchangeRate} = ${usdtAmount} USDT)
+                        </p>
+                        
+                        <p style="color: var(--light-gold); margin-bottom: 0.5rem;">
+                            <i class="fas fa-wallet"></i> Адрес кошелька:
+                        </p>
+                        <div class="crypto-address-box">
+                            <p style="color: white; font-family: monospace; font-size: 0.9rem; word-break: break-all;">
+                                ${wallet.address}
+                            </p>
+                        </div>
+                        
+                        <p style="color: var(--light-gold); margin: 1rem 0 0.5rem;">
+                            <i class="fas fa-network-wired"></i> Сеть:
+                        </p>
+                        <p style="color: white; font-weight: 600; background: rgba(0, 208, 156, 0.2); padding: 0.5rem; border-radius: 8px; border: 1px solid var(--crypto-green);">
+                            ${wallet.network || 'TRC20'}
+                        </p>
+                        
+                        <div style="margin-top: 1.5rem;">
+                            <button onclick="copyToClipboard('${wallet.address}')" 
+                                    style="background: linear-gradient(135deg, var(--crypto-green), #00b588); color: white; border: none; padding: 0.8rem; border-radius: 10px; cursor: pointer; font-weight: 600; width: 100%; margin-top: 0.5rem; transition: all 0.3s ease;">
+                                <i class="fas fa-copy"></i> Скопировать адрес
+                            </button>
+                            
+                            <button onclick="copyToClipboard('${usdtAmount}')" 
+                                    style="background: transparent; border: 2px solid var(--crypto-green); color: var(--crypto-green); padding: 0.8rem; border-radius: 10px; cursor: pointer; font-weight: 600; width: 100%; margin-top: 0.5rem; transition: all 0.3s ease;">
+                                <i class="fas fa-copy"></i> Скопировать сумму (${usdtAmount} USDT)
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 1.5rem;">
+                        <p style="color: var(--light-gold); font-size: 1rem; margin-bottom: 0.5rem;">
+                            <b><i class="fas fa-info-circle"></i> Инструкция:</b>
+                        </p>
+                        <ol style="color: var(--text-gray); padding-left: 1.5rem; line-height: 1.6; font-size: 0.9rem;">
+                            <li>Откройте ваш крипто-кошелек (Trust Wallet, Binance и т.д.)</li>
+                            <li>Выберите USDT и сеть ${wallet.network || 'TRC20'}</li>
+                            <li>Вставьте скопированный адрес получателя</li>
+                            <li>Введите сумму ${usdtAmount} USDT</li>
+                            <li>Проверьте данные и подтвердите перевод</li>
+                            <li>После оплаты нажмите кнопку ниже</li>
+                        </ol>
+                        
+                        <div style="background: rgba(0, 208, 156, 0.1); padding: 1rem; border-radius: 10px; border: 1px solid var(--crypto-green); margin-top: 1rem;">
+                            <p style="color: var(--light-gold); font-size: 0.9rem;">
+                                <i class="fas fa-exclamation-circle"></i> <b>ВАЖНО:</b> Обязательно укажите сеть ${wallet.network || 'TRC20'}!<br>
+                                Переводы по другим сетям не будут зачислены.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1.5rem;">
+                    <label style="display: block; text-align: left; margin-bottom: 0.5rem; font-weight: 600; color: var(--light-gold);">
+                        <i class="fas fa-receipt"></i> Хэш транзакции (необязательно):
+                    </label>
+                    <input type="text" 
+                           id="tx-hash-input" 
+                           class="form-input" 
+                           placeholder="0x..."
+                           style="font-size: 0.9rem;">
+                    <p class="form-hint" style="text-align: left; margin-top: 0.5rem; color: var(--light-gold);">
+                        Можно указать для быстрой проверки платежа
+                    </p>
+                </div>
+                
+                <button class="confirm-payment" onclick="confirmCryptoPayment()" 
+                        style="margin-top: 1.5rem; background: linear-gradient(135deg, var(--crypto-green), #00b588);">
+                    <i class="fas fa-check-circle"></i> Я оплатил ${usdtAmount} USDT
+                </button>
+                
+                <p style="font-size: 0.9rem; color: var(--light-gold); margin-top: 1rem; text-align: center;">
+                    После нажатия заказ будет отправлен администратору
+                </p>
+                
+                <button class="nav-btn" onclick="showPaymentMethods()" 
+                        style="margin-top: 1rem; width: 100%; background: transparent;">
+                    <i class="fas fa-arrow-left"></i> Выбрать другой способ
+                </button>
+            `;
+            
+            modalContent.innerHTML = modalContent.innerHTML.replace(
+                /<div style="text-align: center; padding: 2rem;">.*?<\/div>/s,
+                cryptoHtml
+            );
         }
 
         function showSberPayment() {
@@ -1710,7 +1953,110 @@
                 </button>
             `;
             
-            modalContent.innerHTML += sberHtml;
+            // Находим место для вставки перед кнопкой "Отмена"
+            const cancelButton = modalContent.querySelector('.nav-btn[onclick="closePaymentModal()"]');
+            if (cancelButton) {
+                cancelButton.insertAdjacentHTML('beforebegin', sberHtml);
+            } else {
+                modalContent.innerHTML += sberHtml;
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.target;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Скопировано!';
+                btn.style.background = 'var(--success-green)';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = 'transparent';
+                }, 2000);
+            }).catch(err => {
+                console.error('Ошибка копирования: ', err);
+                // Fallback для старых браузеров
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                const btn = event.target;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Скопировано!';
+                btn.style.background = 'var(--success-green)';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = 'transparent';
+                }, 2000);
+            });
+        }
+
+        async function confirmCryptoPayment() {
+            const userData = getUserData();
+            if (!userData) {
+                alert('❌ Ошибка: данные пользователя не найдены!');
+                return;
+            }
+
+            document.getElementById('loading').style.display = 'block';
+            closePaymentModal();
+            
+            try {
+                const orderId = 'CRYPTO_' + Date.now() + Math.floor(Math.random() * 1000);
+                const txHash = document.getElementById('tx-hash-input')?.value.trim() || '';
+                const rubAmount = currentState.selectedProduct.price;
+                const usdtAmount = calculateUsdtAmount(rubAmount);
+                
+                currentState.currentOrder = {
+                    id: orderId,
+                    product: currentState.selectedProduct,
+                    playerId: currentState.playerId,
+                    paymentMethod: 'crypto',
+                    userData: userData,
+                    timestamp: new Date().toISOString(),
+                    cryptoWallet: currentState.cryptoWallet,
+                    txHash: txHash,
+                    rubAmount: rubAmount,
+                    usdtAmount: usdtAmount,
+                    exchangeRate: currentState.exchangeRate
+                };
+                
+                localStorage.setItem(`order_${orderId}`, JSON.stringify({
+                    product: currentState.selectedProduct,
+                    playerId: currentState.playerId,
+                    price: rubAmount,
+                    timestamp: currentState.currentOrder.timestamp,
+                    paymentMethod: 'crypto',
+                    cryptoWallet: currentState.cryptoWallet,
+                    txHash: txHash,
+                    usdtAmount: usdtAmount,
+                    exchangeRate: currentState.exchangeRate,
+                    status: 'pending'
+                }));
+                
+                console.log('📝 Крипто-заказ сохранен локально:', orderId);
+                
+                const success = await sendOrderToBot(currentState.currentOrder);
+                
+                document.getElementById('loading').style.display = 'none';
+                
+                if (success) {
+                    showOrderStatus(orderId);
+                } else {
+                    alert('⚠️ Заказ сохранен, но не отправлен на сервер.\nАдминистратор свяжется с вами для уточнения.');
+                    showOrderStatus(orderId, true);
+                }
+                
+            } catch (error) {
+                console.error('❌ Ошибка крипто-оплаты:', error);
+                document.getElementById('loading').style.display = 'none';
+                alert('⚠️ Ошибка обработки крипто-оплаты.\nВаш заказ сохранен.\nАдминистратор @astmatiks_exe свяжется с вами.');
+                showMain();
+            }
         }
 
         async function confirmPayment(method) {
@@ -1724,7 +2070,7 @@
             closePaymentModal();
             
             try {
-                const orderId = 'ORD' + Date.now();
+                const orderId = 'ORD' + Date.now() + Math.floor(Math.random() * 1000);
                 currentState.currentOrder = {
                     id: orderId,
                     product: currentState.selectedProduct,
@@ -1734,7 +2080,6 @@
                     timestamp: new Date().toISOString()
                 };
                 
-                // Сохраняем в localStorage
                 localStorage.setItem(`order_${orderId}`, JSON.stringify({
                     product: currentState.selectedProduct,
                     playerId: currentState.playerId,
@@ -1745,7 +2090,6 @@
                 
                 console.log('📝 Заказ сохранен локально:', orderId);
                 
-                // Отправляем в бот
                 const success = await sendOrderToBot(currentState.currentOrder);
                 
                 document.getElementById('loading').style.display = 'none';
@@ -1753,14 +2097,14 @@
                 if (success) {
                     showOrderStatus(orderId);
                 } else {
-                    alert('⚠️ Заказ сохранен локально, но не отправлен на сервер.\nАдминистратор свяжется с вами.');
+                    alert('⚠️ Заказ сохранен локально, но не отправлен на сервер.\nАдминистратор свяжется с вами для уточнения деталей.');
                     showOrderStatus(orderId, true);
                 }
                 
             } catch (error) {
-                console.error('❌ Ошибка:', error);
+                console.error('❌ Критическая ошибка:', error);
                 document.getElementById('loading').style.display = 'none';
-                alert('⚠️ Произошла ошибка.\nВаш заказ сохранен.\nАдминистратор @astmatiks_exe свяжется с вами.');
+                alert('⚠️ Произошла ошибка при обработке заказа.\nВаш заказ сохранен локально.\nАдминистратор @astmatiks_exe свяжется с вами для уточнения деталей.');
                 showMain();
             }
         }
@@ -1769,6 +2113,11 @@
             console.log('📦 Отправка заказа в бот:', order.id);
             
             try {
+                if (!order.userData || !order.product || !order.playerId) {
+                    console.error('❌ Неполные данные заказа');
+                    return false;
+                }
+                
                 const orderData = {
                     order_id: order.id,
                     user_id: order.userData.telegramId || '',
@@ -1780,6 +2129,15 @@
                     payment_method: order.paymentMethod || 'не указан',
                     timestamp: new Date().toISOString()
                 };
+                
+                if (order.paymentMethod === 'crypto') {
+                    orderData.crypto_wallet = order.cryptoWallet?.address || '';
+                    orderData.crypto_network = order.cryptoWallet?.network || '';
+                    orderData.amount_usdt = order.usdtAmount || calculateUsdtAmount(order.product.price);
+                    orderData.exchange_rate = order.exchangeRate || currentState.exchangeRate;
+                    orderData.tx_hash = order.txHash || '';
+                    orderData.amount_rub = order.rubAmount || order.product.price;
+                }
                 
                 console.log('📤 Данные для API:', orderData);
                 
@@ -1798,7 +2156,12 @@
                 const result = await response.json();
                 console.log('✅ Ответ API:', result);
                 
-                return result.status === 'success';
+                if (result.status === 'success') {
+                    console.log('🎉 Заказ успешно создан!');
+                    return true;
+                } else {
+                    throw new Error(result.message || 'Ошибка от сервера');
+                }
                 
             } catch (error) {
                 console.error('❌ Ошибка отправки заказа:', error);
@@ -1819,6 +2182,19 @@
                 'Администратор свяжется с вами для подтверждения' : 
                 'Ожидайте подтверждения админа';
             
+            let iconHtml = '';
+            if (order.product.icon === 'uc') {
+                iconHtml = '<div style="width: 80px; height: 80px; margin: 0 auto; background-image: url(\'https://cdn-icons-png.flaticon.com/512/217/217853.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>';
+            } else if (order.product.icon === 'prime') {
+                iconHtml = '<div style="width: 80px; height: 80px; margin: 0 auto; background-image: url(\'https://cdn-icons-png.flaticon.com/512/3048/3048120.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>';
+            } else if (order.product.icon === 'porsche') {
+                iconHtml = '<div style="width: 80px; height: 80px; margin: 0 auto; background-image: url(\'https://cdn-icons-png.flaticon.com/512/744/744465.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>';
+            } else if (order.product.icon === 'popularity') {
+                iconHtml = '<div style="width: 80px; height: 80px; margin: 0 auto; background-image: url(\'https://cdn-icons-png.flaticon.com/512/1828/1828884.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>';
+            } else if (order.product.icon === 'gold') {
+                iconHtml = '<div style="width: 80px; height: 80px; margin: 0 auto; background-image: url(\'https://cdn-icons-png.flaticon.com/512/3135/3135715.png\'); background-size: contain; background-position: center; background-repeat: no-repeat; border-radius: 10px; border: 2px solid var(--gold-accent);"></div>';
+            }
+            
             const statusHtml = `
                 <div class="status-icon status-pending" style="color: ${iconColor};">
                     <i class="${iconClass}"></i>
@@ -1827,15 +2203,22 @@
                 <p><i class="fas fa-hashtag"></i> Номер: <b style="color: var(--light-burgundy);">#${orderId}</b></p>
                 
                 <div style="margin: 1rem 0;">
-                    <div style="width: 80px; height: 80px; margin: 0 auto; background: var(--gold-accent); border-radius: 10px; border: 2px solid var(--gold-accent); display: flex; align-items: center; justify-content: center; font-size: 2rem;">
-                        ${order.product.icon === 'uc' ? '💰' : order.product.icon === 'prime' ? '👑' : '⭐'}
-                    </div>
+                    ${iconHtml}
                 </div>
                 
                 <p><i class="fas fa-gamepad"></i> Товар: ${order.product.name}</p>
                 <p><i class="fas fa-coins"></i> Сумма: ${order.product.price}₽</p>
                 <p><i class="fas fa-id-card"></i> Ваш ID: ${order.playerId}</p>
                 <p><i class="fas fa-credit-card"></i> Способ оплаты: ${order.paymentMethod}</p>
+                
+                ${order.paymentMethod === 'crypto' ? `
+                    <div style="background: rgba(0, 208, 156, 0.1); padding: 1rem; border-radius: 12px; border: 2px solid var(--crypto-green); margin: 1rem 0;">
+                        <p><i class="fas fa-coins"></i> Крипто-оплата: ${order.usdtAmount || calculateUsdtAmount(order.product.price)} USDT</p>
+                        <p><i class="fas fa-exchange-alt"></i> Курс: 1 USDT = ${order.exchangeRate || currentState.exchangeRate}₽</p>
+                        ${order.cryptoWallet?.network ? `<p><i class="fas fa-network-wired"></i> Сеть: ${order.cryptoWallet.network}</p>` : ''}
+                        ${order.txHash ? `<p><i class="fas fa-receipt"></i> Хэш: ${order.txHash}</p>` : ''}
+                    </div>
+                ` : ''}
                 
                 <div style="background: linear-gradient(135deg, rgba(157, 29, 54, 0.2), rgba(212, 175, 55, 0.1)); padding: 1.5rem; border-radius: 12px; border: 2px solid ${iconColor}; margin: 1.5rem 0;">
                     <p><b><i class="fas fa-${isWarning ? 'exclamation-circle' : 'clock'}"></i> ${message}</b></p>
@@ -1876,7 +2259,7 @@
             const orders = [];
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
-                if (key.startsWith('order_')) {
+                if (key.startsWith('order_') && !key.includes('failed') && !key.includes('success')) {
                     try {
                         const orderData = JSON.parse(localStorage.getItem(key));
                         const orderId = key.replace('order_', '');
