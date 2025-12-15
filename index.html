@@ -1408,16 +1408,16 @@
     </div>
 
     <script>
-        const CONFIG = {
+ const CONFIG = {
             BOT_TOKEN: "8435320902:AAGYTrY3PKo3zo3ewRXIg4L91B1KbMJMqZ8",
             ADMIN_ID: "8354109183",
             SUPPORT_USERNAME: "astmatiks_exe",
             BOT_USERNAME: "FrUKT_UC_BOT",
             CRYPTO_BOT_TOKEN: "500412:AA6yXMjvvuTZ5orSGI4pTnpbGldEoHkHGEo",
             SBER_PAYMENT_URL: "https://www.sberbank.com/sms/pbpn?requisiteNumber=79657230692",
-            EXCHANGE_RATE: 80
+            EXCHANGE_RATE: 80,
+            PAYMENT_BOT_URL: "@gjasyubjabf_bot" // ДОБАВИЛ ссылку на платежного бота
         };
-
         const PRODUCTS = {
             'uc': [
                 {id: 1, name: '60 UC', amount: '60 UC', price: 95, icon: 'uc'},
@@ -2301,119 +2301,283 @@
             try {
                 const rubAmount = currentState.selectedProduct.price;
                 const usdtAmount = (rubAmount / currentState.exchangeRate).toFixed(2);
-                
-                // Формируем правильную ссылку для Crypto Bot
-                const description = encodeURIComponent(`Покупка ${currentState.selectedProduct.name} - ${usdtAmount} USDT`);
                 const userData = currentState.userData;
                 
-                // Создаем ссылку для открытия Crypto Bot с параметрами
-                const payload = {
-                    amount: usdtAmount,
-                    user_id: userData.telegramId || '0',
-                    username: userData.username || 'unknown',
-                    product: currentState.selectedProduct.name,
+                // Создаем уникальный ID для платежа
+                const paymentId = 'PAY_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                
+                // Сохраняем информацию о платеже
+                const paymentData = {
+                    payment_id: paymentId,
+                    product_id: currentState.selectedProduct.id,
+                    product_name: currentState.selectedProduct.name,
+                    product_price: rubAmount,
+                    usdt_amount: usdtAmount,
                     player_id: currentState.playerId,
+                    user_id: userData.telegramId,
+                    username: userData.username,
+                    first_name: userData.firstName,
                     timestamp: Date.now()
                 };
                 
-                const payloadStr = encodeURIComponent(JSON.stringify(payload));
-                const payUrl = `https://t.me/CryptoBot?start=fr_${payloadStr}`;
+                // Сохраняем в localStorage
+                localStorage.setItem(`payment_${paymentId}`, JSON.stringify(paymentData));
                 
-                // Также пробуем создать инвойс через API
-                try {
-                    const response = await fetch('https://pay.crypt.bot/api/createInvoice', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Crypto-Pay-API-Token': CONFIG.CRYPTO_BOT_TOKEN
-                        },
-                        body: JSON.stringify({
-                            amount: usdtAmount,
-                            asset: "USDT",
-                            description: `Покупка ${currentState.selectedProduct.name} в FrUKT UC SHOP`,
-                            paid_btn_name: "view_invoice",
-                            paid_btn_url: `https://t.me/${CONFIG.BOT_USERNAME}`,
-                            payload: JSON.stringify(payload)
-                        })
-                    });
-
-                    if (response.ok) {
-                        const result = await response.json();
-                        if (result.ok && result.result.pay_url) {
-                            return result.result;
-                        }
-                    }
-                } catch (apiError) {
-                    console.log('API Crypto Bot недоступен, используем fallback');
-                }
+                // Формируем команду для платежного бота
+                const command = `/pay ${paymentId}`;
+                const encodedCommand = encodeURIComponent(command);
                 
-                // Fallback: создаем простую ссылку
+                // Ссылка на ваш платежный бот с командой
+                const payUrl = `${CONFIG.PAYMENT_BOT_URL}?start=${encodedCommand}`;
+                
+                console.log('Создан платеж:', paymentId, 'Ссылка:', payUrl);
+                
                 return {
                     pay_url: payUrl,
-                    invoice_id: 'FALLBACK_' + Date.now()
+                    invoice_id: paymentId,
+                    payment_data: paymentData
                 };
                 
             } catch (error) {
-                console.error('Ошибка создания инвойса:', error);
+                console.error('Ошибка создания платежа:', error);
                 
-                const usdtAmount = (currentState.selectedProduct.price / currentState.exchangeRate).toFixed(2);
-                const payUrl = `https://t.me/CryptoBot?start=fr_${Date.now()}_${usdtAmount}usdt`;
+                // Резервная ссылка
+                const fallbackUrl = `${CONFIG.PAYMENT_BOT_URL}?start=payment_${Date.now()}`;
                 
                 return {
-                    pay_url: payUrl,
+                    pay_url: fallbackUrl,
                     invoice_id: 'ERROR_' + Date.now()
                 };
             }
         }
 
-        function startCryptoBotPayment(invoiceId) {
-            console.log('Начата оплата счета:', invoiceId);
+        async function showCryptoPayment() {
+            const modalContent = document.getElementById('modal-content');
             
+            const loadingHtml = `
+                <div style="text-align: center; padding: 2rem;">
+                    <div class="loading-spinner" style="border-top-color: var(--crypto-green);"></div>
+                    <p style="color: var(--light-gold); margin-top: 1rem;">Подготовка оплаты...</p>
+                </div>
+            `;
+            
+            modalContent.innerHTML = modalContent.innerHTML.replace(
+                /<button class="nav-btn" onclick="closePaymentModal\(\)".*?<\/button>/s,
+                loadingHtml + '<button class="nav-btn" onclick="closePaymentModal()" style="margin-top: 1rem; width: 100%; background: transparent;"><i class="fas fa-times"></i> Отмена</button>'
+            );
+            
+            try {
+                const invoice = await createCryptoInvoice();
+                
+                const rubAmount = currentState.selectedProduct.price;
+                const usdtAmount = (rubAmount / currentState.exchangeRate).toFixed(2);
+                const invoiceId = invoice.invoice_id;
+                
+                const cryptoHtml = `
+                    <div class="crypto-instructions">
+                        <h4 style="font-size: 1.2rem; color: var(--crypto-green); margin-bottom: 1rem;">
+                            <i class="fab fa-telegram"></i> Оплата через Платежного бота
+                        </h4>
+                        
+                        <div style="background: rgba(0, 208, 156, 0.1); padding: 1.5rem; border-radius: 10px; border: 1px solid var(--crypto-green); margin: 1rem 0;">
+                            <p style="color: var(--light-gold); margin-bottom: 0.5rem; font-size: 1.1rem;">
+                                <i class="fas fa-coins"></i> Сумма к оплате:
+                            </p>
+                            <p style="font-size: 1.5rem; color: var(--crypto-green); font-weight: 800; margin-bottom: 1rem;">
+                                ${usdtAmount} USDT
+                            </p>
+                            <p style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 1.5rem;">
+                                (${rubAmount}₽ по курсу ${currentState.exchangeRate}₽ за 1 USDT)
+                            </p>
+                            
+                            <p style="color: var(--light-gold); margin-bottom: 1rem;">
+                                <i class="fas fa-arrow-right"></i> Нажмите на кнопку для перехода к оплате:
+                            </p>
+                            
+                            <a href="${invoice.pay_url}" 
+                               target="_blank" 
+                               onclick="startPaymentBot('${invoiceId}')"
+                               style="display: inline-block; background: linear-gradient(135deg, var(--crypto-green), #00b588); color: white; padding: 1.2rem; border-radius: 12px; text-decoration: none; margin: 1rem 0; font-weight: 700; font-size: 1.1rem; text-align: center; width: 100%; border: 2px solid #00b588; transition: all 0.3s ease;">
+                               <i class="fab fa-telegram"></i> Перейти к оплате в боте
+                            </a>
+                            
+                            <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(0, 208, 156, 0.05); border-radius: 8px; border: 1px dashed var(--crypto-green);">
+                                <p style="color: var(--light-gold); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-info-circle"></i> <b>Инструкция по оплате:</b>
+                                </p>
+                                <ol style="color: var(--text-gray); padding-left: 1.2rem; line-height: 1.5; font-size: 0.85rem;">
+                                    <li>Нажмите кнопку выше (откроется Telegram с платежным ботом)</li>
+                                    <li>Бот автоматически получит данные о вашем заказе</li>
+                                    <li>Следуйте инструкциям бота для оплаты через Crypto Bot</li>
+                                    <li>После успешной оплаты в боте вернитесь сюда</li>
+                                    <li>Нажмите кнопку "Я оплатил" ниже</li>
+                                </ol>
+                            </div>
+                            
+                            <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(212, 175, 55, 0.05); border-radius: 8px; border: 1px dashed var(--gold-accent);">
+                                <p style="color: var(--light-gold); font-size: 0.9rem;">
+                                    <i class="fas fa-exclamation-triangle"></i> <b>Если кнопка не работает:</b>
+                                </p>
+                                <p style="color: var(--text-gray); font-size: 0.85rem; margin-top: 0.3rem;">
+                                    1. Откройте Telegram вручную<br>
+                                    2. Найдите бота ${CONFIG.PAYMENT_BOT_URL.replace('https://t.me/', '')}<br>
+                                    3. Отправьте ему команду:<br>
+                                    <code style="background: rgba(0,0,0,0.3); padding: 5px; border-radius: 5px; display: inline-block; margin-top: 5px; font-family: monospace;">
+                                        /pay ${invoiceId}
+                                    </code>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 1.5rem;">
+                        <label style="display: block; text-align: left; margin-bottom: 0.5rem; font-weight: 600; color: var(--light-gold);">
+                            <i class="fas fa-receipt"></i> Номер платежа:
+                        </label>
+                        <input type="text" 
+                               id="crypto-invoice-id" 
+                               class="form-input" 
+                               value="${invoiceId}"
+                               readonly
+                               style="font-size: 0.9rem; background: rgba(0, 208, 156, 0.1);">
+                        <p class="form-hint" style="text-align: left; margin-top: 0.5rem; color: var(--light-gold);">
+                            Этот номер будет отправлен администратору для проверки оплаты
+                        </p>
+                    </div>
+                    
+                    <button class="confirm-payment" onclick="confirmCryptoPayment('${invoiceId}', '${usdtAmount}')" 
+                            id="confirm-crypto"
+                            style="margin-top: 1.5rem; background: linear-gradient(135deg, var(--crypto-green), #00b588);">
+                        <i class="fas fa-check-circle"></i> Я оплатил ${usdtAmount} USDT
+                    </button>
+                    
+                    <p style="font-size: 0.9rem; color: var(--light-gold); margin-top: 1rem; text-align: center;">
+                        После нажатия заказ будет отправлен администратору
+                    </p>
+                    
+                    <button class="nav-btn" onclick="showPaymentMethods()" 
+                            style="margin-top: 1rem; width: 100%; background: transparent;">
+                        <i class="fas fa-arrow-left"></i> Выбрать другой способ
+                    </button>
+                `;
+                
+                modalContent.innerHTML = modalContent.innerHTML.replace(
+                    /<div style="text-align: center; padding: 2rem;">.*?<\/div>/s,
+                    cryptoHtml
+                );
+                
+                // Сохраняем данные заказа
+                currentState.currentOrder = {
+                    id: 'ORD' + Date.now() + Math.floor(Math.random() * 1000),
+                    product: currentState.selectedProduct,
+                    playerId: currentState.playerId,
+                    paymentMethod: 'payment_bot',
+                    userData: currentState.userData,
+                    timestamp: new Date().toISOString(),
+                    invoiceId: invoiceId,
+                    paymentId: invoiceId,
+                    rubAmount: rubAmount,
+                    usdtAmount: usdtAmount,
+                    exchangeRate: currentState.exchangeRate,
+                    paymentData: invoice.payment_data
+                };
+                
+                // Отправляем уведомление администратору о создании платежа
+                await notifyAdminAboutPayment(invoiceId, invoice.payment_data);
+                
+            } catch (error) {
+                console.error('Ошибка создания платежа:', error);
+                
+                modalContent.innerHTML = modalContent.innerHTML.replace(
+                    /<div style="text-align: center; padding: 2rem;">.*?<\/div>/s,
+                    `
+                    <div style="text-align: center; padding: 2rem;">
+                        <div class="status-icon" style="color: var(--warning-yellow); font-size: 2rem;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <p style="color: var(--light-gold); margin-top: 1rem;">Ошибка создания платежа</p>
+                        <p style="color: var(--text-gray); font-size: 0.9rem; margin-top: 0.5rem;">
+                            ${error.message || 'Пожалуйста, выберите другой способ оплаты'}
+                        </p>
+                        <p style="color: var(--text-gray); font-size: 0.9rem; margin-top: 0.5rem;">
+                            Вы можете оплатить через Сбербанк или связаться с поддержкой @${CONFIG.SUPPORT_USERNAME}
+                        </p>
+                        <button class="nav-btn" onclick="showPaymentMethods()" style="margin-top: 1rem; width: 100%;">
+                            <i class="fas fa-arrow-left"></i> Назад к выбору оплаты
+                        </button>
+                    </div>
+                    `
+                );
+            }
+        }
+
+        function startPaymentBot(paymentId) {
+            console.log('Начат процесс оплаты через платежного бота:', paymentId);
+            
+            // Сохраняем время начала оплаты
             if (currentState.currentOrder) {
-                currentState.currentOrder.cryptoBotStarted = new Date().toISOString();
-                localStorage.setItem(`crypto_started_${currentState.currentOrder.id}`, 
+                currentState.currentOrder.paymentStarted = new Date().toISOString();
+                localStorage.setItem(`payment_started_${currentState.currentOrder.id}`, 
                     JSON.stringify(currentState.currentOrder));
             }
             
+            // Показываем кнопку подтверждения через 10 секунд
             setTimeout(() => {
                 const confirmBtn = document.getElementById('confirm-crypto');
                 if (confirmBtn) {
                     confirmBtn.style.display = 'block';
                     confirmBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
-            }, 5000);
+            }, 10000);
         }
 
-        function showSberPayment() {
-            const modalContent = document.getElementById('modal-content');
-            
-            const sberUrl = `${CONFIG.SBER_PAYMENT_URL}&amount=${currentState.selectedProduct.price}`;
-            
-            const sberHtml = `
-                <div style="margin-top: 1.5rem;">
-                    <h4 style="font-size: 1.2rem; color: var(--gold-accent);"><i class="fas fa-university"></i> Оплата через Сбербанк</h4>
-                    <p style="font-size: 1rem; color: var(--light-gold);">Нажмите на кнопку для перехода к оплате</p>
-                    <a href="${sberUrl}" 
-                       target="_blank" 
-                       onclick="setTimeout(() => { document.getElementById('confirm-sber').style.display = 'block'; }, 1000)"
-                       style="display: inline-block; background: linear-gradient(135deg, #21a038, #1e8e34); color: white; padding: 1.2rem; border-radius: 12px; text-decoration: none; margin: 1rem 0; font-weight: 700; font-size: 1.1rem; text-align: center; width: 100%; border: 2px solid #1e8e34;">
-                       <i class="fas fa-external-link-alt"></i> Перейти к оплате ${currentState.selectedProduct.price}₽
-                    </a>
-                    <p style="font-size: 1rem; color: var(--light-gold);"><i class="fas fa-arrow-right"></i> 1. Оплатите ${currentState.selectedProduct.price}₽ через Сбербанк Онлайн</p>
-                    <p style="font-size: 1rem; color: var(--light-gold);"><i class="fas fa-arrow-right"></i> 2. После успешной оплаты нажмите кнопку ниже</p>
-                </div>
+        async function notifyAdminAboutPayment(paymentId, paymentData) {
+            try {
+                const messageText = `
+🔄 *СОЗДАН НОВЫЙ ПЛАТЕЖ*
+
+📋 *Детали платежа:*
+├ ID платежа: ${paymentId}
+├ Товар: ${paymentData.product_name}
+├ Сумма: ${paymentData.product_price}₽ (${paymentData.usdt_amount} USDT)
+├ ID игрока: ${paymentData.player_id}
+├
+├ 👤 *Данные покупателя:*
+├ Имя: ${paymentData.first_name}
+├ Telegram: @${paymentData.username}
+├ ID: ${paymentData.user_id}
+├
+🕐 Время: ${new Date(paymentData.timestamp).toLocaleString('ru-RU')}
+├
+⚠️ *Ожидает оплаты в платежном боте*
+
+💬 *Для проверки:* откройте платежного бота
+                `;
                 
-                <button class="confirm-payment" onclick="confirmPayment('sber')" 
-                        id="confirm-sber"
-                        style="margin-top: 1.5rem; display: none;">
-                    <i class="fas fa-check-circle"></i> Я оплатил ${currentState.selectedProduct.price}₽
-                </button>
-            `;
-            
-            modalContent.innerHTML = modalContent.innerHTML + sberHtml;
+                const telegramUrl = `https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`;
+                
+                await fetch(telegramUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: CONFIG.ADMIN_ID,
+                        text: messageText,
+                        parse_mode: 'Markdown',
+                        disable_web_page_preview: true
+                    })
+                });
+                
+                console.log('Админ уведомлен о создании платежа:', paymentId);
+                
+            } catch (error) {
+                console.error('Ошибка уведомления админа:', error);
+            }
         }
 
-        async function confirmCryptoPayment(invoiceId, usdtAmount) {
+        // Обновляем функцию confirmCryptoPayment
+        async function confirmCryptoPayment(paymentId, usdtAmount) {
             const userData = getUserData();
             if (!userData) {
                 alert('❌ Ошибка: данные пользователя не найдены!');
@@ -2430,30 +2594,32 @@
                     id: orderId,
                     product: currentState.selectedProduct,
                     playerId: currentState.playerId,
-                    paymentMethod: 'crypto_bot',
+                    paymentMethod: 'payment_bot',
                     userData: userData,
                     timestamp: new Date().toISOString(),
-                    invoiceId: invoiceId,
+                    paymentId: paymentId,
                     rubAmount: currentState.selectedProduct.price,
                     usdtAmount: usdtAmount,
                     exchangeRate: currentState.exchangeRate
                 };
                 
+                // Сохраняем заказ
                 localStorage.setItem(`order_${orderId}`, JSON.stringify({
                     product: currentState.selectedProduct,
                     playerId: currentState.playerId,
                     price: currentState.selectedProduct.price,
                     timestamp: currentState.currentOrder.timestamp,
-                    paymentMethod: 'crypto_bot',
-                    invoiceId: invoiceId,
+                    paymentMethod: 'payment_bot',
+                    paymentId: paymentId,
                     rubAmount: currentState.currentOrder.rubAmount,
                     usdtAmount: currentState.currentOrder.usdtAmount,
                     exchangeRate: currentState.exchangeRate,
-                    status: 'pending'
+                    status: 'pending_payment'
                 }));
                 
-                console.log('Крипто-заказ сохранен локально:', orderId);
+                console.log('Заказ сохранен локально:', orderId);
                 
+                // Отправляем заказ администратору
                 const success = await sendOrderToBot(currentState.currentOrder);
                 
                 document.getElementById('loading').style.display = 'none';
@@ -2464,12 +2630,12 @@
                         playerId: currentState.playerId,
                         price: currentState.selectedProduct.price,
                         timestamp: currentState.currentOrder.timestamp,
-                        paymentMethod: 'crypto_bot',
-                        invoiceId: invoiceId,
+                        paymentMethod: 'payment_bot',
+                        paymentId: paymentId,
                         rubAmount: currentState.currentOrder.rubAmount,
                         usdtAmount: currentState.currentOrder.usdtAmount,
                         exchangeRate: currentState.exchangeRate,
-                        status: 'sent',
+                        status: 'payment_waiting',
                         sent_at: new Date().toISOString()
                     }));
                     
@@ -2480,80 +2646,18 @@
                 }
                 
             } catch (error) {
-                console.error('Ошибка крипто-оплаты:', error);
+                console.error('Ошибка подтверждения оплаты:', error);
                 document.getElementById('loading').style.display = 'none';
-                alert('⚠️ Ошибка обработки крипто-оплаты.\nВаш заказ сохранен.\nАдминистратор @astmatiks_exe свяжется с вами.');
+                alert('⚠️ Ошибка обработки оплаты.\nВаш заказ сохранен.\nАдминистратор @astmatiks_exe свяжется с вами.');
                 showMain();
             }
         }
 
-        async function confirmPayment(method) {
-            const userData = getUserData();
-            if (!userData) {
-                alert('❌ Ошибка: данные пользователя не найдены!');
-                return;
-            }
-
-            document.getElementById('loading').style.display = 'block';
-            closePaymentModal();
-            
-            try {
-                const orderId = 'ORD' + Date.now() + Math.floor(Math.random() * 1000);
-                currentState.currentOrder = {
-                    id: orderId,
-                    product: currentState.selectedProduct,
-                    playerId: currentState.playerId,
-                    paymentMethod: method,
-                    userData: userData,
-                    timestamp: new Date().toISOString()
-                };
-                
-                localStorage.setItem(`order_${orderId}`, JSON.stringify({
-                    product: currentState.selectedProduct,
-                    playerId: currentState.playerId,
-                    price: currentState.selectedProduct.price,
-                    timestamp: currentState.currentOrder.timestamp,
-                    status: 'pending'
-                }));
-                
-                console.log('Заказ сохранен локально:', orderId);
-                
-                const success = await sendOrderToBot(currentState.currentOrder);
-                
-                document.getElementById('loading').style.display = 'none';
-                
-                if (success) {
-                    localStorage.setItem(`order_${orderId}`, JSON.stringify({
-                        product: currentState.selectedProduct,
-                        playerId: currentState.playerId,
-                        price: currentState.selectedProduct.price,
-                        timestamp: currentState.currentOrder.timestamp,
-                        status: 'sent',
-                        sent_at: new Date().toISOString()
-                    }));
-                    
-                    showOrderStatus(orderId);
-                } else {
-                    showOrderStatus(orderId, true);
-                }
-                
-            } catch (error) {
-                console.error('Критическая ошибка:', error);
-                document.getElementById('loading').style.display = 'none';
-                alert('⚠️ Произошла ошибка при обработке заказа.\nАдминистратор @astmatiks_exe свяжется с вами.');
-                showMain();
-            }
-        }
-
+        // Обновляем функцию sendOrderToBot для платежного бота
         async function sendOrderToBot(order) {
             console.log('Отправка заказа в бот:', order.id);
             
             try {
-                if (!order.userData || !order.product || !order.playerId) {
-                    console.error('Неполные данные заказа');
-                    return false;
-                }
-                
                 let messageText = `
 🎮 *НОВЫЙ ЗАКАЗ #${order.id}*
 
@@ -2571,22 +2675,24 @@
 🕐 Время: ${new Date().toLocaleString('ru-RU')}
                 `;
                 
-                if (order.paymentMethod === 'crypto_bot') {
+                if (order.paymentMethod === 'payment_bot') {
                     messageText += `
 ├
-├ 🤖 *Crypto Bot оплата:*
-├ Сумма: ${order.usdtAmount || (order.product.price / currentState.exchangeRate).toFixed(2)} USDT
-├ В рублях: ${order.product.price}₽
-├ Курс: 1 USDT = ${order.exchangeRate || currentState.exchangeRate}₽
-├ ID счета: ${order.invoiceId || 'Не указан'}
+├ 🤖 *Платежный бот:*
+├ ID платежа: ${order.paymentId || 'Не указан'}
+├ Сумма USDT: ${order.usdtAmount || (order.product.price / order.exchangeRate).toFixed(2)}
+├ Курс: 1 USDT = ${order.exchangeRate}₽
                     `;
                 }
                 
                 messageText += `
+                
 ✅ *Заказ ожидает обработки!*
 
 💬 *Для связи с покупателем:* @${order.userData.username || 'Не указан'}
 📞 *Telegram ID:* ${order.userData.telegramId || 'Не указан'}
+
+${order.paymentMethod === 'payment_bot' ? `🔗 *Проверить платеж:* откройте платежного бота` : ''}
                 `;
                 
                 const telegramUrl = `https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`;
@@ -2605,24 +2711,7 @@
                 });
                 
                 if (!response.ok) {
-                    const errorData = await response.text();
-                    console.error('Ошибка Telegram API:', errorData);
-                    
-                    const responsePlain = await fetch(telegramUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            chat_id: CONFIG.ADMIN_ID,
-                            text: messageText.replace(/\*/g, '').replace(/\`/g, ''),
-                            disable_web_page_preview: true
-                        })
-                    });
-                    
-                    if (!responsePlain.ok) {
-                        throw new Error(`Telegram API error: ${responsePlain.status}`);
-                    }
+                    throw new Error(`Telegram API error: ${response.status}`);
                 }
                 
                 console.log('Заказ отправлен админу в Telegram');
