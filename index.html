@@ -2447,85 +2447,77 @@
             }
         }
 
-        async function sendOrderToBot(order) {
-            console.log('Отправка заказа в бот:', order.id);
-            
-            try {
-                if (!order.userData || !order.product || !order.playerId) {
-                    console.error('Неполные данные заказа');
-                    return false;
-                }
-                
-                let messageText = `
-🎮 *НОВЫЙ ЗАКАЗ #${order.id}*
+async function sendOrderToBot(order) {
+    console.log('Отправка заказа в бот:', order.id);
+    
+    try {
+        if (!order.userData || !order.product || !order.playerId) {
+            console.error('Неполные данные заказа');
+            return false;
+        }
+        
+        let messageText = `🎮 НОВЫЙ ЗАКАЗ #${order.id}
 
-📋 *Детали заказа:*
+📋 Детали заказа:
 ├ Товар: ${order.product.name}
 ├ Цена: ${order.product.price}₽
 ├ ID игрока: ${order.playerId}
 ├ Способ оплаты: ${order.paymentMethod}
-├
-├ 👤 *Данные покупателя:*
+
+👤 Данные покупателя:
 ├ Имя: ${order.userData.firstName || 'Не указано'}
 ├ Telegram: @${order.userData.username || 'Не указан'}
 ├ ID: ${order.userData.telegramId || 'Не указан'}
-├
-🕐 Время: ${new Date().toLocaleString('ru-RU')}
-                `;
-                
-                if (order.paymentMethod === 'payment_bot') {
-                    messageText += `
-├
-├ 🤖 *Платежный бот:*
-├ Сумма USDT: ${order.usdtAmount || (order.product.price / order.exchangeRate).toFixed(2)}
-├ Курс: 1 USDT = ${order.exchangeRate}₽
-                    `;
-                }
-                
-                messageText += `
-✅ *Заказ ожидает обработки!*
 
-💬 *Для связи с покупателем:* @${order.userData.username || 'Не указан'}
-📞 *Telegram ID:* ${order.userData.telegramId || 'Не указан'}
-                `;
-                
-                const telegramUrl = `https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`;
-                
-                const response = await fetch(telegramUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        chat_id: CONFIG.ADMIN_ID,
-                        text: messageText,
-                        parse_mode: 'Markdown',
-                        disable_web_page_preview: true
-                    })
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`Telegram API error: ${response.status}`);
-                }
-                
-                console.log('Заказ отправлен админу в Telegram');
-                
-                await sendNotificationToUser(order.userData, order);
-                
-                return true;
-                
-            } catch (error) {
-                console.error('Ошибка отправки заказа:', error);
-                
-                localStorage.setItem(`order_failed_${order.id}`, JSON.stringify({
-                    error: error.message,
-                    order_data: order,
-                    timestamp: new Date().toISOString()
-                }));
-                
-                return false;
-            }
+🕐 Время: ${new Date().toLocaleString('ru-RU')}`;
+        
+        if (order.paymentMethod === 'payment_bot') {
+            messageText += `
+🤖 Платежный бот:
+├ Сумма USDT: ${order.usdtAmount || (order.product.price / order.exchangeRate).toFixed(2)}
+├ Курс: 1 USDT = ${order.exchangeRate}₽`;
         }
+        
+        messageText += `
+✅ Заказ ожидает обработки!
+
+💬 Для связи с покупателем: @${order.userData.username || 'Не указан'}
+📞 Telegram ID: ${order.userData.telegramId || 'Не указан'}`;
+        
+        // Формируем URL для отправки сообщения
+        const encodedMessage = encodeURIComponent(messageText);
+        const telegramUrl = `https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage?chat_id=${CONFIG.ADMIN_ID}&text=${encodedMessage}&parse_mode=HTML`;
+        
+        console.log('Отправка на URL:', telegramUrl);
+        
+        const response = await fetch(telegramUrl);
+        
+        if (response.ok) {
+            console.log('✅ Заказ отправлен админу в Telegram');
+            
+            // Также отправляем уведомление пользователю
+            await sendNotificationToUser(order.userData, order);
+            
+            return true;
+        } else {
+            const errorData = await response.text();
+            console.error('❌ Ошибка отправки:', response.status, errorData);
+            throw new Error(`Telegram API error: ${response.status}`);
+        }
+        
+    } catch (error) {
+        console.error('❌ Ошибка отправки заказа:', error);
+        
+        // Сохраняем заказ для ручной обработки
+        localStorage.setItem(`order_failed_${order.id}`, JSON.stringify({
+            error: error.message,
+            order_data: order,
+            timestamp: new Date().toISOString()
+        }));
+        
+        return false;
+    }
+}
 
         async function sendNotificationToUser(userData, order) {
             try {
